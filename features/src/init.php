@@ -40,11 +40,15 @@ function my_block_cgb_block_assets()
     // Register block styles for both frontend + backend.
     wp_register_style(
         'my_block-cgb-style-css', // Handle.
-        plugins_url('dist/blocks.style.build.css', dirname(__FILE__)), // Block style CSS.
+        // plugins_url('dist/blocks.style.build.css', dirname(__FILE__)), // Block style CSS.
+        plugins_url('ku_base_plugin/dist/blocks.style.build.css'), // Block editor CSS.
         array('wp-editor'), // Dependency to include the CSS after it.
         null // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ) // Version: File modification time.
     );
 
+
+
+    $options = get_option('wf-mailchimp-block');
     // Register block editor script for backend.
     $wf_mailchimp_block = array(
         'api_key' => isset($options['api_key']) ? $options['api_key'] : '',
@@ -79,9 +83,11 @@ function my_block_cgb_block_assets()
 
     wp_localize_script('my_block-cgb-block-js', 'wf_mailchimp_block', $wf_mailchimp_block);
     // Register block editor styles for backend.
+    error_log(plugins_url('ku_base_plugin/dist/blocks.editor.build.css'));
     wp_register_style(
         'my_block-cgb-block-editor-css', // Handle.
         plugins_url('dist/blocks.editor.build.css', dirname(__FILE__)), // Block editor CSS.
+
         array('wp-edit-blocks'), // Dependency to include the CSS after it.
         null // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.editor.build.css' ) // Version: File modification time.
     );
@@ -142,6 +148,7 @@ add_filter('block_categories', 'melikes_block_category', 10, 2);
 function melike_gallery_plugin_scripts()
 {
     wp_register_script('ku-block-frontend', plugins_url('dist/blocks.frontend.js', dirname(__FILE__)), array(),  '1.1', true);
+    // wp_register_script('ku-block-frontend',  plugins_url('ku_base_plugin/dist/blocks.frontend.js'), array(),  '1.1', true);
 
     $wf_mailchimp_block = array('ajaxurl' => admin_url('admin-ajax.php'));
 
