@@ -1,0 +1,149 @@
+.hero {
+  width: 100%;
+  height: 100vh;
+  background-position: center;
+  background-size: cover; }
+.hero {
+  width: 100%;
+  height: 100vh;
+  background-position: center;
+  background-size: cover; }
+.amh-wrap {
+  width: 100%;
+  -webkit-transition: width 0.2s;
+  -o-transition: width 0.2s;
+  transition: width 0.2s; }
+
+.amhHeader-inspector-row {
+  height: 35px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center; }
+.gallerie-item {
+  position: relative; }
+  .gallerie-item .gallerie-item-edit {
+    position: absolute;
+    top: 0;
+    height: 0px;
+    background-color: rgba(255, 255, 255, 0.596);
+    overflow: hidden;
+    -webkit-transition: height 0.4s;
+    -o-transition: height 0.4s;
+    transition: height 0.4s;
+    width: 100%; }
+    .gallerie-item .gallerie-item-edit .gallerie-item-edit-move {
+      position: absolute;
+      top: 10px;
+      left: 10px; }
+    .gallerie-item .gallerie-item-edit .gallerie-item-edit-erase {
+      position: absolute;
+      top: 10px;
+      right: 10px; }
+    .gallerie-item .gallerie-item-edit .gallerie-item-edit-edit {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      margin-left: -18px; }
+
+.gallerie-item-selected {
+  border: rgba(0, 102, 255, 0.651) solid 3px; }
+  .gallerie-item-selected .gallerie-item-edit {
+    height: 100%; }
+
+.gallerie-modal-button-wrap {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  -ms-flex-align: center;
+      align-items: center;
+  height: 80px; }
+.preview {
+  background-color: #D3D3D3;
+  float: none; }
+
+.text-input {
+  border-style: solid;
+  border-radius: 1em;
+  border-width: thin;
+  padding: 10px;
+  margin: 5px; }
+.wp-block-webfactory-mailchimp {
+  height: 200px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  width: 100%; }
+
+input.wf-mc-name,
+input.wf-mc-email,
+input.wf-mc-submit {
+  width: 200px;
+  border: 1px solid black;
+  height: 60px;
+  font-family: inherit;
+  text-align: center; }
+
+input.wf-mc-name {
+  border-right-width: 0px;
+  margin-right: 10px;
+  border-radius: 5px 0px 0px 5px; }
+
+input.wf-mc-email {
+  border-radius: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px; }
+
+input.wf-mc-submit {
+  border-radius: 0px 5px 5px 0px;
+  border-left-width: 0px;
+  background-color: rgba(0, 0, 0, 0);
+  margin-left: 10px;
+  color: inherit;
+  -webkit-transition: background-color 0.3s, color 0.3s;
+  -o-transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s; }
+
+input.wf-mc-submit:hover {
+  border: 1px solid black;
+  border-radius: 0px 5px 5px 0px;
+  border-left-width: 0px;
+  background-color: rgba(0, 0, 0, 0.432);
+  color: white; }
+.ku_event_wrap {
+  display: -ms-flexbox;
+  display: flex; }
+  .ku_event_wrap img {
+    width: 100px;
+    height: 100px; }
+
+.ku_events_info {
+  padding: 10px; }
+
+.ku_events_info_title {
+  font-size: 2rem;
+  font-weight: 900; }
+.editor-post-preview {
+  display: none !important; }
+.DayPicker_weekHeader_ul_1 {
+  padding: 0 0 0 5px !important; }
+
+.DayPicker_weekHeader_li_1 {
+  width: 28px !important; }
+
+.DayPicker_weekHeader_1 {
+  max-height: 25px !important; }
+
+.date {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -ms-flex-align: center;
+      align-items: center; }

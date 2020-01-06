@@ -1,0 +1,71 @@
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+.ku_event_wrap {
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 100px;
+  position: relative; }
+  .ku_event_wrap img {
+    width: 100px;
+    height: 100px; }
+
+.ku_event_wrap::after {
+  content: "";
+  border-bottom: 1px rgba(0, 0, 0, 0.507) solid;
+  width: 90%;
+  height: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute; }
+
+.ku_event_wrap_old {
+  opacity: 0.5; }
+
+.ku_event_info {
+  padding: 10px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  width: 100%;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap; }
+
+.ku_event_info_item {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  min-height: 30px; }
+  @media (max-width: 800px) {
+    .ku_event_info_item {
+      min-width: 100%;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; } }
+
+.ku_event_info_date {
+  width: 10%;
+  font-weight: bold; }
+
+.ku_event_info_title {
+  width: 20%; }
+
+.ku_event_info_venue {
+  width: 20%; }
+
+.ku_event_info_city {
+  width: 20%; }
+
+.ku_event_info_link {
+  min-width: 60px; }
+  .ku_event_info_link a {
+    color: inherit;
+    text-decoration: none; }

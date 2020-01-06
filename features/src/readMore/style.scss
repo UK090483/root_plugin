@@ -1,0 +1,49 @@
+.collapsed {
+  p {
+    line-height: 0;
+    opacity: 0;
+    transition: all 0.25s ease;
+  }
+}
+
+.expanded {
+  p {
+    line-height: inherit;
+    opacity: inherit;
+    transition: all 0.25s ease;
+  }
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  border-style: solid none none none;
+  display: inline-block;
+  padding: 1em 4em 1em 4em;
+  color: #e41414 !important;
+  text-align: center;
+  border-color: #ccc;
+  border-width: thin;
+  font-family: lato, sans-serif;
+  font-size: 18px;
+  @media only screen and (max-width: 600px) {
+    font-size: 14px;
+  }
+  line-height: 24px;
+  background-color: inherit;
+
+  &:focus {
+    background-color: inherit;
+  }
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}

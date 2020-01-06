@@ -1,0 +1,45 @@
+.gallerie-item {
+  position: relative;
+  .gallerie-item-edit {
+    position: absolute;
+    top: 0;
+    height: 0px;
+    background-color: rgba(255, 255, 255, 0.596);
+
+    overflow: hidden;
+    transition: height 0.4s;
+
+    width: 100%;
+
+    .gallerie-item-edit-move {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .gallerie-item-edit-erase {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .gallerie-item-edit-edit {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      margin-left: -18px;
+    }
+  }
+}
+
+.gallerie-item-selected {
+  border: rgba(0, 102, 255, 0.651) solid 3px;
+  .gallerie-item-edit {
+    height: 100%;
+  }
+}
+
+.gallerie-modal-button-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
