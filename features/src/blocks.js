@@ -11,14 +11,13 @@
 // import "./show-posts/show-posts.js";
 import "./hero2/hero.js";
 import "./hero/hero.js";
-// import "./metablock/metablock.js";
 // import "./date/date.js";
 // import "./fadein/fadein.js";
 // import "./sozial_links/sozial_links";
 // import "./featuredImageFocal/featuredImageFocal.js";
 // import "./gallery/gallery";
 import "./amhHeader/amhHeader";
-import "./projectsGallerie";
-import "./readMore/index";
-import "./mailchimp/mailchimp-blocks";
+import "./projectsGallerie/projectsGallerie";
+import "./readmore/readmore-blocks";
+// import "./mailchimp/mailchimp-blocks";
 import "./events/events-blocks";

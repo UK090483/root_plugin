@@ -1,5 +1,6 @@
 import initHero from "./hero/frontend";
 import initMailchimp from "./mailchimp/mailchimp-frontend";
+import "./readmore/readmore-frontend";
 
 document.addEventListener("DOMContentLoaded", function() {
 	let hero = document.querySelectorAll(".hero-paralax-wrap");

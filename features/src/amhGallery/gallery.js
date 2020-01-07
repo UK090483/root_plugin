@@ -5,8 +5,7 @@ import Modal from "./inspector/Modal";
 import getSortFunction from "./helper/sortfunction";
 
 const { registerBlockType } = wp.blocks;
-const { Button, ButtonGroup } = wp.components;
-const { MediaPlaceholder } = wp.blockEditor;
+const { Button } = wp.components;
 const { useState, useEffect } = wp.element;
 
 registerBlockType("cgb/gallery", {

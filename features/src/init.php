@@ -46,6 +46,7 @@ class Ku_base
 
     static function enqueue_block_editor_assets()
     {
+        self::blocks_editor_css();
         self::block_js();
     }
 

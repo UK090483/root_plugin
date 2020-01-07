@@ -82,17 +82,12 @@ export default function(props) {
 		});
 	}
 
-	function sortImages(_sort) {
-		setAttributes({ images: images.sort(getSortFunction(_sort || sort)) });
-	}
-
 	return (
 		<div className={"gallerie-editor-wrap"}>
 			<Inspector
 				tools={tools}
 				setAttributes={setAttributes}
 				attributes={attributes}
-				sortImages={sortImages}
 			></Inspector>
 			<Modal
 				tools={tools}
@@ -102,7 +97,6 @@ export default function(props) {
 				isOpen={isOpen}
 				setOpen={setOpen}
 				images={images}
-				sortImages={sortImages}
 			></Modal>
 
 			{images.length > 0 && (
