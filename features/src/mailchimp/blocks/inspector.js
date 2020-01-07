@@ -56,14 +56,14 @@ export default function Inspector(props) {
 					help={
 						!userName && (
 							<p>
-								{wf_mailchimp_block._api_info_start}{" "}
+								{"Open your"}{" "}
 								<a
 									href="https://us2.admin.mailchimp.com/account/api/"
 									target="_blank"
 								>
-									{wf_mailchimp_block._api_info_console}
+									{"MailChimp account"}
 								</a>
-								. {wf_mailchimp_block._api_info_end}
+								. {"to get an API Key."}
 							</p>
 						)
 					}
@@ -79,12 +79,12 @@ export default function Inspector(props) {
 				<Button onClick={checkApiKey}>Check</Button>
 			</PanelBody>
 
-			<PanelBody>
+			{/* <PanelBody>
 				<SelectControl
 					class="wf-mailchimp-lists"
-					label={wf_mailchimp_block._mc_list}
-					value={wf_mailchimp_block.mc_list}
-					options={wf_mailchimp_block.mc_lists}
+					label={"List"}
+					value={undefined}
+					options={undefined}
 					onChange={mc_list => {
 						if (!mc_list) {
 							mc_list = "";
@@ -93,12 +93,12 @@ export default function Inspector(props) {
 						this.updateListThrottled(mc_list);
 					}}
 				/>
-			</PanelBody>
+			</PanelBody> */}
 
 			{/* <PanelBody>
 				<SelectControl
 					class="wf-mailchimp-form-style"
-					label={wf_mailchimp_block._form_css}
+					label={'Form Style'}
 					value={0}
 					options={[
 						{ value: 0, label: "Theme default" },
@@ -137,7 +137,7 @@ export default function Inspector(props) {
 
 			<PanelBody>
 				<TextControl
-					label={wf_mailchimp_block._success_message}
+					label={"Success Message"}
 					value={success_message}
 					onChange={success_message => setAttributes({ success_message })}
 				/>
@@ -145,7 +145,7 @@ export default function Inspector(props) {
 
 			<PanelBody>
 				<TextControl
-					label={wf_mailchimp_block._error_message}
+					label={"Error Message"}
 					value={error_message}
 					onChange={error_message => setAttributes({ error_message })}
 				/>
@@ -153,7 +153,7 @@ export default function Inspector(props) {
 
 			<PanelBody>
 				<TextControl
-					label={wf_mailchimp_block._submit_message}
+					label={"Submit Error Message"}
 					value={submit_message}
 					onChange={submit_message => setAttributes({ submit_message })}
 				/>
@@ -161,7 +161,7 @@ export default function Inspector(props) {
 
 			<PanelBody>
 				<TextControl
-					label={wf_mailchimp_block._duplicate_message}
+					label={"Duplicate Message"}
 					value={duplicate_message}
 					onChange={duplicate_message => setAttributes({ duplicate_message })}
 				/>

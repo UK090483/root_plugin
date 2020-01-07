@@ -50,7 +50,7 @@ function buildMailChimpForm(attributes) {
  */
 export default registerBlockType("webfactory/mailchimp", {
 	title: "mailchimp",
-	description: wf_mailchimp_block._description,
+	description: "Simple yet powerfull Mailchimp subscribe form.",
 	category: "kubase-blocks",
 	icon: "email-alt",
 	keywords: ["mailchimp", "newsletter", "subscribe"],
@@ -123,7 +123,6 @@ export default registerBlockType("webfactory/mailchimp", {
 	},
 	save: props => {
 		const { attributes } = props;
-		console.log(attributes);
 		let maphtml = buildMailChimpForm(attributes);
 		return <div>{maphtml}</div>;
 	}

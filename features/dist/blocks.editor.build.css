@@ -1,49 +1,13 @@
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .hero {
   width: 100%;
   height: 100vh;
   background-position: center;
   background-size: cover; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .hero {
   width: 100%;
   height: 100vh;
   background-position: center;
   background-size: cover; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .amh-wrap {
   width: 100%;
   -webkit-transition: width 0.2s;
@@ -58,18 +22,6 @@
       justify-content: center;
   -ms-flex-align: center;
       align-items: center; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .gallerie-item {
   position: relative; }
   .gallerie-item .gallerie-item-edit {
@@ -109,18 +61,6 @@
   -ms-flex-align: center;
       align-items: center;
   height: 80px; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .preview {
   background-color: #D3D3D3;
   float: none; }
@@ -131,18 +71,6 @@
   border-width: thin;
   padding: 10px;
   margin: 5px; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .wp-block-webfactory-mailchimp {
   height: 200px;
   display: -ms-flexbox;
@@ -188,30 +116,6 @@ input.wf-mc-submit:hover {
   border-left-width: 0px;
   background-color: rgba(0, 0, 0, 0.432);
   color: white; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .ku_event_wrap {
   display: -ms-flexbox;
   display: flex; }
@@ -225,32 +129,8 @@ input.wf-mc-submit:hover {
 .ku_events_info_title {
   font-size: 2rem;
   font-weight: 900; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .editor-post-preview {
   display: none !important; }
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
-/**
- * #.# Common SCSS
- *
- * Can include things like variables and mixins
- * that are used across the project.
-*/
 .DayPicker_weekHeader_ul_1 {
   padding: 0 0 0 5px !important; }
 
