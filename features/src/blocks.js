@@ -9,7 +9,7 @@
  * Webpack is compiling as the input file.
  */
 // import "./show-posts/show-posts.js";
-import "./hero2/hero.js";
+// import "./hero2/hero.js";
 import "./hero/hero.js";
 // import "./date/date.js";
 // import "./fadein/fadein.js";
@@ -21,3 +21,4 @@ import "./projectsGallerie/projectsGallerie";
 import "./readmore/readmore-blocks";
 // import "./mailchimp/mailchimp-blocks";
 import "./events/events-blocks";
+import "./gridGallerie/gridGallerie";
