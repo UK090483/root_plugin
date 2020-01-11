@@ -1,6 +1,5 @@
 export default function init(hero) {
 	let heroVideo = document.querySelectorAll(".hero-image-video");
-	console.log("sjfkaölskjdföalskfdj");
 	heroVideo.forEach(element => {
 		element.onloadeddata = function() {
 			element.classList.add("video-loaded");

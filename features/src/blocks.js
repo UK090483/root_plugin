@@ -22,3 +22,5 @@ import "./readmore/readmore-blocks";
 // import "./mailchimp/mailchimp-blocks";
 import "./events/events-blocks";
 import "./gridGallerie/gridGallerie";
+import "./icons/icons-blocks";
+import "./AmhReadmore/readmore-blocks";

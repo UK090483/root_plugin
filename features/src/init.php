@@ -31,6 +31,7 @@ if (!defined('ABSPATH')) {
 
 require plugin_dir_path(__FILE__) . 'mailchimp/mailchimp.php';
 require plugin_dir_path(__FILE__) . 'events/events.php';
+require plugin_dir_path(__FILE__) . 'icons/icons.php';
 
 
 

@@ -1,0 +1,51 @@
+import { arrow } from "./icons";
+const { RichText } = wp.editor;
+export default function save(props) {
+	const { attributes } = props;
+	const { subBlocks, Id, mainBlock } = attributes;
+
+	function getItems() {
+		return subBlocks.map((item, index) => {
+			function getColor(params) {
+				if (item.short === "ja") {
+					return "green";
+				}
+				if (item.short === "nein") {
+					return "red";
+				}
+				if (item.short === "unklar") {
+					return "orange";
+				}
+			}
+			return (
+				<div className="amh-readmore-item">
+					<h5>{item.label}:</h5>
+					<h5 style={{ color: getColor() }}>{item.short}</h5>
+					<div className="amh-readmore-item-arrow" data-id={Id + index}>
+						{arrow}
+					</div>
+				</div>
+			);
+		});
+	}
+	function getSubsContent() {
+		return subBlocks.map((item, index) => {
+			return (
+				<div className="amh-readmore-subContent" data-id={Id + index}>
+					<RichText.Content tagName="p" value={item.content} />
+				</div>
+			);
+		});
+	}
+
+	return (
+		<div className="amh-readmore-wrap">
+			<div className="amh-readmore-item-head">
+				<RichText.Content tagName="p" value={mainBlock} />
+			</div>
+
+			<div className="amh-readmore-items">{getItems()}</div>
+			<div className="amh-readmore-items-subContent">{getSubsContent()}</div>
+		</div>
+	);
+}

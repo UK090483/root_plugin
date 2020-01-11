@@ -86,10 +86,6 @@ registerBlockType("klarity/klarity-read-more-block", {
 				>
 					<RichText.Content tagName="p" value={props.attributes.introBlock} />
 
-					<button className={"read-more-trigger"} onclick="toggleExpand(this)">
-						Show more
-					</button>
-
 					<div className={"read-more-target collapsed"}>
 						<RichText.Content
 							tagName="p"
@@ -97,9 +93,7 @@ registerBlockType("klarity/klarity-read-more-block", {
 						/>
 					</div>
 				</div>
-				<button className={"read-more-trigger"} onclick="toggleExpand(this)">
-					Show more
-				</button>
+				<button className={"read-more-trigger"}>Show more</button>
 			</div>
 		);
 	}

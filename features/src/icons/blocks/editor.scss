@@ -1,0 +1,11 @@
+.ku_icon_prev {
+	svg {
+		fill: rgb(71, 71, 71);
+		border: red solid 3px;
+		border-color: transparent;
+		transition: border-color 0.2s;
+	}
+	svg:hover {
+		border-color: #0000ff;
+	}
+}

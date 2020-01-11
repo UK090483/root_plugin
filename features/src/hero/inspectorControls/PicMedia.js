@@ -1,42 +1,41 @@
-const { PanelBody, Button } = wp.components;
+const { PanelBody, Button, FocalPointPicker } = wp.components;
 const { MediaUpload } = wp.editor;
 const { __ } = wp.i18n;
 
 export default function PicMedia({ attributes, setAttributes }) {
-	const { imageId, videoId } = attributes;
+	const { imageId, videoId, imageSrc, focalPoint, images } = attributes;
 
-	function onSelectImage(media) {
-		let source = makeSource(media.sizes);
-
-		setAttributes({
-			imageSrc: source.small,
-			imageSrcSet: source.srcSet
-		});
-	}
 	function onSelectVideo(media) {
 		setAttributes({
 			videoUrl: media.url
 		});
 	}
 
-	function makeSource(sizes) {
-		let srcSet = "";
-		let small = "";
-		let smallest = 10000;
-		Object.keys(sizes).forEach(key => {
+	function onSelectImage(media) {
+		let NextImages = [];
+		Object.keys(media.sizes).forEach(key => {
 			if (key !== "thumbnail") {
-				if (sizes[key].width < smallest) {
-					small = sizes[key].url;
-					smallest = sizes[key].width;
-				}
-				srcSet += sizes[key].url + " " + (sizes[key].width + 100) + "w, ";
+				NextImages.push({ ...media.sizes[key] });
 			}
 		});
-		return { srcSet: srcSet, small: small };
+		NextImages.sort((a, b) => {
+			return a.width < b.width ? -1 : a.width > b.width ? 1 : 0;
+		});
+		setAttributes({
+			images: NextImages
+		});
 	}
 
 	return (
 		<PanelBody title={"Image"} initialOpen={false}>
+			{images.length > 0 && (
+				<FocalPointPicker
+					url={images[0].url}
+					dimensions={{ width: 300, height: 200 }}
+					value={focalPoint}
+					onChange={focalPoint => setAttributes({ focalPoint })}
+				/>
+			)}
 			<MediaUpload
 				title={__("Select Image")}
 				onSelect={onSelectImage}
