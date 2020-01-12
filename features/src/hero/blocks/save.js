@@ -4,21 +4,26 @@ export default function save({ attributes }) {
 	const {
 		images,
 		imageSrc,
+		focalPoint,
 		videoUrl,
 		showVideo,
 		height,
 		heightUnit
 	} = attributes;
 
+	const x = Math.round(focalPoint.x * 100) + "%";
+	const y = Math.round(focalPoint.y * 100) + "%";
 	function makeMediaQuerrys() {}
-	let s = `<style>
+	let s = `
 	.hero-image{
-		backgroundImage: url(${imageSrc})
+		background-position: ${x} ${y};
+		background-image: url(${images[images.length - 1].url});
 	}
-	</style>`;
+	`;
 
 	return (
 		<div className="hero-wrap" style={{ height: height + heightUnit }}>
+			<style>{s}</style>
 			<div className="hero-paralax-wrap">
 				<div className={"hero-image"}></div>
 				{videoUrl && showVideo && (

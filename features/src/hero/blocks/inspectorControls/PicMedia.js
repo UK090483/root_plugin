@@ -18,9 +18,13 @@ export default function PicMedia({ attributes, setAttributes }) {
 				NextImages.push({ ...media.sizes[key] });
 			}
 		});
-		NextImages.sort((a, b) => {
-			return a.width < b.width ? -1 : a.width > b.width ? 1 : 0;
-		});
+		console.log("select----------------");
+		console.log(media.sizes);
+		// NextImages.sort((a, b) => {
+		// 	return a.width < b.width ? -1 : a.width > b.width ? 1 : 0;
+		// });
+		console.log(NextImages);
+		console.log("select----------------");
 		setAttributes({
 			images: NextImages
 		});

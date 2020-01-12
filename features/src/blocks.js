@@ -10,7 +10,7 @@
  */
 // import "./show-posts/show-posts.js";
 // import "./hero2/hero.js";
-// import "./hero/hero.js";
+import "./hero/hero-blocks";
 // import "./date/date.js";
 // import "./fadein/fadein.js";
 // import "./sozial_links/sozial_links";
