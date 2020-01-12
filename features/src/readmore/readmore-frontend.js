@@ -4,11 +4,13 @@ export default function init(elems) {
 	});
 
 	function toggleExpand(elem) {
-		const target = elem.target.parentElement.querySelector(".read-more-target");
+		const target = elem.target.parentElement.parentElement.querySelector(
+			".read-more-target"
+		);
 		target.classList.toggle("collapsed");
 		target.classList.toggle("expanded");
-		elem.innerHTML = target.classList.contains("collapsed")
-			? "Show less"
-			: "Show more";
+		elem.target.innerHTML = target.classList.contains("collapsed")
+			? elem.target.dataset.more
+			: elem.target.dataset.less;
 	}
 }

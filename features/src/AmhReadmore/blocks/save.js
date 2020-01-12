@@ -6,21 +6,10 @@ export default function save(props) {
 
 	function getItems() {
 		return subBlocks.map((item, index) => {
-			function getColor(params) {
-				if (item.short === "ja") {
-					return "green";
-				}
-				if (item.short === "nein") {
-					return "red";
-				}
-				if (item.short === "unklar") {
-					return "orange";
-				}
-			}
 			return (
 				<div className="amh-readmore-item">
 					<h5>{item.label}:</h5>
-					<h5 style={{ color: getColor() }}>{item.short}</h5>
+					<h5 style={{ color: item.color }}>{item.short}</h5>
 					<div className="amh-readmore-item-arrow" data-id={Id + index}>
 						{arrow}
 					</div>

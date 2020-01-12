@@ -1,4 +1,5 @@
 import { arrow } from "./icons";
+import ButtonGroup from "./Inspector/ButtonGroup";
 const { RichText } = wp.editor;
 const { useState, useEffect } = wp.element;
 const { TextControl, DateTimePicker, Button, BaseControl } = wp.components;
@@ -38,12 +39,23 @@ export default function edit(props) {
 						}}
 					></TextControl>
 					<TextControl
+						style={{ color: block.color }}
 						label="short"
 						value={block.short}
 						onChange={value => {
 							setSubContent(value, "short", index);
 						}}
 					></TextControl>
+					<ButtonGroup
+						items={[
+							{ value: "inherit", label: "none" },
+							{ value: "red", label: "Red" },
+							{ value: "green", label: "Green" },
+							{ value: "orange", label: "Orange" }
+						]}
+						activeItem={block.color}
+						onChange={color => setSubContent(color, "color", index)}
+					></ButtonGroup>
 					<p>This will be hidden behind </p>
 					<RichText
 						id="contentBlock"

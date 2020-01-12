@@ -20,6 +20,10 @@ export default function init() {
 		items.forEach(item => {
 			if (item.dataset.id === id) {
 				item.classList.add("amh-readmore-subContent-active");
+				window.scrollTo({
+					top: item.getBoundingClientRect().top + window.scrollY - 300,
+					behavior: "smooth"
+				});
 			} else {
 				item.classList.remove("amh-readmore-subContent-active");
 			}

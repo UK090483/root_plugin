@@ -39,24 +39,28 @@ registerBlockType("amh/amh-read-more-block", {
 				{
 					label: "CDU",
 					short: "ja",
+					color: "inherit",
 					content:
 						"CDU Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
 				},
 				{
 					label: "FDP",
 					short: "nein",
+					color: "inherit",
 					content:
 						"FDP Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
 				},
 				{
 					label: "Grüne",
 					short: "unklar",
+					color: "inherit",
 					content:
 						"GRÜNE Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
 				},
 				{
 					label: "Linke",
 					short: "ja",
+					color: "inherit",
 					content:
 						"LINKE Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
 				}

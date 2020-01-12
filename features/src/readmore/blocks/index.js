@@ -1,10 +1,9 @@
 import "./style.scss";
 import "./editor.scss";
-
+import Inspector from "./inspector";
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { RichText } = wp.editor;
-const textAlignments = ["left", "center", "right"];
 
 const el = wp.element.createElement;
 const iconEl = el(
@@ -33,25 +32,28 @@ registerBlockType("klarity/klarity-read-more-block", {
 		},
 		textAlignment: {
 			type: "string",
-			default: textAlignments[0]
+			default: "left"
+		},
+		showMore: {
+			type: "string",
+			default: "Show more"
+		},
+		showLess: {
+			type: "string",
+			default: "Show less"
+		},
+		buttonAlign: {
+			type: "string",
+			default: "center"
 		}
 	},
-	edit({ attributes, className, setAttributes }) {
-		const setTextAlignment = event => {
-			const selected = event.target.querySelector("option:checked");
-			setAttributes({ textAlignment: selected.value });
-			event.preventDefault();
-		};
+	edit(props) {
+		const { attributes, className, setAttributes } = props;
+
 		return (
 			<div>
-				<label>Text alignment</label>
-				<select value={attributes.textAlignment} onChange={setTextAlignment}>
-					{textAlignments.map(alignment => (
-						<option value={alignment} selected>
-							{alignment}
-						</option>
-					))}
-				</select>
+				<Inspector {...props}></Inspector>
+
 				<p>This text will always be visible</p>
 				<div class="text-input">
 					<RichText
@@ -70,15 +72,13 @@ registerBlockType("klarity/klarity-read-more-block", {
 						onChange={content => setAttributes({ contentBlock: content })}
 					/>
 				</div>
-				<div class="preview">
-					<h5>Show more preview</h5>
-					<p dangerouslySetInnerHTML={{ __html: attributes.introBlock }} />
-				</div>
 			</div>
 		);
 	},
 
 	save: props => {
+		const { attributes } = props;
+		const { showMore, showLess, buttonAlign } = attributes;
 		return (
 			<div class="text-center">
 				<div
@@ -93,7 +93,18 @@ registerBlockType("klarity/klarity-read-more-block", {
 						/>
 					</div>
 				</div>
-				<button className={"read-more-trigger"}>Show more</button>
+				<div
+					className={"ku_base_show_more_button"}
+					style={{ justifyContent: buttonAlign }}
+				>
+					<button
+						className={"read-more-trigger"}
+						data-more={showMore}
+						data-less={showLess}
+					>
+						{showMore}
+					</button>
+				</div>
 			</div>
 		);
 	}
