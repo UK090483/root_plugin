@@ -1,31 +1,17 @@
-import { arrow } from "./icons";
 import ButtonGroupCustom from "./Inspector/ButtonGroup";
-const { RichText } = wp.editor;
-const { useState, useEffect } = wp.element;
-const {
-	TextControl,
-	DateTimePicker,
-	Button,
-	BaseControl,
-	ButtonGroup
-} = wp.components;
-const textAlignmentsOptions = ["left", "center", "right"];
+const { RichText } = wp.blockEditor;
+const { useEffect } = wp.element;
+const { TextControl, Button, ButtonGroup } = wp.components;
 
 export default function edit(props) {
-	const { attributes, className, setAttributes } = props;
-	const { mainBlock, textAlignments, subBlocks, Id } = attributes;
+	const { attributes, setAttributes } = props;
+	const { mainBlock, subBlocks, Id } = attributes;
 
 	useEffect(() => {
 		if (!Id) {
 			setAttributes({ Id: Date.now() });
 		}
 	}, []);
-
-	const setTextAlignment = event => {
-		const selected = event.target.querySelector("option:checked");
-		setAttributes({ textAlignment: selected.value });
-		event.preventDefault();
-	};
 
 	function setSubContent(value, type, index) {
 		let nextSubBlocks = [...subBlocks];
@@ -56,7 +42,7 @@ export default function edit(props) {
 		newSubblocks.splice(index, 1);
 		setAttributes({ subBlocks: newSubblocks });
 	}
-	function getSubTexts(params) {
+	function getSubTexts() {
 		return subBlocks.map((block, index) => {
 			return (
 				<div class="text-input">
@@ -106,7 +92,7 @@ export default function edit(props) {
 					></ButtonGroupCustom>
 					<p>This will be hidden behind </p>
 					<RichText
-						id="contentBlock"
+						// id="contentBlock"
 						placeholder="This will be hidden behind the read more section"
 						value={subBlocks[index].content}
 						onChange={content => setSubContent(content, "content", index)}
@@ -128,8 +114,8 @@ export default function edit(props) {
 			<p>Head</p>
 			<div className="text-input">
 				<RichText
-					id="introBlock"
-					placeholder="Thi text will always be visible"
+					// id="introBlock"
+					placeholder="This text will always be visible"
 					value={mainBlock}
 					onChange={mainBlock => setAttributes({ mainBlock })}
 				/>

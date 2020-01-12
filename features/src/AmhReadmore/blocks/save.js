@@ -1,5 +1,5 @@
 import { arrow } from "./icons";
-const { RichText } = wp.editor;
+const { RichText } = wp.blockEditor;
 export default function save(props) {
 	const { attributes } = props;
 	const { subBlocks, Id, mainBlock } = attributes;

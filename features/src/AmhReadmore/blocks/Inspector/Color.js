@@ -1,4 +1,4 @@
-const { ColorPicker, PanelBody, PanelRow } = wp.components;
+const { ColorPicker, PanelBody } = wp.components;
 const { useState, useEffect } = wp.element;
 import style from "../Helper/style";
 import ButtonGroup from "./ButtonGroup";

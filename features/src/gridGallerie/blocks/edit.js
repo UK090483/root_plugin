@@ -72,8 +72,6 @@ export default function(props) {
 		return space / collumns.value;
 	}
 
-	console.log(getRowCount());
-
 	function getImages() {
 		return images.map((i, index) => {
 			let url = i.sizes.hasOwnProperty("medium")
