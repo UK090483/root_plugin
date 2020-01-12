@@ -1,2 +1,44 @@
-.preview{background-color:#D3D3D3;float:none}.text-input{border-style:solid;border-radius:1em;border-width:thin;padding:10px;margin:5px}
-.preview{background-color:#d3d3d3;float:none}.text-input{border-style:solid;border-radius:1em;border-width:thin;padding:10px;margin:5px}.amh-readmore-wrap{border:red solid 1px}.amh-readmore-wrap .amh-readmore-items{border:red solid 1px;display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:center;align-items:center}.amh-readmore-wrap .amh-readmore-items .amh-readmore-item{width:100%;border:red solid 1px;display:-ms-flexbox;display:flex;-ms-flex-pack:distribute;justify-content:space-around;-ms-flex-align:center;align-items:center}.amh-readmore-wrap .amh-readmore-items .amh-readmore-item .amh-readmore-item-arrow.amh-readmore-item-arrow-active{-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg)}
+.preview {
+  background-color: #D3D3D3;
+  float: none; }
+
+.text-input {
+  border-style: solid;
+  border-radius: 1em;
+  border-width: thin;
+  padding: 10px;
+  margin: 5px; }
+.preview {
+  background-color: #d3d3d3;
+  float: none; }
+
+.text-input {
+  border-style: solid;
+  border-radius: 1em;
+  border-width: thin;
+  padding: 10px;
+  margin: 5px; }
+
+.amh-readmore-wrap {
+  border: red solid 1px; }
+  .amh-readmore-wrap .amh-readmore-items {
+    border: red solid 1px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+    -ms-flex-align: center;
+        align-items: center; }
+    .amh-readmore-wrap .amh-readmore-items .amh-readmore-item {
+      width: 100%;
+      border: red solid 1px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+      -ms-flex-align: center;
+          align-items: center; }
+      .amh-readmore-wrap .amh-readmore-items .amh-readmore-item .amh-readmore-item-arrow.amh-readmore-item-arrow-active {
+        -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+                transform: rotate(90deg); }
