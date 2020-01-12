@@ -8,8 +8,10 @@ export default function save(props) {
 		return subBlocks.map((item, index) => {
 			return (
 				<div className="amh-readmore-item">
-					<h5>{item.label}:</h5>
-					<h5 style={{ color: item.color }}>{item.short}</h5>
+					<div className="amh-readmore-item-text" data-id={Id + index}>
+						<h5>{item.label}:</h5>
+						<h5 style={{ color: item.color }}>{item.short}</h5>
+					</div>
 					<div className="amh-readmore-item-arrow" data-id={Id + index}>
 						{arrow}
 					</div>

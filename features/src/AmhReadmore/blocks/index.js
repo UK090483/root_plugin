@@ -26,7 +26,7 @@ registerBlockType("amh/amh-read-more-block", {
 	attributes: {
 		mainBlock: {
 			type: "string",
-			default: ""
+			default: "Forderung"
 		},
 		Id: {
 			type: "number",
@@ -37,32 +37,34 @@ registerBlockType("amh/amh-read-more-block", {
 			type: "array",
 			default: [
 				{
-					label: "CDU",
+					label: "Grüne",
 					short: "ja",
 					color: "inherit",
-					content:
-						"CDU Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
+					content: "Grüne"
+				},
+				{
+					label: "SPD",
+					short: "nein",
+					color: "inherit",
+					content: "SPD"
+				},
+				{
+					label: "CDU",
+					short: "unklar",
+					color: "inherit",
+					content: "CDU"
 				},
 				{
 					label: "FDP",
-					short: "nein",
+					short: "ja",
 					color: "inherit",
-					content:
-						"FDP Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
-				},
-				{
-					label: "Grüne",
-					short: "unklar",
-					color: "inherit",
-					content:
-						"GRÜNE Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
+					content: "FDP"
 				},
 				{
 					label: "Linke",
 					short: "ja",
 					color: "inherit",
-					content:
-						"LINKE Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
+					content: "Linke"
 				}
 			]
 		},

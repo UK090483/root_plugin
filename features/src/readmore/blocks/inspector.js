@@ -24,7 +24,6 @@ const { useState } = wp.element;
 export default function Inspector(props) {
 	const { attributes, setAttributes } = props;
 	const { showLess, showMore, buttonAlign, textAlignment } = attributes;
-	console.log(textAlignment);
 	return (
 		<InspectorControls>
 			<PanelBody>

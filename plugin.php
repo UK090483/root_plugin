@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Melike Gallerie11
+ * Plugin Name: AMH Forderungen Blocks
 
  * Description: Plugin for Melikes Gallerie
  * Author: Konrad Ullrich
