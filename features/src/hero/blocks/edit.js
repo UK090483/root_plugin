@@ -4,8 +4,26 @@ import metadata from "./meta";
 
 export default function edit(props) {
 	const { attributes } = props;
-	const { videoUrl, showVideo, height, heightUnit, images } = attributes;
-	console.log(metadata);
+	const {
+		videoUrl,
+		showVideo,
+		height,
+		heightUnit,
+		images,
+		focalPoint
+	} = attributes;
+	console.log(images);
+
+	function getBackgroundPosition() {
+		return (
+			Math.round(focalPoint.x * 100) +
+			"%" +
+			" " +
+			Math.round(focalPoint.y * 100) +
+			"%"
+		);
+	}
+
 	return (
 		<div>
 			<InspectorC {...props}></InspectorC>
@@ -15,7 +33,8 @@ export default function edit(props) {
 					<div
 						className={"hero-image"}
 						style={{
-							backgroundImage: `url(${images[0].url})`
+							backgroundPosition: getBackgroundPosition(),
+							backgroundImage: `url(${images[images.length - 1].url})`
 						}}
 					></div>
 				)}
