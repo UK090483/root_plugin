@@ -2,7 +2,6 @@
 
 /**
  * Plugin Name: AMH Forderungen Blocks
-
  * Description: Plugin for Melikes Gallerie
  * Author: Konrad Ullrich
  * Version: 1.0.0
