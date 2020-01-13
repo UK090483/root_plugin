@@ -14,21 +14,21 @@ export default function edit(props) {
 	}, []);
 
 	function setSubContent(value, type, index) {
-		let nextSubBlocks = [...subBlocks];
+		const nextSubBlocks = [...subBlocks];
 		nextSubBlocks[index][type] = value;
 		setAttributes({ subBlocks: nextSubBlocks });
 	}
 	function moveItem(direction, index) {
-		let newSubblocks = [...subBlocks];
-		let changeIndex = direction === "down" ? index + 1 : index - 1;
-		let saveold = { ...newSubblocks[changeIndex] };
+		const newSubblocks = [...subBlocks];
+		const changeIndex = direction === "down" ? index + 1 : index - 1;
+		const saveold = { ...newSubblocks[changeIndex] };
 		newSubblocks[changeIndex] = newSubblocks[index];
 		newSubblocks[index] = saveold;
 		setAttributes({ subBlocks: newSubblocks });
 	}
 	function addItem(index) {
-		let newSubblocks = [...subBlocks];
-		let newItem = {
+		const newSubblocks = [...subBlocks];
+		const newItem = {
 			label: "NEU",
 			short: "ja",
 			color: "inherit",
@@ -38,14 +38,14 @@ export default function edit(props) {
 		setAttributes({ subBlocks: newSubblocks });
 	}
 	function eraseItem(index) {
-		let newSubblocks = [...subBlocks];
+		const newSubblocks = [...subBlocks];
 		newSubblocks.splice(index, 1);
 		setAttributes({ subBlocks: newSubblocks });
 	}
 	function getSubTexts() {
 		return subBlocks.map((block, index) => {
 			return (
-				<div class="text-input">
+				<div className="text-input">
 					<ButtonGroup>
 						<Button
 							isSmall

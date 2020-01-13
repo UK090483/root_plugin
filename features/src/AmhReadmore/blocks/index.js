@@ -4,7 +4,6 @@ import edit from "./edit";
 import save from "./save";
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { RichText } = wp.editor;
 const textAlignments = ["left", "center", "right"];
 
 const el = wp.element.createElement;
