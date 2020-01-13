@@ -3,7 +3,6 @@ const { RichText } = wp.blockEditor;
 export default function save(props) {
 	const { attributes } = props;
 	const { subBlocks, Id, mainBlock } = attributes;
-	console.log(props);
 	function getItems() {
 		return subBlocks.map((item, index) => {
 			return (
