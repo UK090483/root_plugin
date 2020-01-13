@@ -6,6 +6,7 @@ const { TextControl, Button, ButtonGroup } = wp.components;
 export default function edit(props) {
 	const { attributes, setAttributes } = props;
 	const { mainBlock, subBlocks, Id } = attributes;
+	const encodedSubblocks = JSON.parse(subBlocks);
 
 	useEffect(() => {
 		if (!Id) {
@@ -14,9 +15,9 @@ export default function edit(props) {
 	}, []);
 
 	function setSubContent(value, type, index) {
-		const nextSubBlocks = [...subBlocks];
+		const nextSubBlocks = [...encodedSubblocks];
 		nextSubBlocks[index][type] = value;
-		setAttributes({ subBlocks: nextSubBlocks });
+		setAttributes({ subBlocks: JSON.stringify(nextSubBlocks) });
 	}
 	function moveItem(direction, index) {
 		const newSubblocks = [...subBlocks];
@@ -43,14 +44,14 @@ export default function edit(props) {
 		setAttributes({ subBlocks: newSubblocks });
 	}
 	function getSubTexts() {
-		return subBlocks.map((block, index) => {
+		return encodedSubblocks.map((block, index) => {
 			return (
 				<div className="text-input">
 					<ButtonGroup>
 						<Button
 							isSmall
 							isPrimary
-							disabled={index > subBlocks.length - 2}
+							disabled={index > encodedSubblocks.length - 2}
 							onClick={() => moveItem("down", index)}
 						>
 							{"move down"}
@@ -94,7 +95,7 @@ export default function edit(props) {
 					<RichText
 						// id="contentBlock"
 						placeholder="This will be hidden behind the read more section"
-						value={subBlocks[index].content}
+						value={block.content}
 						onChange={content => setSubContent(content, "content", index)}
 					/>
 

@@ -2,6 +2,7 @@ import "./style.scss";
 import "./editor.scss";
 import edit from "./edit";
 import save from "./save";
+import deprecated from "./deprecated/deprecated";
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const textAlignments = ["left", "center", "right"];
@@ -18,6 +19,39 @@ const iconEl = el(
 	})
 );
 
+const defaulSubBlocks = JSON.stringify([
+	{
+		label: "Grüne",
+		short: "ja",
+		color: "inherit",
+		content: "Grüne"
+	},
+	{
+		label: "SPD",
+		short: "nein",
+		color: "inherit",
+		content: "SPD"
+	},
+	{
+		label: "CDU",
+		short: "unklar",
+		color: "inherit",
+		content: "CDU"
+	},
+	{
+		label: "FDP",
+		short: "ja",
+		color: "inherit",
+		content: "FDP"
+	},
+	{
+		label: "Linke",
+		short: "ja",
+		color: "inherit",
+		content: "Linke"
+	}
+]);
+
 registerBlockType("amh/amh-read-more-block", {
 	title: __("Amh Read more"),
 	icon: iconEl,
@@ -33,45 +67,16 @@ registerBlockType("amh/amh-read-more-block", {
 		},
 
 		subBlocks: {
-			type: "array",
-			default: [
-				{
-					label: "Grüne",
-					short: "ja",
-					color: "inherit",
-					content: "Grüne"
-				},
-				{
-					label: "SPD",
-					short: "nein",
-					color: "inherit",
-					content: "SPD"
-				},
-				{
-					label: "CDU",
-					short: "unklar",
-					color: "inherit",
-					content: "CDU"
-				},
-				{
-					label: "FDP",
-					short: "ja",
-					color: "inherit",
-					content: "FDP"
-				},
-				{
-					label: "Linke",
-					short: "ja",
-					color: "inherit",
-					content: "Linke"
-				}
-			]
+			type: "string",
+			default: defaulSubBlocks
 		},
+
 		textAlignment: {
 			type: "string",
 			default: textAlignments[0]
 		}
 	},
 	edit,
-	save
+	save,
+	deprecated
 });
