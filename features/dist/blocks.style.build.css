@@ -1,3 +1,93 @@
+.hero-wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center; }
+
+.hero-image {
+  width: 100vw;
+  height: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.863);
+  background-blend-mode: overlay;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
+  -webkit-animation-name: blendIn;
+          animation-name: blendIn;
+  -webkit-animation-timing-function: cubic-bezier(1, 0.19, 0.66, 1.28);
+          animation-timing-function: cubic-bezier(1, 0.19, 0.66, 1.28);
+  color: white; }
+  .hero-image * {
+    font-size: 2.5rem;
+    color: white; }
+
+.hero-image-video {
+  opacity: 0;
+  -webkit-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  transition: opacity 0.2s; }
+
+.video-loaded {
+  opacity: 1; }
+
+.hero_innerblock {
+  opacity: 0;
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-name: blendInnerText;
+          animation-name: blendInnerText;
+  -webkit-animation-timing-function: cubic-bezier(1, 0.19, 0.66, 1.28);
+          animation-timing-function: cubic-bezier(1, 0.19, 0.66, 1.28);
+  color: white; }
+
+@-webkit-keyframes blendIn {
+  form {
+    background-color: rgba(255, 255, 255, 0); }
+  to {
+    background-color: rgba(34, 34, 34, 0.432); } }
+
+@keyframes blendIn {
+  form {
+    background-color: rgba(255, 255, 255, 0); }
+  to {
+    background-color: rgba(34, 34, 34, 0.432); } }
+
+@-webkit-keyframes blendInnerText {
+  form {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes blendInnerText {
+  form {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+.hero-paralax-wrap {
+  height: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-transform: translate3d(0px, 0px, 0px);
+          transform: translate3d(0px, 0px, 0px); }
 .collapsed p {
   line-height: 0;
   opacity: 0;
