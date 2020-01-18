@@ -1,27 +1,25 @@
-import { arrow } from "./icons";
+import { arrow } from "../../icons";
 const { RichText } = wp.blockEditor;
 export default function save(props) {
 	const { attributes } = props;
 	const { subBlocks, Id, mainBlock } = attributes;
-	const encodedSubblocks = JSON.parse(subBlocks);
-	console.log("new save");
-
 	function getItems() {
-		return encodedSubblocks.map((item, index) => {
+		return subBlocks.map((item, index) => {
 			return (
-				<div className="amh-readmore-item" data-id={Id + index}>
-					<div className="amh-readmore-item-text">
+				<div className="amh-readmore-item">
+					<div className="amh-readmore-item-text" data-id={Id + index}>
 						<h5>{item.label}:</h5>
 						<h5 style={{ color: item.color }}>{item.short}</h5>
 					</div>
-					<div className="amh-readmore-item-arrow">{arrow}</div>
+					<div className="amh-readmore-item-arrow" data-id={Id + index}>
+						{arrow}
+					</div>
 				</div>
 			);
 		});
 	}
-
 	function getSubsContent() {
-		return encodedSubblocks.map((item, index) => {
+		return subBlocks.map((item, index) => {
 			return (
 				<div className="amh-readmore-subContent" data-id={Id + index}>
 					<RichText.Content tagName="p" value={item.content} />

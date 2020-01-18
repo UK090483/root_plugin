@@ -1,0 +1,56 @@
+$amh-wrap-wrapbg: rgb(128, 128, 128);
+
+.amh-wrap-wrap {
+  margin-bottom: 10px;
+  border: green solid 3px;
+  border-radius: 10px;
+  padding: 1px;
+  .amh-wrap-head {
+    * {
+      pointer-events: none;
+    }
+    color: white;
+    background-color: $amh-wrap-wrapbg;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+
+    .amh-readmore-item-arrow {
+      svg {
+        border-radius: 50%;
+        border-style: solid;
+        border-width: 1px;
+        border-color: inherit;
+        height: 40px;
+        width: 40px;
+        fill: inherit;
+        transition: transform 0.25s;
+      }
+    }
+  }
+  .amh-wrap-innerBlocks-container {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  .amh-wrap-innerBlocks {
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+  &.amh-wrap-wrap-active {
+    .amh-wrap-head {
+      border-radius: 6px 6px 0 0;
+      transition: all 0.6s ease-in-out;
+      svg {
+        transform: rotate(90deg);
+        fill: inherit;
+      }
+    }
+    .amh-wrap-innerBlocks {
+      opacity: 1;
+      transition: all 0.6s ease-in-out;
+    }
+  }
+}

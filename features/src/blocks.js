@@ -14,3 +14,4 @@ import "./readmore/readmore-blocks";
 // import "./gridGallerie/gridGallerie";
 // import "./icons/icons-blocks";
 import "./AmhReadmore/readmore-blocks";
+import "./AmhWrap/amhWrap-blocks";

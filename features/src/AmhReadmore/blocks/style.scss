@@ -1,104 +1,109 @@
 .amh-readmore-wrap {
-	border: black solid 1px;
-	border-bottom: unset;
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 
-	.amh-readmore-item-head {
-		padding: 10px;
-	}
-	.amh-readmore-items {
-		border-top: black solid 1px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: nowrap;
-		@media (max-width: 990px) {
-			flex-wrap: wrap;
-		}
+  .amh-readmore-item-head {
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.555);
+  }
+  .amh-readmore-items {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    @media (max-width: 990px) {
+      flex-wrap: wrap;
+    }
 
-		.amh-readmore-item {
-			@media (max-width: 990px) {
-				border-right: none;
-			}
-			padding: 0 10px;
-			width: 100%;
-			min-height: 50px;
-			border-right: black solid 1px;
-			border-bottom: black solid 1px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			flex-wrap: wrap;
-			.amh-readmore-item-text {
-				display: flex;
+    .amh-readmore-item {
+      background-color: rgba(128, 128, 128, 0.295);
+      * {
+        pointer-events: none;
+      }
+      @media (max-width: 990px) {
+        border-right: none;
+      }
+      padding: 0 10px;
+      width: 100%;
+      min-height: 50px;
 
-				align-items: center;
-				width: calc(100% - 40px);
-				h5 {
-					margin: 0;
-				}
-				h5:nth-child(1) {
-					width: 100px;
-					text-align: center;
-				}
-				h5:nth-child(2) {
-					width: 100%;
-					text-align: center;
-				}
-			}
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      .amh-readmore-item-text {
+        display: flex;
 
-			.amh-readmore-item-arrow {
-				width: 40px;
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
+        align-items: center;
+        width: calc(100% - 40px);
+        h5 {
+          margin: 0;
+        }
+        h5:nth-child(1) {
+          width: 100px;
+          text-align: center;
+        }
+        h5:nth-child(2) {
+          width: 100%;
+          text-align: center;
+        }
+      }
 
-				* {
-					pointer-events: none;
-				}
-				svg {
-					border-radius: 50%;
-					border: black solid 1px;
-					height: 40px;
-					width: 40px;
-				}
-				transition: transform 0.25s;
-				&.amh-readmore-item-arrow-active {
-					transform: rotate(90deg);
-					svg {
-						background-color: rgb(37, 37, 37);
-						fill: white;
-					}
-				}
-			}
-		}
-		.amh-readmore-item:last-child {
-			border-right: unset;
-		}
-	}
+      .amh-readmore-item-arrow {
+        width: 40px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        svg {
+          border-radius: 50%;
+          border: black solid 1px;
+          height: 40px;
+          width: 40px;
+        }
+        transition: transform 0.25s;
+      }
+
+      &.amh-readmore-item-active {
+        .amh-readmore-item-arrow {
+          transform: rotate(90deg);
+          svg {
+            background-color: rgb(37, 37, 37);
+            fill: white;
+          }
+        }
+      }
+      &.amh-readmore-item-inactive {
+        opacity: 0.2;
+        background-color: rgba(99, 97, 97, 0.322);
+      }
+    }
+  }
 }
 .amh-readmore-items-subContent {
-	.amh-readmore-subContent {
-		padding: 0 10px;
-		max-height: 0px;
-		overflow: hidden;
-		transition: all 0.25s ease;
-		* {
-			font-size: 0;
-			line-height: 0px;
-			opacity: 0;
-			transition: all 0.25s ease;
-		}
-		&.amh-readmore-subContent-active {
-			border-bottom: black solid 1px;
-			transition: all 0.25s ease;
-			max-height: fit-content;
-			* {
-				font-size: 1rem;
-				line-height: inherit;
-				opacity: inherit;
-				transition: all 0.25s ease;
-			}
-		}
-	}
+  // border: red solid 1px;
+
+  .amh-readmore-subContent {
+    padding: 0 10px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    * {
+      font-size: 0;
+      line-height: 0px;
+      opacity: 0;
+      transition: all 0.25s ease;
+    }
+    &.amh-readmore-subContent-active {
+      border-bottom: black solid 1px;
+      transition: all 0.25s ease;
+      max-height: fit-content;
+      * {
+        font-size: 1rem;
+        line-height: inherit;
+        opacity: inherit;
+        transition: all 0.25s ease;
+      }
+    }
+  }
 }

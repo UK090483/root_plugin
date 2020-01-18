@@ -1,8 +1,9 @@
 import "./style.scss";
 import "./editor.scss";
-import edit from "./edit";
+import edit from "./edit/edit";
 import save from "./save";
 import deprecated from "./deprecated/deprecated";
+
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const textAlignments = ["left", "center", "right"];
