@@ -1,5 +1,5 @@
-import "./hero/hero-frontend";
-import "./mailchimp/mailchimp-frontend";
+// import "./hero/hero-frontend";
+// import "./mailchimp/mailchimp-frontend";
 import "./AmhReadmore/readmore-frontend";
 import "./readmore/readmore-frontend";
 import "./AmhWrap/amhWrap-frontend";
