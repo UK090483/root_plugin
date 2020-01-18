@@ -29,7 +29,6 @@ export default function item(props) {
 		nextSubBlocks[index] = saveold;
 		setAttributes({ subBlocks: JSON.stringify(nextSubBlocks) });
 	}
-	function onSelectImage(params) {}
 
 	function eraseItem() {
 		const nextSubBlocks = [...encodedSubblocks];
@@ -37,6 +36,7 @@ export default function item(props) {
 		setactiveColor(-1);
 		setAttributes({ subBlocks: JSON.stringify(nextSubBlocks) });
 	}
+
 	return (
 		<div>
 			<div
@@ -98,18 +98,34 @@ export default function item(props) {
 							onChangeComplete={value => setSubContent(value.hex, "bgColor")}
 						></ColorPicker>
 					</div> */}
-
-					<MediaUpload
-						title={"Select Logo"}
-						onSelect={onSelectImage}
-						allowedTypes={["image"]}
-						value={block.imageId}
-						render={({ open }) => (
-							<Button isDefault onClick={open}>
-								{!block.imageId ? "Select Logo" : "Replace Logo"}
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							flexWrap: "wrap",
+							justifyContent: "space-around"
+						}}
+					>
+						{block.logo && (
+							<img src={block.logo} style={{ with: 100, height: 100 }}></img>
+						)}
+						<MediaUpload
+							title={"Select Logo"}
+							onSelect={image => setSubContent(image.sizes.medium.url, "logo")}
+							allowedTypes={["image"]}
+							value={block.imageId}
+							render={({ open }) => (
+								<Button isDefault onClick={open}>
+									{!block.imageId ? "Select Logo" : "Replace Logo"}
+								</Button>
+							)}
+						/>
+						{block.logo && (
+							<Button isPrimary onClick={image => setSubContent(null, "logo")}>
+								{"Erase Image"}
 							</Button>
 						)}
-					/>
+					</div>
 					<TextControl
 						style={{ color: block.color }}
 						label="short"

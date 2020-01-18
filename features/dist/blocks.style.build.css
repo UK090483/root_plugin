@@ -195,6 +195,12 @@
         .amh-readmore-wrap .amh-readmore-items .amh-readmore-item .amh-readmore-item-text h5:nth-child(2) {
           width: 100%;
           text-align: center; }
+        .amh-readmore-wrap .amh-readmore-items .amh-readmore-item .amh-readmore-item-text .amh-readmore-item-image {
+          width: 100px;
+          height: 48px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center; }
       .amh-readmore-wrap .amh-readmore-items .amh-readmore-item .amh-readmore-item-arrow {
         width: 40px;
         display: -ms-flexbox;

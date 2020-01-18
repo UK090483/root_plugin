@@ -2,6 +2,7 @@ import ButtonGroupCustom from "../Inspector/ButtonGroup";
 import Item from "./item";
 const { RichText } = wp.blockEditor;
 const { useEffect, useState } = wp.element;
+const { useSelect } = wp.data;
 const {
 	TextControl,
 	Button,

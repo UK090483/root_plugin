@@ -11,7 +11,16 @@ export default function save(props) {
 			return (
 				<div className="amh-readmore-item" data-id={Id + index}>
 					<div className="amh-readmore-item-text">
-						<h5>{item.label}:</h5>
+						{item.logo ? (
+							<div
+								className="amh-readmore-item-image"
+								style={{
+									backgroundImage: `url(${item.logo})`
+								}}
+							></div>
+						) : (
+							<h5>{item.label}:</h5>
+						)}
 						<h5 style={{ color: item.color }}>{item.short}</h5>
 					</div>
 					<div className="amh-readmore-item-arrow">{arrow}</div>
