@@ -1,0 +1,141 @@
+// $padding: 80px;
+// $w1: 720px - $padding;
+// $w2: 940px - $padding;
+// $w3: 1140px - $padding;
+
+// .gallerie-wrap {
+// 	display: flex;
+// 	flex-direction: row;
+// 	flex-wrap: wrap;
+// 	align-items: center;
+// 	justify-content: space-between;
+// 	width: 100%;
+// 	a {
+// 		.image {
+// 			transition: transform 0.3s, box-shadow 0.3s;
+// 			box-shadow: 0px 0px 0px grey;
+// 		}
+// 	}
+// 	a:hover {
+// 		.image {
+// 			box-shadow: 10px 10px 30px rgb(0, 0, 0);
+// 			transform: scale(1.03);
+// 		}
+// 	}
+// }
+
+// .gallerie-item {
+// 	width: calc(100vw - 30px);
+// 	text-decoration: none;
+// 	color: black;
+// 	margin-bottom: 20px;
+// 	display: flex;
+// 	flex-wrap: wrap;
+// 	align-items: center;
+// 	justify-content: center;
+// 	// border: blue solid 1px;
+
+// 	.image {
+// 		width: 100%;
+// 		height: calc(100vw - 30px);
+// 		object-fit: cover;
+// 		object-position: center;
+// 		// border: red solid 1px;
+// 	}
+// 	.gallerie-item-text {
+// 		width: 100%;
+// 		height: 40px;
+// 		margin: 0 auto;
+// 		text-decoration: none;
+// 		color: black;
+// 		display: flex;
+// 		justify-content: center;
+// 		align-items: center;
+// 	}
+// }
+
+// @media (min-width: 768px) {
+// 	.gallerie-item {
+// 		width: calc(#{$w1} / 2);
+// 		.image {
+// 			height: calc(#{$w1} / 2);
+// 		}
+// 	}
+// }
+// @media (min-width: 992px) {
+// 	.gallerie-item {
+// 		width: calc(#{$w2} / 3);
+// 		.image {
+// 			height: calc(#{$w2} / 3);
+// 		}
+
+// 		&.gallerie-item3-2-übrig {
+// 			margin-right: calc(#{$w2} / 3 + 40px);
+// 		}
+// 	}
+// }
+// @media (min-width: 1200px) {
+// 	.gallerie-item {
+// 		width: calc(#{$w3} / 4);
+// 		.image {
+// 			height: calc(#{$w3} / 4);
+// 		}
+// 		&.gallerie-item3-2-übrig {
+// 			margin-right: 0px;
+// 		}
+// 		&.gallerie-item4-2-übrig {
+// 			margin-right: calc(#{$w3} / 2 + 50px);
+// 		}
+// 		&.gallerie-item4-3-übrig {
+// 			margin-right: calc(#{$w3}/ 4 + 25px);
+// 		}
+// 	}
+// }
+
+.gallerie-wrap {
+  position: relative;
+
+  .gallerie-item {
+    position: absolute;
+    overflow: hidden;
+    transition: all 0.2s;
+    width: 0;
+    height: 0;
+    left: 0;
+    top: 0;
+    background-color: rgba(224, 224, 224, 0.281);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &[data-fit="contain"] {
+      img {
+        width: calc(100% - 20px);
+        height: inherit;
+        object-fit: contain;
+      }
+    }
+    &[data-fit="cover"] {
+      img {
+        width: 100%;
+        height: inherit;
+        object-fit: cover;
+      }
+    }
+
+    .gallerie-item-text {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.63);
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+  }
+
+  .gallerie-item:hover {
+    .gallerie-item-text {
+      opacity: 1;
+    }
+  }
+}

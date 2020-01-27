@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Plugin Name: AMH Forderungen Blocks
+ * Plugin Name: Sarah
 
- * Description: Plugin for Melikes Gallerie
+ * Description: Plugin for Sarah
  * Author: Konrad Ullrich
  * Version: 1.0.0
  * License: GPL2+

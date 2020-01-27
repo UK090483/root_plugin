@@ -3,56 +3,59 @@ import getSortFunction from "./helper/sortfunction";
 import Modal from "./inspector/Modal";
 import EditPannel from "./inspector/EditPannel";
 
-const { useState, useEffect } = wp.element;
+const { useState, useEffect, useRef } = wp.element;
 
 export default function(props) {
 	const { setAttributes, attributes, isSelected } = props;
-	const { images, sort, Id, borderRadius, gridHeight, collumns } = attributes;
+	const {
+		images,
+		Id,
+		borderRadius,
+		gridHeight,
+		collumns,
+		gap,
+		positions,
+		containerHeight,
+		ratio,
+		timages
+	} = attributes;
+
 	const [isOpen, setOpen] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(-1);
+	const [container, Setcontainer] = useState(null);
+	const [containerSize, setContainerSize] = useState(null);
+	const ref = useRef();
 
+	console.log(timages);
 	useEffect(() => {
 		!isSelected && setSelectedItem(-1);
 	});
 
 	useEffect(() => {
+		Setcontainer(ref.current);
 		if (!Id) {
 			setAttributes({ Id: Date.now() });
 		}
 	}, []);
 
+	useEffect(() => {
+		if (images.length > 0) {
+			getPositions();
+		}
+	}, [images, collumns, ratio, gap]);
+
+	useEffect(() => {
+		setContainerSize(ref.current.getBoundingClientRect());
+	}, []);
+
 	const tools = {
-		eraseItem: eraseItem,
+		setSelectedItem: setSelectedItem,
 		selectedItem: selectedItem,
 		setAttributes: setAttributes,
 		attributes: attributes,
-		setOpen: setOpen,
-		moveItem: moveItem
+		setOpen: setOpen
 	};
 
-	function eraseItem() {
-		let i = [...images];
-		let index = i.findIndex(element => element.fileName === selectedItem);
-
-		i.splice(index, 1);
-		setAttributes({
-			images: i
-		});
-		setSelectedItem(-1);
-		setOpen(false);
-	}
-
-	function moveItem(dir) {
-		let i = [...images];
-		let index = i.findIndex(element => element.fileName === selectedItem);
-		let changeIndex = dir === "right" ? index + 1 : index - 1;
-		let saveold = { ...i[changeIndex] };
-		i[changeIndex] = i[index];
-		i[index] = saveold;
-		setAttributes({
-			images: i
-		});
-	}
 	function getRowCount() {
 		let space = 0;
 		images.forEach(image => {
@@ -69,7 +72,61 @@ export default function(props) {
 				space += 1;
 			}
 		});
-		return space / collumns.value;
+		let res = space / collumns.value;
+		if (res - Math.trunc(res) !== 0) {
+			return Math.trunc(res) + 1;
+		} else {
+			return res;
+		}
+	}
+
+	function getPositions() {
+		if (container) {
+			if (container.childNodes[2]) {
+				let itemContainer = container.childNodes[2];
+				let size = itemContainer.getBoundingClientRect();
+				let res = [];
+				let cx = size.x;
+				let cy = size.y;
+				let w = size.width;
+
+				itemContainer.childNodes.forEach(item => {
+					let rect = item.getBoundingClientRect();
+					let left = (rect.x - cx) / w;
+					let top = (rect.y - cy) / w;
+					let width = rect.width / w;
+					let height = rect.height / w;
+					res.push({ left: left, top: top, width: width, height: height });
+				});
+				if (positions !== JSON.stringify(res)) {
+					setAttributes({ positions: JSON.stringify(res) });
+				}
+			}
+		}
+	}
+
+	function getContainerHeight() {
+		if (!container) {
+			return "100px";
+		} else {
+			let containerW = container.getBoundingClientRect().width;
+			let rowCount = getRowCount();
+
+			let ItemWidth =
+				(containerW - gap * (collumns.value - 1)) / collumns.value;
+
+			let heightContainer = ItemWidth * rowCount + gap * (rowCount - 1);
+			let heightContainerContainer =
+				(heightContainer / containerW) * (ratio / 100);
+
+			if (gridHeight !== heightContainer) {
+				setAttributes({ gridHeight: heightContainer });
+			}
+			if (containerHeight !== heightContainerContainer) {
+				setAttributes({ containerHeight: heightContainerContainer });
+			}
+			return heightContainer * (ratio / 100) + "px";
+		}
 	}
 
 	function getImages() {
@@ -79,43 +136,41 @@ export default function(props) {
 				: i.sizes.full.url;
 
 			let wrapClass =
-				i.fileName === selectedItem
+				i.id === selectedItem
 					? `grid-Gallerie-item grid-Gallery-${i.pos} grid-Gallerie-item-selected`
 					: `grid-Gallerie-item grid-Gallery-${i.pos}`;
 
 			return (
 				<div
-					key={i.fileName}
+					key={i.id}
 					className={wrapClass}
-					onClick={() => setSelectedItem(i.fileName)}
+					onClick={() => setSelectedItem(i.id)}
 					style={{
 						backgroundImage: `url(${url})`,
-						borderRadius: borderRadius.value + borderRadius.unit
+						borderRadius: borderRadius.value + borderRadius.unit,
+						backgroundSize: i.fit
 					}}
 				>
-					{/* <img
-						className={`grid-Gallery-image grid-Gallery-${i.pos}`}
-						src={url}
-					></img> */}
-
 					<EditPannel tools={tools} index={index}></EditPannel>
 				</div>
 			);
 		});
 	}
+
 	const wrapStyle = {
-		height: gridHeight.value + gridHeight.unit,
-		gridTemplateColumns: `repeat(${collumns.value}, 1fr)`
+		height: getContainerHeight(),
+		gridTemplateColumns: `repeat(${collumns.value}, 1fr)`,
+		gridGap: gap + "px"
 	};
 
 	return (
-		<div className={"grid-Gallerie-editor-wrap"}>
+		<div ref={ref} className={"grid-Gallerie-editor-wrap"}>
 			<Inspector
 				tools={tools}
 				setAttributes={setAttributes}
 				attributes={attributes}
 			></Inspector>
-			{/* <Modal
+			<Modal
 				tools={tools}
 				setAttributes={setAttributes}
 				selectedItem={selectedItem}
@@ -123,10 +178,10 @@ export default function(props) {
 				isOpen={isOpen}
 				setOpen={setOpen}
 				images={images}
-			></Modal> */}
+			></Modal>
 
 			{images.length > 0 && (
-				<div className={"grid-Gallerie-wrap"} style={wrapStyle}>
+				<div className={"grid-Gallerie-e-wrap"} style={wrapStyle}>
 					{getImages()}
 				</div>
 			)}

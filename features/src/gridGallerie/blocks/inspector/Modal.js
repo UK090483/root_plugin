@@ -1,21 +1,19 @@
 import SelectPages from "./selectPages";
 const { Button, Modal, TextControl, SelectControl } = wp.components;
 
-export default function Inspector({
+export default function KUmodal({
 	setAttributes,
 	selectedItem,
-	sortImages,
 	isOpen,
 	setOpen,
 	images,
-	tools,
-	setSelectedItem
+	tools
 }) {
-	const item = images.find(element => element.fileName === selectedItem);
+	const item = images.find(element => element.id === selectedItem);
 
 	function setAlt(text) {
 		let i = [...images];
-		i.find(element => element.fileName === selectedItem).alt = text;
+		i.find(element => element.id === selectedItem).alt = text;
 		setAttributes({
 			images: i
 		});
@@ -30,15 +28,13 @@ export default function Inspector({
 						setOpen(false);
 					}}
 				>
-					{/* <SelectPages tools={tools}></SelectPages>
-					<h3>FileName</h3>
-					<h5>{item.fileName}</h5>
-					<h3>{item.alt}</h3>
+					<SelectPages tools={tools}></SelectPages>
+
 					<TextControl
 						label="Label"
 						value={item.alt}
 						onChange={e => setAlt(e)}
-					></TextControl> */}
+					></TextControl>
 
 					<div className={"gallerie-modal-button-wrap"}>
 						<Button

@@ -1,19 +1,10 @@
 const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-const { Button, ButtonGroup } = wp.components;
+const { Button, ButtonGroup, RangeControl } = wp.components;
 import getSortFunction from "../helper/sortfunction";
 import style from "../helper/style";
 
 export default function Inspector({ setAttributes, attributes, sortImages }) {
-	const { sort, images } = attributes;
-
-	function isActiveSort(params) {
-		return sort === params;
-	}
-
-	function setSortAlo(_sort) {
-		setAttributes({ sort: _sort });
-		sortImages(_sort);
-	}
+	const { sort, images, columns, ratio, gap } = attributes;
 
 	const UploadCheckFallback = (
 		<h3>You don't have permission to Upload Images...</h3>
@@ -26,7 +17,9 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 			imgObject.sizes = element.sizes;
 			imgObject.fileName = checkIfallreadyExist(element, all);
 			imgObject.alt = "";
+			imgObject.fit = "cover";
 			imgObject.id = element.id;
+			imgObject.size = [1, 1];
 			imgObject.link = { id: null, url: null };
 			all.push(imgObject);
 		});
@@ -38,27 +31,31 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 		<div>
 			<InspectorControls>
 				<br></br>
-				<h3>Sort</h3>
-				<div className={style.row}>
-					<ButtonGroup>
-						<Button
-							isSmall
-							isPrimary={isActiveSort("<")}
-							onClick={() => setSortAlo("<")}
-						>
-							{"<"}
-						</Button>
-						<Button
-							isSmall
-							isPrimary={isActiveSort(">")}
-							onClick={() => setSortAlo(">")}
-						>
-							{">"}
-						</Button>
-					</ButtonGroup>
-				</div>
-				<br></br>
 
+				<RangeControl
+					label="Columns"
+					value={columns}
+					onChange={columns => setAttributes({ columns })}
+					min={2}
+					max={10}
+				/>
+				<br></br>
+				<RangeControl
+					label="ratio"
+					value={ratio}
+					onChange={ratio => setAttributes({ ratio })}
+					min={100}
+					max={300}
+				/>
+				<br></br>
+				<RangeControl
+					label="ratio"
+					value={gap}
+					onChange={gap => setAttributes({ gap })}
+					min={0}
+					max={100}
+				/>
+				<br></br>
 				<MediaUploadCheck fallback={UploadCheckFallback}>
 					<MediaUpload
 						multiple={true}

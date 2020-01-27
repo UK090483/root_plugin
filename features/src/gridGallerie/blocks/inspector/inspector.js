@@ -1,9 +1,26 @@
 const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-const { Button, ButtonGroup, RangeControl } = wp.components;
+const {
+	Button,
+	ButtonGroup,
+	RangeControl,
+	Panel,
+	PanelBody,
+	PanelRow
+} = wp.components;
 import style from "../helper/style";
 
 export default function Inspector({ setAttributes, attributes, sortImages }) {
-	const { sort, images, borderRadius, gridHeight, collumns } = attributes;
+	const {
+		sort,
+		images,
+		borderRadius,
+		gridHeight,
+		collumns,
+		gap,
+		ratio,
+		marginTop,
+		marginBottom
+	} = attributes;
 
 	const UploadCheckFallback = (
 		<h3>You don't have permission to Upload Images...</h3>
@@ -14,22 +31,17 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 		i.forEach(element => {
 			let imgObject = {};
 			imgObject.sizes = element.sizes;
-			imgObject.fileName = checkIfallreadyExist(element, all);
+			imgObject.fileName = element.title.replace(/ /g, "");
 			imgObject.alt = "";
 			imgObject.pos = "small";
-			imgObject.id = element.id;
-			imgObject.link = { id: null, url: null };
+			imgObject.id = element.id + Math.floor(Math.random() * 100);
+			imgObject.fit = "cover";
+			imgObject.link = { id: null, url: null, postType: null };
 			all.push(imgObject);
 		});
-
 		setAttributes({ images: all });
 	}
 
-	function setRange(value) {
-		let nextBorderRadius = { ...borderRadius };
-		nextBorderRadius.value = value;
-		setAttributes({ borderRadius: nextBorderRadius });
-	}
 	function setValues(type, value) {
 		let nextValues = { ...attributes[type] };
 		nextValues.value = value;
@@ -40,7 +52,7 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 		<div>
 			<InspectorControls>
 				<br></br>
-				<h3>Sort</h3>
+
 				<div className={style.row}>
 					<RangeControl
 						label={"Corners"}
@@ -52,12 +64,23 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 				</div>
 				<div className={style.row}>
 					<RangeControl
-						label={"height"}
-						value={gridHeight.value}
-						onChange={value => setValues("gridHeight", value)}
+						label={"gap"}
+						value={gap}
+						onChange={gap => setAttributes({ gap })}
 						min={0}
-						max={1000}
+						max={100}
 					></RangeControl>
+				</div>
+				<div className={style.row}>
+					<RangeControl
+						label="ratio"
+						value={ratio}
+						onChange={ratio => {
+							ratio && setAttributes({ ratio });
+						}}
+						min={50}
+						max={300}
+					/>
 				</div>
 				<div className={style.row}>
 					<RangeControl
@@ -77,12 +100,31 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 						allowedTypes={["image"]}
 						value={""}
 						render={({ open }) => (
-							<Button isPrimary onClick={open}>
-								Add Images
-							</Button>
+							<div className={style.row}>
+								<Button isPrimary onClick={open}>
+									Add Images
+								</Button>
+							</div>
 						)}
 					/>
 				</MediaUploadCheck>
+
+				<PanelBody title="Margin" initialOpen={false}>
+					<RangeControl
+						label={"Margin Top"}
+						value={marginTop}
+						onChange={marginTop => setAttributes({ marginTop })}
+						min={0}
+						max={100}
+					></RangeControl>
+					<RangeControl
+						label={"Margin Bottom"}
+						value={marginBottom}
+						onChange={marginBottom => setAttributes({ marginBottom })}
+						min={0}
+						max={100}
+					></RangeControl>
+				</PanelBody>
 			</InspectorControls>
 
 			{!(images.length > 0) && (

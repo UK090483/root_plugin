@@ -1,22 +1,32 @@
 import ItemWrap from "./ItemWrap";
 
 export default function({ attributes }) {
-	const { id, borderRadius } = attributes;
+	const {
+		id,
+		borderRadius,
+		collumns,
+		gridHeight,
+		gap,
+		ratio,
+		positions,
+		containerHeight,
+		marginTop,
+		marginBottom
+	} = attributes;
 
 	function getImages() {
 		return attributes.images.map((i, index) => {
-			let url = i.sizes.hasOwnProperty("medium")
-				? i.sizes.medium.url
-				: i.sizes.full.url;
-
 			return (
-				<div
-					className={`grid-Gallerie-item grid-Gallery-${i.pos}`}
-					style={{
-						backgroundImage: `url(${url})`,
-						borderRadius: borderRadius.value + borderRadius.unit
-					}}
-				></div>
+				<ItemWrap
+					i={i}
+					positions={positions}
+					index={index}
+					borderRadius={borderRadius}
+				>
+					<div className={"grid-Gallerie-item-text"}>
+						{i.alt && <h5>{i.alt}</h5>}
+					</div>
+				</ItemWrap>
 			);
 		});
 	}
@@ -24,7 +34,15 @@ export default function({ attributes }) {
 	return (
 		<div>
 			{attributes.images.length > 0 && (
-				<div className={"grid-Gallerie-wrap"}>{getImages()}</div>
+				<div
+					className={"grid-Gallerie-wrap-front"}
+					data-height={containerHeight}
+					data-ratio={ratio / 100}
+					data-gap={gap}
+					style={{ marginTop: marginTop, marginBottom }}
+				>
+					{getImages()}
+				</div>
 			)}
 
 			<script>

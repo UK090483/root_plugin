@@ -1,7 +1,7 @@
 import ItemWrap from "./ItemWrap";
 
 export default function({ attributes }) {
-	let Id = attributes.Id;
+	const { columns, Id, gap, ratio } = attributes;
 
 	function getImages() {
 		return attributes.images.map((i, index) => {
@@ -10,11 +10,7 @@ export default function({ attributes }) {
 				: i.sizes.full.url;
 
 			return (
-				<ItemWrap
-					link={i.link.url}
-					index={index}
-					length={attributes.images.length}
-				>
+				<ItemWrap link={i.link.url} fit={i.fit}>
 					<noscript>
 						<img className={"image"} src={url}></img>
 					</noscript>
@@ -28,7 +24,14 @@ export default function({ attributes }) {
 	return (
 		<div>
 			{attributes.images.length > 0 && (
-				<div className={"gallerie-wrap"}>{getImages()}</div>
+				<div
+					className={"gallerie-wrap"}
+					data-gap={gap}
+					data-columns={columns}
+					data-ratio={ratio}
+				>
+					{getImages()}
+				</div>
 			)}
 
 			<script>

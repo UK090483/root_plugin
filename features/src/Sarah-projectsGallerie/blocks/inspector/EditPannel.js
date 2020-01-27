@@ -2,51 +2,23 @@ const { Button, ButtonGroup } = wp.components;
 
 export default function EditPannel({ tools, index }) {
 	const {
+		eraseItem,
 		setOpen,
+		moveItem,
 		attributes,
 		setAttributes,
-		selectedItem,
 		setSelectedItem
 	} = tools;
-
-	function setPos(e) {
-		let images = [...attributes.images];
-		let index = images.findIndex(element => element.id === selectedItem);
-		images[index].pos = e;
-		setAttributes({ images });
-	}
 
 	function setImageAtribute(attribute, value) {
 		let nextImages = [...attributes.images];
 		nextImages[index][attribute] = value;
 		setAttributes({ images: nextImages });
 	}
-	function moveItem(dir) {
-		let i = [...attributes.images];
-
-		let changeIndex = dir === "right" ? index + 1 : index - 1;
-		let saveold = { ...i[changeIndex] };
-		i[changeIndex] = i[index];
-		i[index] = saveold;
-
-		setAttributes({
-			images: i
-		});
-	}
-	function eraseItem() {
-		let i = [...attributes.images];
-
-		i.splice(index, 1);
-		setAttributes({
-			images: i
-		});
-		setSelectedItem(-1);
-		setOpen(false);
-	}
 
 	return (
-		<div className={"grid-Gallerie-item-edit"}>
-			<div className={"grid-Gallerie-item-edit-move"}>
+		<div className={"gallerie-item-edit"}>
+			<div className={"gallerie-item-edit-move"}>
 				<ButtonGroup>
 					<Button
 						isSmall
@@ -66,7 +38,60 @@ export default function EditPannel({ tools, index }) {
 					</Button>
 				</ButtonGroup>
 			</div>
-			<div className={"grid-Gallerie-item-edit-fit"}>
+
+			<div className={"gallerie-item-edit-size"}>
+				<ButtonGroup>
+					<h5>horizontal</h5>
+					<Button
+						isSmall
+						isPrimary
+						onClick={() => {
+							let nextSize = [...attributes.images[index].size];
+							nextSize[0] = nextSize[0] + 1;
+							setImageAtribute("size", nextSize);
+						}}
+					>
+						{">"}
+					</Button>
+
+					<Button
+						isSmall
+						isPrimary
+						onClick={() => {
+							let nextSize = [...attributes.images[index].size];
+							nextSize[0] = nextSize[0] - 1;
+							setImageAtribute("size", nextSize);
+						}}
+					>
+						{"<"}
+					</Button>
+					<h5>vertical</h5>
+					<Button
+						isSmall
+						isPrimary
+						onClick={() => {
+							let nextSize = [...attributes.images[index].size];
+							nextSize[1] = nextSize[1] + 1;
+							setImageAtribute("size", nextSize);
+						}}
+					>
+						{">"}
+					</Button>
+					<Button
+						isSmall
+						isPrimary
+						onClick={() => {
+							let nextSize = [...attributes.images[index].size];
+							nextSize[1] = nextSize[1] - 1;
+							setImageAtribute("size", nextSize);
+						}}
+					>
+						{"<"}
+					</Button>
+				</ButtonGroup>
+			</div>
+
+			<div className={"gallerie-item-edit-fit"}>
 				<ButtonGroup>
 					<Button
 						isSmall
@@ -84,30 +109,11 @@ export default function EditPannel({ tools, index }) {
 					</Button>
 				</ButtonGroup>
 			</div>
-			<div className={"grid-Gallerie-item-edit-erase"}>
+			<div className={"gallerie-item-edit-erase"}>
 				<Button isSmall isPrimary onClick={() => eraseItem()}>
 					{"X"}
 				</Button>
 			</div>
-			<div className={"grid-Gallerie-item-edit-pos"}>
-				<div
-					className={"grid-Gallerie-item-edit-pos-high"}
-					onClick={() => setPos("high")}
-				></div>
-				<div
-					className={"grid-Gallerie-item-edit-pos-even"}
-					onClick={() => setPos("even")}
-				></div>
-				<div
-					className={"grid-Gallerie-item-edit-pos-landscape"}
-					onClick={() => setPos("landscape")}
-				></div>
-				<div
-					className={"grid-Gallerie-item-edit-pos-small"}
-					onClick={() => setPos("small")}
-				></div>
-			</div>
-
 			<div className={"gallerie-item-edit-edit"}>
 				<Button isSmall isPrimary onClick={() => setOpen(true)}>
 					Edit

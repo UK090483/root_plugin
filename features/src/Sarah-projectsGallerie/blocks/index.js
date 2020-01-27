@@ -1,7 +1,7 @@
 import "./style.scss";
 import "./editor.scss";
 
-import save from "./save/index.js";
+import save from "./save/index";
 import edit from "./edit";
 
 const { registerBlockType } = wp.blocks;
@@ -19,6 +19,23 @@ registerBlockType("kubase/projects-gallery", {
 			type: "array",
 			default: []
 		},
+		rows: {
+			type: "string",
+			default: "[{}]"
+		},
+		columns: {
+			type: "number",
+			default: 4
+		},
+		ratio: {
+			type: "number",
+			default: 100
+		},
+		gap: {
+			type: "number",
+			default: 20
+		},
+
 		sort: {
 			type: "string",
 			default: ">"
