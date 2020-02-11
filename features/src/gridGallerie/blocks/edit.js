@@ -1,5 +1,4 @@
 import Inspector from "./inspector/inspector";
-import getSortFunction from "./helper/sortfunction";
 import Modal from "./inspector/Modal";
 import EditPannel from "./inspector/EditPannel";
 
@@ -15,9 +14,8 @@ export default function(props) {
 		collumns,
 		gap,
 		positions,
-		containerHeight,
 		ratio,
-		timages
+		containerHeight
 	} = attributes;
 
 	const [isOpen, setOpen] = useState(false);
@@ -26,7 +24,6 @@ export default function(props) {
 	const [containerSize, setContainerSize] = useState(null);
 	const ref = useRef();
 
-	console.log(timages);
 	useEffect(() => {
 		!isSelected && setSelectedItem(-1);
 	});
@@ -81,6 +78,7 @@ export default function(props) {
 	}
 
 	function getPositions() {
+		let nextImages = [...images];
 		if (container) {
 			if (container.childNodes[2]) {
 				let itemContainer = container.childNodes[2];
@@ -89,17 +87,26 @@ export default function(props) {
 				let cx = size.x;
 				let cy = size.y;
 				let w = size.width;
+				let h = getContainerHeight();
 
-				itemContainer.childNodes.forEach(item => {
+				itemContainer.childNodes.forEach((item, index) => {
 					let rect = item.getBoundingClientRect();
-					let left = (rect.x - cx) / w;
-					let top = (rect.y - cy) / w;
-					let width = rect.width / w;
-					let height = rect.height / w;
+					let left = ((rect.x - cx) / w) * 100;
+					let top = ((rect.y - cy) / h) * 100;
+					let width = (rect.width / w) * 100;
+					let height = (rect.height / h) * 100;
 					res.push({ left: left, top: top, width: width, height: height });
+
+					nextImages[index].top = top;
+					nextImages[index].left = left;
+					nextImages[index].width = width;
+					nextImages[index].height = height;
 				});
 				if (positions !== JSON.stringify(res)) {
-					setAttributes({ positions: JSON.stringify(res) });
+					setAttributes({
+						positions: JSON.stringify(res),
+						images: nextImages
+					});
 				}
 			}
 		}
@@ -107,7 +114,7 @@ export default function(props) {
 
 	function getContainerHeight() {
 		if (!container) {
-			return "100px";
+			return "100";
 		} else {
 			let containerW = container.getBoundingClientRect().width;
 			let rowCount = getRowCount();
@@ -125,7 +132,7 @@ export default function(props) {
 			if (containerHeight !== heightContainerContainer) {
 				setAttributes({ containerHeight: heightContainerContainer });
 			}
-			return heightContainer * (ratio / 100) + "px";
+			return heightContainer * (ratio / 100);
 		}
 	}
 
@@ -158,7 +165,7 @@ export default function(props) {
 	}
 
 	const wrapStyle = {
-		height: getContainerHeight(),
+		height: getContainerHeight() + "px",
 		gridTemplateColumns: `repeat(${collumns.value}, 1fr)`,
 		gridGap: gap + "px"
 	};

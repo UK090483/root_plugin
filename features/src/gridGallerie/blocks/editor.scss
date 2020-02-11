@@ -1,123 +1,126 @@
 .grid-Gallerie-item {
-  position: relative;
+	position: relative;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
 
-  .grid-Gallerie-item-edit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    height: 0px;
-    background-color: rgba(255, 255, 255, 0.596);
+	.grid-Gallerie-item-edit {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		height: 0px;
+		background-color: rgba(255, 255, 255, 0.596);
 
-    overflow: hidden;
-    transition: height 0.4s;
+		overflow: hidden;
+		transition: height 0.4s;
 
-    width: 100%;
+		width: 100%;
 
-    .grid-Gallerie-item-edit-move {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .grid-Gallerie-item-edit-erase {
-      position: absolute;
-      top: 0;
-      right: 1px;
-    }
-    .gallerie-item-edit-edit {
-      position: absolute;
-      bottom: 0;
-      left: 1px;
-    }
-    .grid-Gallerie-item-edit-pos {
-      width: 100%;
-      margin: auto;
-    }
-    .grid-Gallerie-item-edit-fit {
-      position: absolute;
-      bottom: 0;
-      right: 5px;
-    }
-  }
+		.grid-Gallerie-item-edit-move {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		.grid-Gallerie-item-edit-erase {
+			position: absolute;
+			top: 0;
+			right: 1px;
+		}
+		.gallerie-item-edit-edit {
+			position: absolute;
+			bottom: 0;
+			left: 1px;
+		}
+		.grid-Gallerie-item-edit-pos {
+			width: 100%;
+			margin: auto;
+		}
+		.grid-Gallerie-item-edit-fit {
+			position: absolute;
+			bottom: 0;
+			right: 5px;
+		}
+	}
 }
 
 .grid-Gallerie-item-selected {
-  // border: rgba(0, 102, 255, 0.651) solid 3px;
-  .grid-Gallerie-item-edit {
-    height: 100%;
-  }
+	// border: rgba(0, 102, 255, 0.651) solid 3px;
+	.grid-Gallerie-item-edit {
+		height: 100%;
+	}
 }
 
 .grid-Gallerie-modal-button-wrap {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 80px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 80px;
 }
 
-$grid-Galleriebg: #007cba;
+$grid-Galleriebg: #007cba9c;
 $grid-Galleriepadding: 10px;
 
 .grid-Gallerie-item-edit-pos {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  div {
-    margin: $grid-Galleriepadding;
-    background-color: $grid-Galleriebg;
-    opacity: 0.5;
-    width: 10%;
-    height: 10%;
-  }
-  .grid-Gallerie-item-edit-pos-high {
-    width: 20px;
-    height: 40px;
-  }
-  .grid-Gallerie-item-edit-pos-even {
-    width: 35px;
-    height: 35px;
-  }
-  .grid-Gallerie-item-edit-pos-landscape {
-    width: 40px;
-    height: 20px;
-  }
-  .grid-Gallerie-item-edit-pos-small {
-    width: 20px;
-    height: 20px;
-  }
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 80%;
+	height: 40%;
+	position: relative;
+	div {
+		margin: $grid-Galleriepadding;
+		background-color: $grid-Galleriebg;
+		opacity: 0.5;
+		width: 10%;
+		height: 10%;
+	}
+	.grid-Gallerie-item-edit-pos-high {
+		width: 15%;
+		padding-top: 30%;
+	}
+	.grid-Gallerie-item-edit-pos-even {
+		width: 20%;
+		padding-top: 20%;
+	}
+	.grid-Gallerie-item-edit-pos-landscape {
+		width: 30%;
+		padding-top: 15%;
+	}
+	.grid-Gallerie-item-edit-pos-small {
+		width: 15%;
+		padding-top: 15%;
+	}
 }
 
 // -----------------------------------------
 
 .grid-Gallerie-e-wrap {
-  display: grid;
-  grid-template-rows: auto;
-  grid-gap: 0.5vw;
+	display: grid;
+	grid-template-rows: auto;
+	grid-gap: 0.5vw;
 }
 
 .grid-Gallerie-item {
-  grid-column: span 2;
-  grid-row: span 2;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+	grid-column: span 2;
+	grid-row: span 2;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
 }
 
 .grid-Gallery-high {
-  grid-column: span 1;
-  grid-row: span 2;
+	grid-column: span 1;
+	grid-row: span 2;
 }
 .grid-Gallery-even {
-  grid-column: span 2;
-  grid-row: span 2;
+	grid-column: span 2;
+	grid-row: span 2;
 }
 .grid-Gallery-landscape {
-  grid-column: span 2;
-  grid-row: span 1;
+	grid-column: span 2;
+	grid-row: span 1;
 }
 .grid-Gallery-small {
-  grid-column: span 1;
-  grid-row: span 1;
+	grid-column: span 1;
+	grid-row: span 1;
 }

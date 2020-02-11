@@ -11,7 +11,7 @@ registerBlockType("kubase/grid-gallery", {
 	icon: "images-alt2",
 	category: "kubase-blocks",
 	supports: {
-		align: ["wide", "full"]
+		align: ["wide", "full", "center"]
 	},
 
 	attributes: {
@@ -25,7 +25,7 @@ registerBlockType("kubase/grid-gallery", {
 		},
 		borderRadius: {
 			type: "object",
-			default: { value: 0, unit: "px" }
+			default: { value: 0, unit: "%" }
 		},
 		gridHeight: {
 			type: "number",
@@ -46,38 +46,6 @@ registerBlockType("kubase/grid-gallery", {
 		positions: {
 			type: "string",
 			default: "[]"
-		},
-		timages: {
-			type: "array",
-			source: "query",
-			selector: ".grid-Gallerie-item-front",
-			query: {
-				width: {
-					type: "string",
-					source: "attribute",
-					attribute: "data-width"
-				},
-				height: {
-					type: "string",
-					source: "attribute",
-					attribute: "data-height"
-				},
-				top: {
-					type: "string",
-					source: "attribute",
-					attribute: "data-top"
-				},
-				left: {
-					type: "string",
-					source: "attribute",
-					attribute: "data-left"
-				},
-				url: {
-					type: "string",
-					source: "attribute",
-					attribute: "style"
-				}
-			}
 		},
 		ratio: {
 			type: "number",

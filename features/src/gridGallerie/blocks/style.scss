@@ -1,66 +1,68 @@
 .grid-Gallerie-wrap-front {
-  position: relative;
-  max-width: 100%;
+	position: relative;
+	max-width: 100%;
 
-  .grid-Gallerie-item-front {
-    color: inherit;
-    text-decoration: none;
-    position: absolute;
-    background-repeat: no-repeat;
-    background-position: center;
-    // background-color: rgb(248, 248, 248);
-    height: 0;
-    transition: all 0.1s ease-in-out;
+	.grid-Gallerie-item-front {
+		color: inherit;
+		text-decoration: none;
+		position: absolute;
+		background-repeat: no-repeat;
+		background-position: center;
+		// background-color: rgb(248, 248, 248);
+		height: attr(data-height);
+		transition: all 0.1s ease-in-out;
 
-    .grid-Gallerie-item-text {
-      padding: 20% 10px 10px 10px;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: all 1s ease-in-out;
-      font-size: 1.2rem;
-      overflow: hidden;
-      color: inherit;
+		.grid-Gallerie-item-text {
+			padding: 20% 10px 10px 10px;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			transition: all 1s ease-in-out;
+			font-size: 1.2rem;
+			overflow: hidden;
+			color: inherit;
 
-      h5 {
-        text-decoration: none;
-        transform: translateX(-100%);
-        transition: transform 0.4s ease-in-out;
-      }
-    }
+			h5 {
+				text-decoration: none;
+				transform: translateX(-100%);
+				transition: transform 0.4s ease-in-out;
+			}
+		}
 
-    .grid-Gallerie-item-text:hover {
-      transition: all 0.2s ease-in-out;
-      opacity: 1;
-      background-color: rgba(255, 255, 255, 0.534);
-      h5 {
-        transition: transform 0.3s ease-in-out;
-        transform: translateX(0);
-      }
-    }
+		&:hover {
+			.grid-Gallerie-item-text {
+				transition: all 0.2s ease-in-out;
+				opacity: 1;
+				background-color: rgba(255, 255, 255, 0.534);
+				h5 {
+					transition: transform 0.3s ease-in-out;
+					transform: translateX(0);
+				}
+			}
+		}
 
-    @media (hover: none) {
-      .grid-Gallerie-item-text {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 0 0 10px;
-        width: 100%;
-        height: 40px;
-        opacity: 1;
-        font-size: 1.2rem;
-        overflow: hidden;
-        color: inherit;
-        background-color: rgba(255, 255, 255, 0.651);
+		@media (hover: none) {
+			.grid-Gallerie-item-text {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 10px 0 0 10px;
+				width: 100%;
+				height: 40px;
+				opacity: 1;
+				font-size: 1.2rem;
+				overflow: hidden;
+				color: inherit;
+				background-color: rgba(255, 255, 255, 0.651);
 
-        h5 {
-          width: 300px;
-          margin: 0;
+				h5 {
+					width: 300px;
+					margin: 0;
 
-          text-decoration: none;
-          transform: translateX(0);
-        }
-      }
-    }
-  }
+					text-decoration: none;
+					transform: translateX(0);
+				}
+			}
+		}
+	}
 }

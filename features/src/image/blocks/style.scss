@@ -1,0 +1,16 @@
+.ku-image-wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ku-image-image {
+  width: 100%;
+  height: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+}

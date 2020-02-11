@@ -25,3 +25,6 @@ import "./gridGallerie/gridGallerie";
 // import "./icons/icons-blocks";
 // import "./AmhReadmore/readmore-blocks";
 import "./Sarah-projectsGallerie/projectsGallerie";
+import "./image/image-blocks";
+import "./freeGridItem/freeGridItem";
+import "./freeGrid/freeGrid";

@@ -1,33 +1,43 @@
 import ItemWrap from "./ItemWrap";
+import { toCss, toJs } from "../helper/converter";
 
 export default function({ attributes }) {
 	const {
-		id,
+		Id,
 		borderRadius,
-		collumns,
-		gridHeight,
-		gap,
-		ratio,
-		positions,
 		containerHeight,
 		marginTop,
-		marginBottom
+		marginBottom,
+		images,
+		sizes
 	} = attributes;
+
+	function getStyles() {
+		let style = {};
+		style[`.grid-Gallerie-item-front${Id}`] = {
+			["border-radius"]: `${borderRadius.value}${borderRadius.unit}`
+		};
+
+		attributes.images.forEach((element, index) => {
+			let top = images[index].top;
+			let left = images[index].left;
+			let width = images[index].width;
+			let height = images[index].height;
+
+			style[`.grid-Gallerie-item-front${Id}-${index}`] = {
+				["background-image"]: `url(${element.sizes.full.url})`,
+				top: top + "%",
+				left: left + "%",
+				width: width + "%",
+				height: height + "%"
+			};
+		});
+		return toCss(style);
+	}
 
 	function getImages() {
 		return attributes.images.map((i, index) => {
-			return (
-				<ItemWrap
-					i={i}
-					positions={positions}
-					index={index}
-					borderRadius={borderRadius}
-				>
-					<div className={"grid-Gallerie-item-text"}>
-						{i.alt && <h5>{i.alt}</h5>}
-					</div>
-				</ItemWrap>
-			);
+			return <ItemWrap i={i} index={index} id={Id}></ItemWrap>;
 		});
 	}
 
@@ -35,18 +45,20 @@ export default function({ attributes }) {
 		<div>
 			{attributes.images.length > 0 && (
 				<div
-					className={"grid-Gallerie-wrap-front"}
-					data-height={containerHeight}
-					data-ratio={ratio / 100}
-					data-gap={gap}
-					style={{ marginTop: marginTop, marginBottom }}
+					className={`grid-Gallerie-wrap-front `}
+					style={{
+						marginTop: marginTop,
+						marginBottom,
+						paddingTop: containerHeight * 100 + "%"
+					}}
 				>
+					<style>{getStyles()}</style>
 					{getImages()}
 				</div>
 			)}
 
 			<script>
-				{`document.addEventListener("DOMContentLoaded",function(){var e=[].slice.call(document.querySelectorAll("img.lazy${id}"));if("IntersectionObserver"in window){var s=new IntersectionObserver(function(e,t){e.forEach(function(e){if(e.isIntersecting){let t=e.target;t.src=t.dataset.src,t.classList.remove("lazy${id}"),t.classList.add("image"),s.unobserve(t)}})});e.forEach(function(e){s.observe(e)})}else e.forEach(function(e){e.src=e.dataset.src,e.classList.remove("lazy${id}"),e.classList.add("image")})});`}
+				{`document.addEventListener("DOMContentLoaded",function(){var e=[].slice.call(document.querySelectorAll("img.lazy${Id}"));if("IntersectionObserver"in window){var s=new IntersectionObserver(function(e,t){e.forEach(function(e){if(e.isIntersecting){let t=e.target;t.src=t.dataset.src,t.classList.remove("lazy${Id}"),t.classList.add("image"),s.unobserve(t)}})});e.forEach(function(e){s.observe(e)})}else e.forEach(function(e){e.src=e.dataset.src,e.classList.remove("lazy${Id}"),e.classList.add("image")})});`}
 			</script>
 		</div>
 	);

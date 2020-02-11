@@ -1,20 +1,11 @@
 const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-const {
-	Button,
-	ButtonGroup,
-	RangeControl,
-	Panel,
-	PanelBody,
-	PanelRow
-} = wp.components;
+const { Button, RangeControl, PanelBody } = wp.components;
 import style from "../helper/style";
 
-export default function Inspector({ setAttributes, attributes, sortImages }) {
+export default function Inspector({ setAttributes, attributes }) {
 	const {
-		sort,
 		images,
 		borderRadius,
-		gridHeight,
 		collumns,
 		gap,
 		ratio,
@@ -31,10 +22,9 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 		i.forEach(element => {
 			let imgObject = {};
 			imgObject.sizes = element.sizes;
-			imgObject.fileName = element.title.replace(/ /g, "");
-			imgObject.alt = "";
+			imgObject.alt = "no label jet";
 			imgObject.pos = "small";
-			imgObject.id = element.id + Math.floor(Math.random() * 100);
+			imgObject.id = element.id;
 			imgObject.fit = "cover";
 			imgObject.link = { id: null, url: null, postType: null };
 			all.push(imgObject);
@@ -145,33 +135,4 @@ export default function Inspector({ setAttributes, attributes, sortImages }) {
 			)}
 		</div>
 	);
-}
-
-function checkIfallreadyExist(totest, images) {
-	let testName = totest.title.replace(/ /g, "");
-	let res = testName;
-	let exists = checkExistence(testName, images);
-	if (exists) {
-		res = getDifferentName(exists, testName);
-	}
-	return res;
-}
-
-function checkExistence(testName, images) {
-	let res = images.filter(el => el.fileName.includes(testName));
-	return res.length > 0 ? res : false;
-}
-
-function getDifferentName(listofNames, name) {
-	let res = 0;
-	listofNames.forEach(item => {
-		let overhead = Number(item.fileName.replace(name, ""));
-		if (typeof overhead === "number") {
-			if (res < overhead) {
-				res = overhead;
-			}
-		}
-	});
-
-	return name + (res + 1);
 }
