@@ -8,22 +8,16 @@ export default function(props) {
 		return `
 		.ku-free-grid-inner-wrap-${clientId} {
 			display:grid;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			position: absolute;
 		}
 		
 		@media only screen and (max-width: ${attributes["breakingPointmobile"]}px) {
 				.ku-free-grid-inner-wrap-${clientId} {
 					grid-gap: ${attributes["gapmobile"]}px;
 					grid-template-columns: repeat(${attributes["columnsmobile"]}, 1fr);
-					grid-template-rows: repeat(${attributes["rowsmobile"]}, 1fr);
+					grid-template-rows: ${attributes["gridTemplateRowsmobile"]};
 				}
 				.ku-free-grid-ratio-wrap-${clientId} {
 					margin: ${attributes["marginTopmobile"]}px auto ${attributes["marginBottommobile"]}px auto;
-					padding-top: ${attributes["containerHeightmobile"]}%;
 				}
 			  }
 			  
@@ -31,12 +25,10 @@ export default function(props) {
 				.ku-free-grid-inner-wrap-${clientId} {
 					grid-gap: ${attributes["gaptablet"]}px;
 					grid-template-columns: repeat(${attributes["columnstablet"]}, 1fr);
-					grid-template-rows: repeat(${attributes["rowstablet"]}, 1fr);
-
+					grid-template-rows: ${attributes["gridTemplateRowstablet"]};
 				}
 				.ku-free-grid-ratio-wrap-${clientId} {
-					margin: ${attributes["marginToptablet"]}px auto ${attributes["marginBottomtablet"]}px auto;
-					padding-top: ${attributes["containerHeighttablet"]}%;
+					margin: ${attributes["marginToptablet"]}px auto ${attributes["marginBottomtablet"]}px auto;	
 				}
 			  }
 			
@@ -44,11 +36,10 @@ export default function(props) {
 				.ku-free-grid-inner-wrap-${clientId} {
 					grid-gap: ${attributes["gapdesktop"]}px;
 					grid-template-columns: repeat(${attributes["columnsdesktop"]}, 1fr);
-					grid-template-rows: repeat(${attributes["rowsdesktop"]}, 1fr);
+					grid-template-rows: ${attributes["gridTemplateRowsdesktop"]};
 				}
 				.ku-free-grid-ratio-wrap-${clientId} {
 					margin: ${attributes["marginTopdesktop"]}px auto ${attributes["marginBottomdesktop"]}px auto;
-					padding-top: ${attributes["containerHeightdesktop"]}%;
 				}
 			  }
 			  `;

@@ -39,6 +39,14 @@ attributes = addResponsivePropertys(
 	{ name: "minHeight", type: "number", default: 0 },
 	attributes
 );
+attributes = addResponsivePropertys(
+	{ name: "ratio", type: "number", default: 100 },
+	attributes
+);
+attributes = addResponsivePropertys(
+	{ name: "autoHeight", type: "boolean", default: false },
+	attributes
+);
 
 export default {
 	...attributes,

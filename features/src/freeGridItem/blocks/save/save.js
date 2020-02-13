@@ -6,9 +6,12 @@ export default function(props) {
 	const { backgtroundImage, clientId } = attributes;
 
 	function getStyle() {
-		return `
+		let e = `
 		.ku-free-grid-item-${clientId} {
 			width: 100%;
+			align-self: start;
+		}
+		.ku-free-grid-item-${clientId}{
 			background-image: url(${backgtroundImage});
 			background-position: center;
 			background-size: cover;
@@ -21,6 +24,20 @@ export default function(props) {
 					grid-row-end: span ${attributes["gridRowEndmobile"]};
 					min-height:  ${attributes["minHeightmobile"]}px;
 				}
+				
+				.ku-free-grid-item-${clientId}::before {
+					content: "";
+					width: 1px;
+					margin-left: -1px;
+					float: left;
+					height: 0;
+					padding-top:  ${attributes["ratiomobile"]}%;
+				}
+				.ku-free-grid-item-${clientId}::after {
+					content: "";
+					display: table;
+					clear: both;
+				}
 			  }
 			  @media only screen and (min-width: ${attributes["breakingPointmobile"]}px) {
 				.ku-free-grid-item-${clientId} {
@@ -29,6 +46,19 @@ export default function(props) {
 					grid-row-start: ${attributes["gridRowStarttablet"]};
 					grid-row-end: span ${attributes["gridRowEndtablet"]};
 					min-height:  ${attributes["minHeighttablet"]}px;
+				}
+				.ku-free-grid-item-${clientId}::before {
+					content: "";
+					width: 1px;
+					margin-left: -1px;
+					float: left;
+					height: 0;
+					padding-top:  ${attributes["ratiotablet"]}%;
+				}
+				.ku-free-grid-item-${clientId}::after {
+					content: "";
+					display: table;
+					clear: both;
 				}
 			  }
 			  @media only screen and (min-width:${attributes["breakingPointtablet"]}px) {
@@ -39,8 +69,23 @@ export default function(props) {
 					grid-row-end: span ${attributes["gridRowEnddesktop"]};
 					min-height:  ${attributes["minHeightdesktop"]}px;
 				}
+				.ku-free-grid-item-${clientId}::before {
+					content: "";
+					width: 1px;
+					margin-left: -1px;
+					float: left;
+					height: 0;
+					padding-top:  ${attributes["ratiodesktop"]}%;
+				}
+				.ku-free-grid-item-${clientId}::after {
+					content: "";
+					display: table;
+					clear: both;
+				}
 			  }
 			  `;
+
+		return e;
 	}
 	return (
 		<Fragment>

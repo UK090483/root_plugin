@@ -25,10 +25,6 @@ registerBlockType("kubase/free-grid-item", {
 
 		return {
 			style: {
-				backgroundSize: "cover",
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundImage: `url(${backgtroundImage})`,
 				// border: attributes.isActive ? "red dotted 1px" : "grey dotted 1px",
 				width: "100%",
 				gridColumnStart: attributes[`gridColumnStart${device}`],

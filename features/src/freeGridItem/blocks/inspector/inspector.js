@@ -1,11 +1,12 @@
 const { InspectorControls } = wp.blockEditor;
-const { TextControl, Button, RangeControl } = wp.components;
+const { TextControl, Button, RangeControl, CheckboxControl } = wp.components;
 import PicMedia from "./PicMedia";
 
 import style from "../helper/style";
 
 export default function Inspector(props) {
 	const { setAttributes, attributes, device, resetWrap } = props;
+	const { autoHeight } = attributes;
 
 	function handleClick(dir) {
 		if (dir === "up") {
@@ -119,6 +120,17 @@ export default function Inspector(props) {
 					</Button>
 				</div>
 				<br></br>
+				<CheckboxControl
+					heading="User"
+					label="autoHeight"
+					help="Is the user a author or not?"
+					checked={attributes[`autoHeight${device}`]}
+					onChange={value => {
+						resetWrap();
+						setAttributes({ [`autoHeight${device}`]: value });
+					}}
+				></CheckboxControl>
+
 				<div className={style.row}></div>
 				<RangeControl
 					label="min Height"

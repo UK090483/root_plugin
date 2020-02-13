@@ -33,6 +33,7 @@ export default function(props) {
 	const breakingPoint = attributes[`breakingPoint${device}`];
 	const marginTop = attributes[`marginTop${device}`];
 	const marginBottom = attributes[`marginBottom${device}`];
+	const gridTemplateRows = attributes[`gridTemplateRows${device}`];
 
 	const [container, Setcontainer] = useState(null);
 	const [containerSize, setContainerSize] = useState(null);
@@ -68,8 +69,21 @@ export default function(props) {
 			let heightContainer = ItemWidth * rows + gap * (rows - 1);
 			setContainerHeigths();
 
+			let heightRows = new Array(rows);
+			let h = 0;
+			heightRows.fill(ItemWidth * (ratio / 100));
+			children.forEach(child => {
+				let row = child.attributes[`gridRowStart${device}`] - 1;
+				let ownHeight = child.attributes.ownHeight;
+				if (ownHeight > heightRows[row]) [(heightRows[row] = ownHeight)];
+			});
+			h = heightRows.reduce(
+				(accumulator, currentValue) => accumulator + currentValue
+			);
+			h += gap * (rows - 1);
+
 			return {
-				h: heightContainer * (ratio / 100),
+				h: h,
 				w: containerW,
 				iw: ItemWidth
 			};
@@ -93,7 +107,13 @@ export default function(props) {
 		}
 		var foo = new Array(all - sum);
 		foo.fill(
-			<Item columns={columns} rows={rows} gap={gap} clientId={clientId}></Item>
+			<Item
+				columns={columns}
+				rows={rows}
+				gap={gap}
+				clientId={clientId}
+				ratio={ratio}
+			></Item>
 		);
 		return [...activeChildren, ...foo];
 	}
@@ -101,12 +121,11 @@ export default function(props) {
 	function getChildren() {
 		let result = [];
 		children.forEach(child => {
-			console.log(child.attributes);
 			if (child.attributes.isActive) {
 				result.push(
 					<div
 						style={{
-							// height: child.attributes[`minHeight${device}`] + "px",
+							minHeight: child.attributes.ownHeight,
 							border: "#007cba dotted 1px",
 							gridColumnStart: child.attributes[`gridColumnStart${device}`],
 							gridColumnEnd:
@@ -138,24 +157,35 @@ export default function(props) {
 		});
 	}
 
+	function getGridTemplateRows() {
+		let res = new Array(rows);
+		res.fill("min-content");
+		children.forEach(child => {
+			if (child.attributes[`autoHeight${device}`]) {
+				res[child.attributes[`gridRowStart${device}`] - 1] = "min-content";
+			}
+		});
+		setAttributes({ [`gridTemplateRows${device}`]: res.join(" ") });
+	}
+	getGridTemplateRows();
+
 	function getStyles() {
 		const containersizes = getContainerHeight();
 		const h = containersizes.h;
-		const w = containersizes.w;
-		const iw = containersizes.iw;
 
 		let s = `.grid-Gallerie-e-wrap-${clientId} > .editor-inner-blocks > .editor-block-list__layout {
 		  display: grid;
 		  grid-gap: ${gap}px;
 		  grid-template-columns: repeat(${columns}, 1fr);
-		  grid-template-rows: repeat(${rows}, 1fr);
+		  grid-template-rows: ${gridTemplateRows};
 		  max-width:${breakingPoint}px;
 		  margin: ${marginTop}px auto ${marginBottom}px auto;
 		  position:relative;
 	  
 	  `;
+
 		if (attributes[`heightType${device}`] === "ratio") {
-			s += `height: ${h}px`;
+			s += `min-height: ${h}px; `;
 		}
 
 		s += "}";
@@ -189,9 +219,9 @@ export default function(props) {
 						position: "absolute",
 						top: 0,
 						display: "grid",
-						height: "100%",
+
 						gridTemplateColumns: `repeat( ${columns} , 1fr)`,
-						gridTemplateRows: `repeat( ${rows} , 1fr)`,
+						gridTemplateRows: `repeat( ${rows} , fit-content)`,
 						gridGap: gap + "px",
 						width: "100%",
 						left: 0,
@@ -206,8 +236,9 @@ export default function(props) {
 }
 
 const Item = props => {
-	const { columns, rows, clientId } = props;
+	const { columns, rows, clientId, ratio, gap } = props;
 	const [hoverd, setHoverd] = useState(false);
+	const [height, setHeight] = useState(0);
 	const ref = useRef(null);
 
 	function activate(e) {
@@ -222,6 +253,12 @@ const Item = props => {
 
 		insertBlock(c, r);
 	}
+
+	useEffect(() => {
+		if (ref.current) {
+			setHeight(ref.current.getBoundingClientRect().width * (ratio / 100));
+		}
+	}, [ref, ratio, gap, columns, rows]);
 
 	function insertBlock(c, r) {
 		let insert = wp.blocks.createBlock("kubase/free-grid-item", {
@@ -243,6 +280,7 @@ const Item = props => {
 			.dispatch("core/block-editor")
 			.insertBlocks(insert, 0, clientId, false);
 	}
+
 	return (
 		<div
 			ref={ref}
@@ -253,6 +291,7 @@ const Item = props => {
 				setHoverd(false);
 			}}
 			style={{
+				minHeight: height,
 				pointerEvents: "auto",
 				border: "#80808043 dotted 1px",
 				gridColumnStart: "auto",

@@ -59,6 +59,10 @@ attributes = addResponsivePropertys(
 	{ name: "area", type: "number", default: 16 },
 	attributes
 );
+attributes = addResponsivePropertys(
+	{ name: "gridTemplateRows", type: "string", default: "1fr 1fr 1fr 1fr" },
+	attributes
+);
 
 export default {
 	...attributes,

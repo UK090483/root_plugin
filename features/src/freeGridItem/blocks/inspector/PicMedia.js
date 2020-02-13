@@ -1,5 +1,5 @@
 const { PanelBody, Button, FocalPointPicker } = wp.components;
-const { MediaUpload } = wp.editor;
+const { MediaUpload } = wp.blockEditor;
 const { __ } = wp.i18n;
 
 export default function PicMedia(props) {
