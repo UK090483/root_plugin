@@ -1,15 +1,17 @@
 import PicMedia from "./PicMedia";
 import ButtonGroup from "../helper/ButtonGroup";
+import ResponsiveTabs from "../../../shared/ResponsiveTabs";
 const { InspectorControls } = wp.blockEditor;
 const {
 	CheckboxControl,
 	RangeControl,
 	FocalPointPicker,
-	PanelBody
+	PanelBody,
+	ColorPicker
 } = wp.components;
 
 export default function InspectorC(props) {
-	const { attributes, setAttributes } = props;
+	const { attributes, setAttributes, device, setDevice } = props;
 	const {
 		showVideo,
 		display,
@@ -21,11 +23,15 @@ export default function InspectorC(props) {
 		marginBottom,
 		marginLeft,
 		marginRight,
-		backgroundSize
+		backgroundSize,
+		backgroundColor,
+		spaceAround,
+		ratio
 	} = attributes;
 
 	return (
 		<InspectorControls>
+			<ResponsiveTabs value={device} onSelect={setDevice}></ResponsiveTabs>
 			<CheckboxControl
 				label="ShowVideo"
 				checked={showVideo}
@@ -35,6 +41,31 @@ export default function InspectorC(props) {
 					})
 				}
 			/>
+
+			<RangeControl
+				label="ratio zähler"
+				value={ratio[0]}
+				onChange={value => {
+					let _ratio = [...ratio];
+					_ratio[0] = value;
+					setAttributes({ ratio: _ratio });
+				}}
+				min={1}
+				max={1000}
+			/>
+
+			<RangeControl
+				label="ratio nenner"
+				value={ratio[1]}
+				onChange={value => {
+					let _ratio = [...ratio];
+					_ratio[1] = value;
+					setAttributes({ ratio: _ratio });
+				}}
+				min={1}
+				max={1000}
+			/>
+
 			<RangeControl
 				label="Height"
 				value={height}
@@ -94,33 +125,21 @@ export default function InspectorC(props) {
 				activeItem={backgroundSize}
 				onChange={backgroundSize => setAttributes({ backgroundSize })}
 			></ButtonGroup>
-			<PanelBody title={"Margin"} initialOpen={false}>
-				<RangeControl
-					label="Top"
-					value={marginTop}
-					onChange={marginTop => setAttributes({ marginTop })}
-					min={0}
-					max={100}
+			<PanelBody title={"BackgroundColor"} initialOpen={false}>
+				<ColorPicker
+					color={backgroundColor}
+					onChangeComplete={backgroundColor =>
+						setAttributes({ backgroundColor: backgroundColor.hex })
+					}
 				/>
+			</PanelBody>
+
+			<PanelBody title={"Spacing"} initialOpen={false}>
 				<RangeControl
-					label="Bottom"
-					value={marginBottom}
-					onChange={marginBottom => setAttributes({ marginBottom })}
-					min={0}
-					max={100}
-				/>
-				<RangeControl
-					label="Left"
-					value={marginLeft}
-					onChange={marginLeft => setAttributes({ marginLeft })}
-					min={0}
-					max={100}
-				/>
-				<RangeControl
-					label="Right"
-					value={marginRight}
-					onChange={marginRight => setAttributes({ marginRight })}
-					min={0}
+					label="space Around Image"
+					value={spaceAround}
+					onChange={spaceAround => setAttributes({ spaceAround })}
+					min={o}
 					max={100}
 				/>
 			</PanelBody>

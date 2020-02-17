@@ -1,5 +1,11 @@
 const { InspectorControls } = wp.blockEditor;
-const { RangeControl, PanelBody, Button, ButtonGroup } = wp.components;
+const {
+	RangeControl,
+	PanelBody,
+	Button,
+	ButtonGroup,
+	CheckboxControl
+} = wp.components;
 import ResponsiveTabs from "../helper/ResponsiveTabs";
 import style from "../helper/style";
 
@@ -103,6 +109,45 @@ export default function Inspector(props) {
 						/>
 					)}
 				</div>
+
+				<div className={style.row}>
+					{attributes[`heightType${device}`] === "ratio" && (
+						<RangeControl
+							label="ratio zähler"
+							value={attributes[`ratio2${device}`][0]}
+							onChange={value => {
+								let res = [...attributes[`ratio2${device}`]];
+								res[0] = value;
+								setAttributes({ [`ratio2${device}`]: res });
+							}}
+							min={1}
+							max={1000}
+						/>
+					)}
+					{attributes[`heightType${device}`] === "ratio" && (
+						<RangeControl
+							label="ratio nenner"
+							value={attributes[`ratio2${device}`][1]}
+							onChange={value => {
+								let res = [...attributes[`ratio2${device}`]];
+								res[1] = value;
+								setAttributes({ [`ratio2${device}`]: res });
+							}}
+							min={1}
+							max={1000}
+						/>
+					)}
+				</div>
+
+				<CheckboxControl
+					heading="User"
+					label="no grid"
+					help="works also in ie"
+					checked={attributes.noGrid}
+					onChange={noGrid => {
+						setAttributes({ noGrid });
+					}}
+				></CheckboxControl>
 				<div className={style.row}>
 					<ButtonGroup>
 						<Button

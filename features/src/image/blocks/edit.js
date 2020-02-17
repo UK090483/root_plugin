@@ -19,9 +19,13 @@ export default function edit(props) {
 		marginBottom,
 		marginLeft,
 		marginRight,
-		backgroundSize
+		backgroundSize,
+		backgroundColor,
+		spaceAround,
+		ratio
 	} = attributes;
 
+	const [device, setDevice] = useState("desktop");
 	const [heightfromC, setheightfromC] = useState(100);
 	const ref = useRef();
 	const { rootId } = useSelect(select => {
@@ -34,7 +38,6 @@ export default function edit(props) {
 
 	useEffect(() => {
 		let rootelement = document.querySelector(`#block-${rootId}`);
-		console.log(rootelement);
 
 		if (rootelement) {
 			setTimeout(() => {
@@ -57,21 +60,23 @@ export default function edit(props) {
 
 	return (
 		<div>
-			<InspectorC {...props}></InspectorC>
+			<InspectorC {...props} device={device} setDevice={setDevice}></InspectorC>
 
 			<div
 				ref={ref}
 				className={"ku-image-wrap"}
 				style={{
-					height:
-						rootId && heightUnit === "%"
-							? heightfromC * (height / 100)
-							: height + heightUnit,
+					// height:
+					// 	rootId && heightUnit === "%"
+					// 		? heightfromC * (height / 100)
+					// 		: height + heightUnit,
+					backgroundColor: backgroundColor,
 					width: rootId ? "100%" : width + widthUnit,
 					marginTop: rootId ? marginTop - 28 : marginTop,
 					marginBottom: rootId ? marginBottom - 28 : marginBottom,
 					marginLeft: marginLeft,
-					marginRight: marginRight
+					marginRight: marginRight,
+					paddingTop: (ratio[0] / ratio[1]) * 100 + "%"
 				}}
 			>
 				{images.length > 0 && (
@@ -80,7 +85,8 @@ export default function edit(props) {
 						style={{
 							backgroundPosition: getBackgroundPosition(),
 							backgroundImage: `url(${images[images.length - 1].url})`,
-							backgroundSize: backgroundSize
+							backgroundSize: backgroundSize,
+							border: `${backgroundColor} solid ${spaceAround}px`
 						}}
 					></div>
 				)}

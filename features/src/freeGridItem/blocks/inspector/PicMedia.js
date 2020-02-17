@@ -1,10 +1,11 @@
+import ButtonGroup from "../../../shared/ButtonGroup";
 const { PanelBody, Button, FocalPointPicker } = wp.components;
 const { MediaUpload } = wp.blockEditor;
 const { __ } = wp.i18n;
 
 export default function PicMedia(props) {
 	const { setAttributes, attributes, device, resetWrap } = props;
-	const { backgtroundImage } = attributes;
+	const { backgtroundImage, focalPoint, backgroundSize } = attributes;
 
 	function onSelectVideo(media) {
 		setAttributes({
@@ -31,14 +32,16 @@ export default function PicMedia(props) {
 
 	return (
 		<PanelBody title={"Image"} initialOpen={false}>
-			{/* {backgtroundImage && (
+			{backgtroundImage && (
 				<FocalPointPicker
 					url={backgtroundImage}
 					dimensions={{ width: 300, height: 200 }}
 					value={focalPoint}
-					// onChange={focalPoint => setAttributes({ focalPoint })}
+					onChange={focalPoint => {
+						setAttributes({ focalPoint });
+					}}
 				/>
-			)} */}
+			)}
 			<MediaUpload
 				title={__("Select Image")}
 				onSelect={onSelectImage}
@@ -49,6 +52,15 @@ export default function PicMedia(props) {
 					</Button>
 				)}
 			/>
+
+			<ButtonGroup
+				items={[
+					{ value: "cover", label: "Cover" },
+					{ value: "contain", label: "Contain" }
+				]}
+				activeItem={backgroundSize}
+				onChange={backgroundSize => setAttributes({ backgroundSize })}
+			></ButtonGroup>
 			{/* <MediaUpload
 				title={__("Select Video")}
 				onSelect={onSelectVideo}

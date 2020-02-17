@@ -1,4 +1,5 @@
 import Inspector from "../inspector/inspector";
+import makeId from "../../../shared/makeId";
 const { InspectorControls } = wp.blockEditor;
 const { InnerBlocks } = wp.blockEditor;
 const { useSelect } = wp.data;
@@ -7,9 +8,36 @@ let layouts = ["desktop", "tablet", "mobile"];
 
 export default function(props) {
 	const { attributes, setAttributes, clientId, isSelected } = props;
-	const { device, isActive, backgtroundImage } = attributes;
-	const minHight = attributes[`minHeight${device}`];
+	const {
+		device,
+		isActive,
+		backgtroundImage,
+		focalPoint,
+		backgroundSize,
+		overlay,
+		overlayText
+	} = attributes;
+	const gridColumnStart = attributes[`gridColumnStart${device}`];
+	const gridColumnEnd = attributes[`gridColumnEnd${device}`];
+	const gridRowStart = attributes[`gridRowStart${device}`];
+	const gridRowEnd = attributes[`gridRowEnd${device}`];
+	const ownHight = attributes[`ownHeight${device}`];
+	const ownRatio = attributes[`ratio${device}`];
+
+	const [hovered, setHovered] = useState(false);
+
+	function getFocalPoint() {
+		let x = focalPoint.x * 100;
+		let y = focalPoint.y * 100;
+		return `${x}% ${y}%`;
+	}
+
+	const innerB = useSelect(select => {
+		return select("core/block-editor").getBlock(clientId).innerBlocks;
+	});
+
 	const [height, setHeight] = useState(100);
+
 	const ref = useRef();
 	const { _device, parentAttr } = useSelect(select => {
 		const { getBlockAttributes, getBlockRootClientId } = select(
@@ -19,6 +47,11 @@ export default function(props) {
 		const { device } = parentAttr;
 		return { _device: device, parentAttr: parentAttr };
 	});
+	const gap = parentAttr[`gap${device}`];
+	const ratio =
+		parentAttr[`ratio2${device}`][0] / parentAttr[`ratio2${device}`][1];
+	const columns = parentAttr[`columns${device}`];
+
 	const rootId = useSelect(select => {
 		const { getBlockRootClientId } = select("core/block-editor");
 		return getBlockRootClientId(clientId);
@@ -35,34 +68,16 @@ export default function(props) {
 	}, [_device]);
 
 	useEffect(() => {
-		layouts.forEach(layout => {
-			if (parentAttr[`ratio${layout}`] !== attributes[`ratio${layout}`]) {
-				setAttributes({ [`ratio${layout}`]: parentAttr[`ratio${layout}`] });
-			}
-		});
-	}, [parentAttr]);
-
-	useEffect(() => {
-		if (attributes.clientId !== clientId) {
-			setAttributes({ clientId });
+		if (attributes.clientId === "") {
+			setAttributes({ clientId: makeId() });
 		}
 	}, []);
 
 	useEffect(() => {
-		let interval = undefined;
 		if (ref.current) {
 			setComputedHeight(ref.current);
-			interval =
-				!interval &&
-				setInterval(() => {
-					let ownHeight = ref.current.getBoundingClientRect().height;
-					setAttributes({ ownHeight: ownHeight });
-				}, 100);
 		}
-		return () => {
-			clearInterval(interval);
-		};
-	}, [ref, parentAttr, attributes]);
+	}, [ref, gap, ratio, columns, gridColumnEnd, gridRowEnd, device, innerB]);
 
 	function resetWrap() {
 		wp.data
@@ -72,43 +87,76 @@ export default function(props) {
 
 	const setComputedHeight = wrap => {
 		if (attributes[`autoHeight${device}`]) {
-			setHeight(0);
+			/// FREE HIGHT
 		} else {
-			let width = wrap.getBoundingClientRect().width;
+			let sizes = wrap.getBoundingClientRect();
+			let width = sizes.width;
+			let hightMesured = sizes.height;
+			let gapHeight =
+				(attributes[`gridRowEnd${device}`] - 1) * parentAttr[`gap${device}`];
+			let gapWidth =
+				(attributes[`gridColumnEnd${device}`] - 1) * parentAttr[`gap${device}`];
+			let width1Box = (width - gapWidth) / attributes[`gridColumnEnd${device}`];
+			let height1Box = width1Box * ratio;
+			let height = height1Box * attributes[`gridRowEnd${device}`] + gapHeight;
 
-			let _width = width / attributes[`gridColumnEnd${device}`];
-			let height =
-				_width *
-					((parentAttr[`ratio${device}`] / 100) *
-						attributes[`gridRowEnd${device}`]) +
-				attributes[`gridRowEnd${device}`] * parentAttr[`gap${device}`];
-			setHeight(height);
-			let r = (height / width) * 100;
-			setAttributes({ [`ratio${device}`]: r });
+			height = Math.max(height, hightMesured);
+			if (ownHight !== height) {
+				setAttributes({ [`ownHeight${device}`]: height });
+			}
+
+			let r =
+				(ratio / attributes[`gridColumnEnd${device}`]) *
+				attributes[`gridRowEnd${device}`] *
+				100;
+
+			let gabSum = gapHeight - gapWidth * (r / 100);
+
+			let ratioString = `calc(${r}% + ${gabSum}px )`;
+
+			if (ownRatio !== ratioString) {
+				setAttributes({ [`ratio${device}`]: ratioString });
+			}
 		}
 	};
 
 	return (
 		<div
-			ref={ref}
-			style={{
-				minHeight: height,
-				margin: "-28px -15px -28px -15px",
-				border: "red solid 1px",
-				backgroundSize: "cover",
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundImage: `url(${backgtroundImage})`
+			onMouseEnter={() => {
+				setHovered(true);
 			}}
+			onMouseLeave={() => {
+				setHovered(false);
+			}}
+			style={{
+				minHeight: ownHight,
+				margin: "-28px -15px -28px -15px",
+				backgroundSize: backgroundSize,
+				backgroundRepeat: "no-repeat",
+				backgroundPosition: getFocalPoint(),
+				backgroundImage: `url(${backgtroundImage})`,
+				position: "relative"
+			}}
+			className={"ku-box"}
 		>
+			{hovered && (
+				<div
+					style={{
+						position: "absolute",
+						right: 0,
+						top: 0,
+						zIndex: 500,
+						backgroundColor: "red"
+					}}
+					className={"hoverbox"}
+				>
+					{"select"}
+				</div>
+			)}
+			{overlay && <div className={"overlay-box"}>{overlayText}</div>}
 			<Fragment>
-				<Fragment>
-					<Inspector
-						{...props}
-						device={device}
-						resetWrap={resetWrap}
-					></Inspector>
-
+				<Inspector {...props} device={device} resetWrap={resetWrap}></Inspector>
+				<div ref={ref}>
 					<InnerBlocks
 						renderAppender={
 							!hasChildBlocks && isSelected
@@ -116,7 +164,7 @@ export default function(props) {
 								: () => <div style={{ height: 0, width: 0 }}></div>
 						}
 					/>
-				</Fragment>
+				</div>
 			</Fragment>
 		</div>
 	);

@@ -40,11 +40,15 @@ attributes = addResponsivePropertys(
 	attributes
 );
 attributes = addResponsivePropertys(
-	{ name: "ratio", type: "number", default: 100 },
+	{ name: "ratio", type: "string", default: "calc(100% + 0px)" },
 	attributes
 );
 attributes = addResponsivePropertys(
 	{ name: "autoHeight", type: "boolean", default: false },
+	attributes
+);
+attributes = addResponsivePropertys(
+	{ name: "ownHeight", type: "number", default: 0 },
 	attributes
 );
 
@@ -56,7 +60,7 @@ export default {
 	},
 	clientId: {
 		type: "sting",
-		default: 0
+		default: ""
 	},
 	device: {
 		type: "string",
@@ -66,8 +70,24 @@ export default {
 		type: "string",
 		default: ""
 	},
+	focalPoint: {
+		type: "object",
+		default: { x: 0.5, y: 0.5 }
+	},
+	backgroundSize: {
+		type: "string",
+		default: "cover"
+	},
 	ownHeight: {
 		type: "number",
 		default: 0
+	},
+	overlay: {
+		type: "boolean",
+		default: false
+	},
+	overlayText: {
+		type: "string",
+		default: ""
 	}
 };

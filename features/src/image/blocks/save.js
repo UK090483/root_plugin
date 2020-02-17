@@ -15,11 +15,18 @@ export default function save({ attributes }) {
 		marginBottom,
 		marginLeft,
 		marginRight,
-		backgroundSize
+		backgroundSize,
+		backgroundColor,
+		spaceAround
 	} = attributes;
 
 	const x = Math.round(focalPoint.x * 100) + "%";
 	const y = Math.round(focalPoint.y * 100) + "%";
+
+	function getStyle() {
+		let style = `
+		`;
+	}
 
 	return (
 		<div
@@ -31,7 +38,8 @@ export default function save({ attributes }) {
 				marginBottom: marginBottom,
 				marginLeft: marginLeft,
 				marginRight: marginRight,
-				backgroundSize: backgroundSize
+				backgroundSize: backgroundSize,
+				backgroundColor: backgroundColor
 			}}
 		>
 			{images.length > 0 && (
@@ -40,7 +48,8 @@ export default function save({ attributes }) {
 					style={{
 						backgroundSize: backgroundSize,
 						backgroundPosition: `${x} ${y}`,
-						backgroundImage: `url(${images[images.length - 1].url})`
+						backgroundImage: `url(${images[images.length - 1].url})`,
+						border: `${backgroundColor} solid ${spaceAround}px`
 					}}
 				></div>
 			)}

@@ -5,8 +5,8 @@ import PicMedia from "./PicMedia";
 import style from "../helper/style";
 
 export default function Inspector(props) {
-	const { setAttributes, attributes, device, resetWrap } = props;
-	const { autoHeight } = attributes;
+	const { setAttributes, attributes, device } = props;
+	const { autoHeight, overlay, overlayText } = attributes;
 
 	function handleClick(dir) {
 		if (dir === "up") {
@@ -52,11 +52,10 @@ export default function Inspector(props) {
 		<InspectorControls>
 			<h1>{device}</h1>
 			<div className={style.row}>
-				<TextControl
+				{/* <TextControl
 					label={"gridColumnStart"}
 					value={attributes[`gridColumnStart${device}`]}
 					onChange={value => {
-						resetWrap();
 						setAttributes({ [`gridColumnStart${device}`]: value });
 					}}
 				></TextControl>
@@ -64,7 +63,6 @@ export default function Inspector(props) {
 					label={"gridColumnEnd"}
 					value={attributes[`gridColumnEnd${device}`]}
 					onChange={value => {
-						resetWrap();
 						setAttributes({ [`gridColumnEnd${device}`]: value });
 					}}
 				></TextControl>
@@ -72,7 +70,6 @@ export default function Inspector(props) {
 					label={"gridRowStart"}
 					value={attributes[`gridRowStart${device}`]}
 					onChange={value => {
-						resetWrap();
 						setAttributes({ [`gridRowStart${device}`]: value });
 					}}
 				></TextControl>
@@ -80,10 +77,9 @@ export default function Inspector(props) {
 					label={"gridRowEnd"}
 					value={attributes[`gridRowEnd${device}`]}
 					onChange={value => {
-						resetWrap();
 						setAttributes({ [`gridRowEnd${device}`]: value });
 					}}
-				></TextControl>
+				></TextControl>  */}
 				<div className={style.row}>
 					<Button isPrimary onClick={() => handleClick("up")}>
 						Up
@@ -126,7 +122,6 @@ export default function Inspector(props) {
 					help="Is the user a author or not?"
 					checked={attributes[`autoHeight${device}`]}
 					onChange={value => {
-						resetWrap();
 						setAttributes({ [`autoHeight${device}`]: value });
 					}}
 				></CheckboxControl>
@@ -136,12 +131,26 @@ export default function Inspector(props) {
 					label="min Height"
 					value={attributes[`minHeight${device}`]}
 					onChange={value => {
-						resetWrap();
 						setAttributes({ [`minHeight${device}`]: value });
 					}}
 					min={0}
 					max={2000}
 				/>
+				<TextControl
+					label={"overlay Text"}
+					value={overlayText}
+					onChange={overlayText => {
+						setAttributes({ overlayText });
+					}}
+				></TextControl>
+				<CheckboxControl
+					heading="User"
+					label="overlay"
+					checked={overlay}
+					onChange={overlay => {
+						setAttributes({ overlay });
+					}}
+				></CheckboxControl>
 			</div>
 
 			<PicMedia {...props}></PicMedia>

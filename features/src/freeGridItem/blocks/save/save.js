@@ -3,7 +3,22 @@ const { Fragment } = wp.element;
 
 export default function(props) {
 	const { attributes } = props;
-	const { backgtroundImage, clientId } = attributes;
+	const {
+		backgtroundImage,
+		clientId,
+		backgroundSize,
+		focalPoint,
+		overlayText,
+		overlay
+	} = attributes;
+
+	function getFocalPoint() {
+		let x = focalPoint.x * 100;
+		let y = focalPoint.y * 100;
+		return `${x}% ${y}%`;
+	}
+
+	let _focalPoint = getFocalPoint();
 
 	function getStyle() {
 		let e = `
@@ -13,8 +28,9 @@ export default function(props) {
 		}
 		.ku-free-grid-item-${clientId}{
 			background-image: url(${backgtroundImage});
-			background-position: center;
-			background-size: cover;
+			background-position: ${_focalPoint};
+			background-size: ${backgroundSize};
+			background-repeat: no-repeat ;
 		}
 		@media only screen and (max-width: ${attributes["breakingPointmobile"]}px) {
 				.ku-free-grid-item-${clientId} {
@@ -31,7 +47,7 @@ export default function(props) {
 					margin-left: -1px;
 					float: left;
 					height: 0;
-					padding-top:  ${attributes["ratiomobile"]}%;
+					padding-top:  ${attributes["ratiomobile"]};
 				}
 				.ku-free-grid-item-${clientId}::after {
 					content: "";
@@ -53,7 +69,7 @@ export default function(props) {
 					margin-left: -1px;
 					float: left;
 					height: 0;
-					padding-top:  ${attributes["ratiotablet"]}%;
+					padding-top:  ${attributes["ratiotablet"]};
 				}
 				.ku-free-grid-item-${clientId}::after {
 					content: "";
@@ -75,7 +91,7 @@ export default function(props) {
 					margin-left: -1px;
 					float: left;
 					height: 0;
-					padding-top:  ${attributes["ratiodesktop"]}%;
+					padding-top:  ${attributes["ratiodesktop"]};
 				}
 				.ku-free-grid-item-${clientId}::after {
 					content: "";
@@ -94,6 +110,11 @@ export default function(props) {
 					<style>{getStyle()}</style>
 
 					<div className={`ku-free-grid-item-${clientId} ku-free-grid-item`}>
+						{overlay && (
+							<div className={"ku-free-grid-item-overlay-box"}>
+								{overlayText}
+							</div>
+						)}
 						<InnerBlocks.Content />
 					</div>
 				</Fragment>

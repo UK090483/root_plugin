@@ -1,1 +1,1 @@
-import "./blocks/image";
+import "./blocks";

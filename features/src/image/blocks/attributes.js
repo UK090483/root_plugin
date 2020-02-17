@@ -39,55 +39,86 @@ attributes = addResponsivePropertys(
 	{ name: "heightType", type: "string", default: "ratio" },
 	attributes
 );
-attributes = addResponsivePropertys(
-	{ name: "ratio2", type: "array", default: [1, 1] },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "marginTop", type: "number", default: 0 },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "marginBottom", type: "number", default: 0 },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "breakingPoint", type: "string", default: ["unset", 992, 750] },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "containerHeight", type: "number", default: 100 },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "area", type: "number", default: 16 },
-	attributes
-);
 
 export default {
 	...attributes,
-	size: {
-		type: "number",
-		default: 5
+	images: {
+		type: "array",
+		default: []
 	},
-	device: {
+	imageSrcSet: {
 		type: "string",
-		default: "desktop"
+		default: null
 	},
-	clientId: {
+	imageSrc: {
 		type: "string",
-		default: ""
+		default: null
 	},
-	borderRadius: {
+	focalPoint: {
 		type: "object",
-		default: { value: 0, unit: "%" }
+		default: {
+			x: 0.5,
+			y: 0.5
+		}
 	},
-	gridHeight: {
+	videoUrl: {
+		type: "string",
+		default: null
+	},
+	showVideo: {
+		type: "boolean",
+		default: false
+	},
+	display: {
+		type: "string",
+		default: "paralax"
+	},
+	backgroundSize: {
+		type: "string",
+		default: "cover"
+	},
+	height: {
 		type: "number",
 		default: 100
 	},
-	noGrid: {
-		type: "bolean",
-		default: false
+	heightUnit: {
+		type: "string",
+		default: "%"
+	},
+	width: {
+		type: "number",
+		default: 100
+	},
+	widthUnit: {
+		type: "string",
+		default: "%"
+	},
+	marginTop: {
+		type: "number",
+		default: 0
+	},
+	marginBottom: {
+		type: "number",
+		default: 0
+	},
+	marginLeft: {
+		type: "number",
+		default: 0
+	},
+	marginRight: {
+		type: "number",
+		default: 0
+	},
+	backgroundColor: {
+		type: "string",
+		default: "transparent"
+	},
+	spaceAround: {
+		type: "number",
+		default: 0
+	},
+	ratio: {
+		type: "array",
+		default: [1, 1]
 	}
 };
