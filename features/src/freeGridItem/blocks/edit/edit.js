@@ -47,9 +47,11 @@ export default function(props) {
 		const { device } = parentAttr;
 		return { _device: device, parentAttr: parentAttr };
 	});
+
 	const gap = parentAttr[`gap${device}`];
 	const ratio =
 		parentAttr[`ratio2${device}`][0] / parentAttr[`ratio2${device}`][1];
+
 	const columns = parentAttr[`columns${device}`];
 
 	const rootId = useSelect(select => {
@@ -64,6 +66,12 @@ export default function(props) {
 	useEffect(() => {
 		if (attributes.device !== _device) {
 			setAttributes({ device: _device });
+		}
+	}, [_device]);
+
+	useEffect(() => {
+		if (attributes.noGrid !== parentAttr.noGrid) {
+			setAttributes({ noGrid: parentAttr.noGrid });
 		}
 	}, [_device]);
 
@@ -88,6 +96,13 @@ export default function(props) {
 	const setComputedHeight = wrap => {
 		if (attributes[`autoHeight${device}`]) {
 			/// FREE HIGHT
+			let sizes = wrap.getBoundingClientRect();
+			let hightMesured = sizes.height;
+			setAttributes({
+				[`ownHeight${device}`]: hightMesured,
+				[`minHeight${device}`]: 0,
+				[`ratio${device}`]: "0%"
+			});
 		} else {
 			let sizes = wrap.getBoundingClientRect();
 			let width = sizes.width;
@@ -102,7 +117,9 @@ export default function(props) {
 
 			height = Math.max(height, hightMesured);
 			if (ownHight !== height) {
-				setAttributes({ [`ownHeight${device}`]: height });
+				setAttributes({
+					[`ownHeight${device}`]: height
+				});
 			}
 
 			let r =
@@ -129,12 +146,15 @@ export default function(props) {
 				setHovered(false);
 			}}
 			style={{
+				zIndex: isSelected ? 100 : 0,
 				minHeight: ownHight,
 				margin: "-28px -15px -28px -15px",
 				backgroundSize: backgroundSize,
 				backgroundRepeat: "no-repeat",
 				backgroundPosition: getFocalPoint(),
-				backgroundImage: `url(${backgtroundImage})`,
+				backgroundImage:
+					Object.keys(backgtroundImage).length !== 0 &&
+					`url(${backgtroundImage.full.url})`,
 				position: "relative"
 			}}
 			className={"ku-box"}

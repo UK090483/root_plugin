@@ -1,7 +1,7 @@
 const { useState, useEffect, useRef, Fragment } = wp.element;
 
 export default function(props) {
-	const { columns, rows, clientId, ratio, gap, device } = props;
+	const { columns, rows, clientId, ratio, gap, device, children } = props;
 	const [hoverd, setHoverd] = useState(false);
 	const [height, setHeight] = useState(0);
 	const ref = useRef(null);
@@ -43,7 +43,7 @@ export default function(props) {
 		});
 		wp.data
 			.dispatch("core/block-editor")
-			.insertBlocks(insert, 0, clientId, false);
+			.insertBlock(insert, children.length, clientId, true);
 	}
 
 	return (

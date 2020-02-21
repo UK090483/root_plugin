@@ -6,7 +6,7 @@ function addResponsivePropertys(property, attributes) {
 		result[property.name + layout] = {
 			type: property.type,
 			default:
-				typeof property.default === "object"
+				typeof property.default === "object" && property.type !== "array"
 					? property.default[index]
 					: property.default
 		};
@@ -51,6 +51,14 @@ attributes = addResponsivePropertys(
 	{ name: "ownHeight", type: "number", default: 0 },
 	attributes
 );
+attributes = addResponsivePropertys(
+	{ name: "ownWidth", type: "number", default: 0 },
+	attributes
+);
+attributes = addResponsivePropertys(
+	{ name: "animations", type: "array", default: [] },
+	attributes
+);
 
 export default {
 	...attributes,
@@ -67,8 +75,8 @@ export default {
 		default: "desktop"
 	},
 	backgtroundImage: {
-		type: "string",
-		default: ""
+		type: "object",
+		default: {}
 	},
 	focalPoint: {
 		type: "object",
@@ -89,5 +97,9 @@ export default {
 	overlayText: {
 		type: "string",
 		default: ""
+	},
+	noGrid: {
+		type: "boolean",
+		default: false
 	}
 };

@@ -20,11 +20,11 @@ attributes = addResponsivePropertys(
 	attributes
 );
 attributes = addResponsivePropertys(
-	{ name: "gap", type: "number", default: 0 },
+	{ name: "gap", type: "number", default: 40 },
 	attributes
 );
 attributes = addResponsivePropertys(
-	{ name: "columns", type: "number", default: 4 },
+	{ name: "columns", type: "number", default: 3 },
 	attributes
 );
 attributes = addResponsivePropertys(
@@ -40,7 +40,7 @@ attributes = addResponsivePropertys(
 	attributes
 );
 attributes = addResponsivePropertys(
-	{ name: "ratio2", type: "array", default: [1, 1] },
+	{ name: "ratio2", type: "array", default: [289, 426] },
 	attributes
 );
 attributes = addResponsivePropertys(

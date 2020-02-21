@@ -1,0 +1,19 @@
+.ku-free-grid-item {
+  position: relative;
+
+  .ku-free-grid-item-overlay-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .ku-free-grid-item-overlay-box:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+}

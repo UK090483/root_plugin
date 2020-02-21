@@ -1,0 +1,54 @@
+.ku-free-grid-animation-listener {
+	// position: relative;
+}
+
+// body {
+// 	position: relative;
+// 	overflow-x: hidden;
+// }
+
+.ku-free-grid-animation-target {
+	// position: absolute;
+	top: 0;
+}
+
+.slideIn {
+	transition: transform 1.2s cubic-bezier(0.14, 1, 0.34, 1);
+	transform: scale(0) translateY(500px) translateX(500px);
+	&.ku-free-grid-animation-active {
+		transform: scale(1) translateY(0px) translateX(0px);
+	}
+}
+.slideUp {
+	transition: transform 1.2s cubic-bezier(0.14, 1, 0.34, 1);
+	transform: translate3d(100vh, 0, 0);
+
+	&.ku-free-grid-animation-active {
+		transform: translate3d(0, 0, 0);
+	}
+	&.ku-free-grid-animation-active-over {
+		transform: translate3d(-100vh, 0, 0);
+	}
+}
+.slideInLeft {
+	transition: transform 1.2s cubic-bezier(0.14, 1, 0.34, 1);
+	transform: translate3d(-250%, 0, 0);
+	&.ku-free-grid-animation-active {
+		transform: translate3d(0, 0, 0);
+	}
+}
+.slideInRight {
+	transition: transform 1.2s cubic-bezier(0.14, 1, 0.34, 1);
+	transform: translate3d(250%, 0, 0);
+
+	&.ku-free-grid-animation-active {
+		transform: translate3d(0, 0, 0);
+	}
+}
+.fadeIn {
+	transition: opacity 1.2s cubic-bezier(0.14, 1, 0.34, 1);
+	opacity: 0;
+	&.ku-free-grid-animation-active {
+		opacity: 1;
+	}
+}

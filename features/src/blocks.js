@@ -28,3 +28,6 @@ import "./Sarah-projectsGallerie/projectsGallerie";
 import "./image/image-blocks";
 import "./freeGridItem/freeGridItem";
 import "./freeGrid/freeGrid";
+// import "./freeGridItemnoGrid/freeGridItem";
+// import "./freeGridnoGrid/freeGrid";
+import "./Karussel/karussell -blocks";

@@ -1,0 +1,33 @@
+.karussell-wrap {
+  overflow: hidden;
+  position: relative;
+
+  .karussell-image {
+    position: absolute;
+    background-color: rgb(26, 26, 26);
+    top: 100px;
+    height: calc(100% - 110px);
+    width: 100vw;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0;
+    transition: opacity 2s;
+    &.active {
+      opacity: 1;
+    }
+  }
+  // .karussell-image::before {
+  //   content: "";
+  //   width: 1px;
+  //   margin-left: -1px;
+  //   float: left;
+  //   height: 0;
+  //   padding-top: 100%;
+  // }
+  // .karussell-image::after {
+  //   content: "";
+  //   display: table;
+  //   clear: both;
+  // }
+}

@@ -3,14 +3,13 @@ import Placeholder from "./Placeholder";
 
 const { InnerBlocks, BlockControls } = wp.blockEditor;
 const { useState, useEffect, useRef, Fragment } = wp.element;
-const { useSelect, select } = wp.data;
+const { useSelect } = wp.data;
 
-const ALLOWED_BLOCKS = ["kubase/free-grid-item"];
+const ALLOWED_BLOCKS = ["kubase/free-grid-item-nogrid"];
 
 export default function(props) {
 	const { setAttributes, attributes, clientId } = props;
 	const { device } = attributes;
-
 	const gap = attributes[`gap${device}`];
 	const columns = attributes[`columns${device}`];
 	const rows = attributes[`rows${device}`];
@@ -23,15 +22,15 @@ export default function(props) {
 	const PrefContainerRef = useRef();
 	const Container = useRef();
 	const [state, setState] = useState({
-		prefContaineHeight: 0,
-		prefContaineWidth: 0,
+		containerWidth: null,
 		gridTemplateRows: ""
 	});
-	const [containerWidth, setContainerWidth] = useState(null);
-
-	const children = useSelect(select => {
-		return select("core/block-editor").getBlock(clientId).innerBlocks;
-	}, []);
+	const children = useSelect(
+		select => {
+			return select("core/block-editor").getBlock(clientId).innerBlocks;
+		},
+		[ratio]
+	);
 
 	useEffect(() => {
 		if (attributes.clientId === "") {
@@ -41,27 +40,13 @@ export default function(props) {
 
 	useEffect(() => {
 		if (Container.current) {
-			setContainerWidth(PrefContainerRef.current.getBoundingClientRect().width);
+			let cWidth = Container.current.getBoundingClientRect().width;
+			setState({
+				containerWidth: cWidth,
+				gridTemplateRows: comutedGridTemplateRows(cWidth)
+			});
 		}
-	}, []);
-
-	useEffect(() => {
-		if (PrefContainerRef.current) {
-			let compStyles = window.getComputedStyle(PrefContainerRef.current);
-			setTimeout(() => {
-				// console.log(compStyles.getPropertyValue("height").replace("px", ""));
-				setState({
-					gridTemplateRows: getGridTemplateRows("fit-content"),
-					prefContaineHeight: compStyles
-						.getPropertyValue("height")
-						.replace("px", ""),
-					prefContaineWidth: compStyles
-						.getPropertyValue("width")
-						.replace("px", "")
-				});
-			}, 200);
-		}
-	}, [PrefContainerRef, rows, gap, device]);
+	}, [Container, device, gap, ratio, children, rows]);
 
 	function getPrefItems() {
 		let activeChildren = getChildren();
@@ -79,7 +64,7 @@ export default function(props) {
 		}
 		var foo = new Array(all - sum);
 		let placeholderHeight =
-			((state.prefContaineWidth - gap * (columns - 1)) / columns) * ratio;
+			((state.containerWidth - gap * (columns - 1)) / columns) * ratio;
 
 		foo.fill(
 			<Placeholder
@@ -90,31 +75,10 @@ export default function(props) {
 				ratio={ratio}
 				device={device}
 				height={placeholderHeight}
+				children={children}
 			></Placeholder>
 		);
 		return [...activeChildren, ...foo];
-	}
-
-	function getGridTemplateRows(a) {
-		let result = new Array(rows);
-		let placeholderHeight =
-			((state.prefContaineWidth - gap * (columns - 1)) / columns) * ratio;
-		console.log(placeholderHeight);
-		result.fill(a);
-		children.forEach(child => {
-			if (!(child.attributes[`gridRowEnd${device}`] > 1)) {
-				let ownHeight =
-					child.attributes[`ownHeight${device}`] /
-					child.attributes[`gridRowEnd${device}`];
-				let index = child.attributes[`gridRowStart${device}`] - 1;
-
-				if (result[index] < ownHeight) {
-					result[index] = ownHeight + "px";
-				}
-			}
-		});
-
-		return result.join(" ");
 	}
 
 	function getChildren() {
@@ -139,10 +103,27 @@ export default function(props) {
 		return result;
 	}
 
-	function comutedHeight(width) {
-		let _r = new Array(rows);
-		_r.fill(0);
-		// console.log(width);
+	function comutedGridTemplateRows(width) {
+		let result = new Array(rows);
+		let placeholderHeight = ((width - gap * (columns - 1)) / columns) * ratio;
+		result.fill(placeholderHeight);
+		children.forEach(child => {
+			if (!(child.attributes[`gridRowEnd${device}`] > 1)) {
+				let ownHeight =
+					child.attributes[`ownHeight${device}`] /
+					child.attributes[`gridRowEnd${device}`];
+
+				let index = child.attributes[`gridRowStart${device}`] - 1;
+				if (
+					result[index] < ownHeight ||
+					child.attributes[`autoHeight${device}`]
+				) {
+					result[index] = ownHeight;
+				}
+			}
+		});
+
+		return result.join("px ") + "px";
 	}
 
 	function getStyles() {
@@ -156,11 +137,6 @@ export default function(props) {
 		  margin: ${marginTop}px auto ${marginBottom}px auto;
 		  position:relative;
 	  `;
-
-		if (attributes[`heightType${device}`] === "ratio") {
-			s += `min-height: ${state.prefContaineHeight}px; `;
-		}
-
 		s += "}";
 		return s;
 	}
@@ -174,42 +150,46 @@ export default function(props) {
 				ref={Container}
 				style={{
 					maxWidth: breakingPoint,
+					width: "100%",
 					margin: " 0 auto"
 				}}
 			>
-				<style>{getStyles()}</style>
-
-				<div
-					className={`grid-Gallerie-e-wrap-${clientId}`}
-					style={{
-						position: "relative",
-						maxWidth: breakingPoint,
-						margin: " 0 auto"
-					}}
-				>
-					<InnerBlocks
-						allowedBlocks={ALLOWED_BLOCKS}
-						renderAppender={() => <div className="bla"></div>}
-					/>
-					<div
-						ref={PrefContainerRef}
-						className={"grid-Gallerie-editor-pref"}
-						style={{
-							pointerEvents: "none",
-							// position: "absolute",
-							top: 0,
-							display: "grid",
-							gridTemplateColumns: `repeat( ${columns} , 1fr)`,
-							gridTemplateRows: state.gridTemplateRows,
-							gridGap: gap + "px",
-							width: "100%",
-							left: 0,
-							maxWidth: breakingPoint
-						}}
-					>
-						{getPrefItems()}
-					</div>
-				</div>
+				{state.containerWidth && (
+					<Fragment>
+						<style>{getStyles()}</style>
+						<div
+							className={`grid-Gallerie-e-wrap-${clientId} `}
+							style={{
+								position: "relative",
+								maxWidth: breakingPoint,
+								margin: " 0 auto"
+							}}
+						>
+							<InnerBlocks
+								allowedBlocks={ALLOWED_BLOCKS}
+								renderAppender={() => <div className="bla"></div>}
+							/>
+							<div
+								ref={PrefContainerRef}
+								className={"grid-Gallerie-editor-pref"}
+								style={{
+									pointerEvents: "none",
+									position: "absolute",
+									top: 0,
+									display: "grid",
+									gridTemplateColumns: `repeat( ${columns} , 1fr)`,
+									gridTemplateRows: state.gridTemplateRows,
+									gridGap: gap + "px",
+									width: "100%",
+									left: 0,
+									maxWidth: breakingPoint
+								}}
+							>
+								{getPrefItems()}
+							</div>
+						</div>
+					</Fragment>
+				)}
 			</div>
 		</div>
 	);

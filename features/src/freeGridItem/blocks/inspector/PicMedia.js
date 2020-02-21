@@ -14,20 +14,8 @@ export default function PicMedia(props) {
 	}
 
 	function onSelectImage(media) {
-		setAttributes({ backgtroundImage: media.url });
-		// let NextImages = [];
-		// Object.keys(media.sizes).forEach(key => {
-		// 	if (key !== "thumbnail") {
-		// 		NextImages.push({ ...media.sizes[key] });
-		// 	}
-		// });
-		// console.log("select----------------");
-		// console.log(media.sizes);
-		// console.log(NextImages);
-		// console.log("select----------------");
-		// setAttributes({
-		// 	images: NextImages
-		// });
+		console.log(media.sizes);
+		setAttributes({ backgtroundImage: media.sizes });
 	}
 
 	return (
