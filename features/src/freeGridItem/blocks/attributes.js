@@ -59,6 +59,10 @@ attributes = addResponsivePropertys(
 	{ name: "animations", type: "array", default: [] },
 	attributes
 );
+attributes = addResponsivePropertys(
+	{ name: "gapMargin", type: "string", default: `` },
+	attributes
+);
 
 export default {
 	...attributes,

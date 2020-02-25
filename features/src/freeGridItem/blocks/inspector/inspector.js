@@ -49,9 +49,12 @@ export default function Inspector(props) {
 			setAttributes({ [`gridRowEnd${device}`]: newValue });
 		}
 	}
+
 	return (
 		<InspectorControls>
 			<h1>{device}</h1>
+
+			<Button onClick={() => makeAuto()}></Button>
 			<div className={style.row}>
 				{/* <TextControl
 					label={"gridColumnStart"}

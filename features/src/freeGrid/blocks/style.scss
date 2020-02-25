@@ -1,4 +1,5 @@
-.ku-free-grid-inner-wrap {
-	display: -ms-grid;
+.ku-free-grid-wrap {
+	width: 100%; /* width: calc(100% + gap) */
 	display: grid;
+	display: -ms-grid;
 }

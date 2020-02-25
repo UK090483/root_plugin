@@ -39,76 +39,50 @@ export default function(props) {
 
 	const backgtroundImageUrl =
 		Object.keys(backgtroundImage).length > 0 ? backgtroundImage.large.url : "";
-	console.log(backgroundSize);
-	function getImageSizes() {
-		return {
-			desktop: "",
-			tablet: "",
-			mobile: ""
-		};
-	}
 
 	function getStyle() {
 		let e = `
-		.ku-free-grid-item-inner-${clientId} {
+		.ku-free-grid-item-background-${clientId} {
 			background-image: url(${backgtroundImageUrl});
 			background-position: ${_focalPoint};
 			background-size: ${backgroundSize};
 		}
 		@media only screen and (max-width: ${attributes["breakingPointmobile"]}px) {
 				.ku-free-grid-item-${clientId} {
-					-ms-grid-column:${attributes["gridColumnStartmobile"]};
-					grid-column-start: ${attributes["gridColumnStartmobile"]};
-					-ms-grid-column-span: ${attributes["gridColumnEndmobile"]};
-					grid-column-end: span ${attributes["gridColumnEndmobile"]};
+					grid-area: ${attributes["gridRowStartmobile"]} / ${attributes["gridColumnStartmobile"]} / span ${attributes["gridRowEndmobile"]} / span ${attributes["gridColumnEndmobile"]};
 					-ms-grid-row: ${attributes["gridRowStartmobile"]};
-					grid-row-start: ${attributes["gridRowStartmobile"]};
+					-ms-grid-column:${attributes["gridColumnStartmobile"]};
 					-ms-grid-row-span: ${attributes["gridRowEndmobile"]};
-					grid-row-end: span ${attributes["gridRowEndmobile"]};
-					min-height:  ${attributes["minHeightmobile"]}px;
+					-ms-grid-column-span: ${attributes["gridColumnEndmobile"]};	
+					margin: ${attributes["gapMarginmobile"]};			
 				}
-				.ku-free-grid-item-inner-${clientId}::before {
-					padding-top:  ${attributes["ratiomobile"]};
-				}
-				.ku-free-grid-item-${clientId}::before {
+				.ku-free-grid-item-${clientId}::before{
 					padding-top:  ${attributes["ratiomobile"]};
 				}
 			  }
-			  @media only screen and (min-width: ${attributes["breakingPointmobile"]}px) {
+			  @media only screen and (min-width: ${attributes["breakingPointtablet"]}px) {
 				.ku-free-grid-item-${clientId} {
-					g-ms-grid-column:${attributes["gridColumnStarttablet"]};
-					grid-column-start: ${attributes["gridColumnStarttablet"]};
-					-ms-grid-column-span: ${attributes["gridColumnEndtablet"]};
-					grid-column-end: span ${attributes["gridColumnEndtablet"]};
+					grid-area: ${attributes["gridRowStarttablet"]} / ${attributes["gridColumnStarttablet"]} / span ${attributes["gridRowEndtablet"]} / span ${attributes["gridColumnEndtablet"]};
 					-ms-grid-row: ${attributes["gridRowStarttablet"]};
-					grid-row-start: ${attributes["gridRowStarttablet"]};
+					-ms-grid-column:${attributes["gridColumnStarttablet"]};
 					-ms-grid-row-span: ${attributes["gridRowEndtablet"]};
-					grid-row-end: span ${attributes["gridRowEndtablet"]};
-					min-height:  ${attributes["minHeighttablet"]}px;
+					-ms-grid-column-span: ${attributes["gridColumnEndtablet"]};	
+					margin: ${attributes["gapMargintablet"]};				
 				}
-				.ku-free-grid-item-inner-${clientId}::before {
-					padding-top:  ${attributes["ratiotablet"]};
-				}
-				.ku-free-grid-item-${clientId}::before {
+				.ku-free-grid-item-${clientId}::before{
 					padding-top:  ${attributes["ratiotablet"]};
 				}
 			  }
 			  @media only screen and (min-width:${attributes["breakingPointtablet"]}px) {
 				.ku-free-grid-item-${clientId} {
-					-ms-grid-column:${attributes["gridColumnStartdesktop"]};
-					grid-column-start: ${attributes["gridColumnStartdesktop"]};
-					-ms-grid-column-span: ${attributes["gridColumnEnddesktop"]};
-					grid-column-end: span ${attributes["gridColumnEnddesktop"]};
+					grid-area: ${attributes["gridRowStartdesktop"]} / ${attributes["gridColumnStartdesktop"]} / span ${attributes["gridRowEnddesktop"]} / span ${attributes["gridColumnEnddesktop"]};
 					-ms-grid-row: ${attributes["gridRowStartdesktop"]};
-					grid-row-start: ${attributes["gridRowStartdesktop"]};
+					-ms-grid-column:${attributes["gridColumnStartdesktop"]};
 					-ms-grid-row-span: ${attributes["gridRowEnddesktop"]};
-					grid-row-end: span ${attributes["gridRowEnddesktop"]};
-					min-height:  ${attributes["minHeightmobile"]}px;
+					-ms-grid-column-span: ${attributes["gridColumnEnddesktop"]};	
+					margin: ${attributes["gapMargindesktop"]};						
 				}
-				.ku-free-grid-item-inner-${clientId}::before {
-					padding-top:  ${attributes["ratiodesktop"]};
-				}
-				.ku-free-grid-item-${clientId}::before {
+				.ku-free-grid-item-${clientId}::before{
 					padding-top:  ${attributes["ratiodesktop"]};
 				}
 			  }
@@ -118,26 +92,20 @@ export default function(props) {
 	}
 	return (
 		<Fragment>
-			{attributes.isActive && (
-				<Fragment>
-					<style>{getStyle()}</style>
+			<style>{getStyle()}</style>
 
-					<div
-						className={`ku-free-grid-item ku-free-grid-item-${clientId}  ${animationClasses.listener}`}
-					>
-						<div
-							className={`ku-free-grid-item-inner ku-free-grid-item-inner-${clientId} ${animationClasses.target}`}
-						>
-							{overlay && (
-								<div className={"ku-free-grid-item-overlay-box"}>
-									{overlayText}
-								</div>
-							)}
-							<InnerBlocks.Content />
-						</div>
-					</div>
-				</Fragment>
-			)}
+			<div
+				className={`ku-free-grid-item ku-free-grid-item-${clientId}  ${animationClasses.listener}`}
+			>
+				<div
+					className={`ku-free-grid-item-background ku-free-grid-item-background-${clientId} ${animationClasses.target}`}
+				></div>
+				<div
+					className={`ku-free-grid-item-content ku-free-grid-item-content-${clientId} ${animationClasses.target}`}
+				>
+					<InnerBlocks.Content />
+				</div>
+			</div>
 		</Fragment>
 	);
 }

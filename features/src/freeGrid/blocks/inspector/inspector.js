@@ -1,3 +1,4 @@
+import AutoComponent from "./Auto/AutoComponent";
 const { InspectorControls } = wp.blockEditor;
 const {
 	RangeControl,
@@ -48,17 +49,6 @@ export default function Inspector(props) {
 		});
 	}
 
-	function setAuto() {
-		children.forEach(child => {
-			let newAttributes = { ...child.attributes };
-			newAttributes[`gridColumnStart${device}`] = "auto";
-			newAttributes[`gridRowStart${device}`] = "auto";
-			wp.data
-				.dispatch("core/editor")
-				.updateBlockAttributes(child.clientId, newAttributes);
-		});
-	}
-
 	function getCopyFromButtons() {
 		let result = [];
 		devices.forEach(_device => {
@@ -81,14 +71,6 @@ export default function Inspector(props) {
 	return (
 		<div>
 			<InspectorControls>
-				{/* <Button
-					isPrimary
-					onClick={() => {
-						setAuto();
-					}}
-				>
-					Auto
-				</Button> */}
 				<br></br>
 
 				<ResponsiveTabs
@@ -197,6 +179,12 @@ export default function Inspector(props) {
 
 				<br></br>
 				<br></br>
+				<AutoComponent
+					children={children}
+					device={device}
+					setAttributes={setAttributes}
+					attributes={attributes}
+				></AutoComponent>
 
 				<div className={style.row}>
 					<RangeControl

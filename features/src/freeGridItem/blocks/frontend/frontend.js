@@ -1,5 +1,9 @@
 import animations from "../animations/animations";
 
+if (window.NodeList && !NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = Array.prototype.forEach;
+}
+
 let items = [].slice.call(
 	document.querySelectorAll(".ku-free-grid-animation-listener")
 );
@@ -10,7 +14,7 @@ if (items.length > 0) {
 }
 
 function IntersectionObserverAlternative(items) {
-	let ScrollPos = scrollY;
+	let ScrollPos = window.pageYOffset;
 	let windowBottom = window.innerHeight;
 	var loop =
 		window.requestAnimationFrame ||
@@ -25,11 +29,11 @@ function IntersectionObserverAlternative(items) {
 	let cashedItems = [];
 
 	var update = function() {
-		if (ScrollPos !== scrollY) {
+		if (ScrollPos !== window.pageYOffset) {
 			windowBottom = window.innerHeight;
 			onSrollChange();
 			loop(update);
-			ScrollPos = scrollY;
+			ScrollPos = window.pageYOffset;
 		} else {
 			window.addEventListener("scroll", update);
 		}

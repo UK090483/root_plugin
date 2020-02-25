@@ -36,8 +36,6 @@ export default function(props) {
 		return select("core/block-editor").getBlock(clientId).innerBlocks;
 	});
 
-	const [height, setHeight] = useState(100);
-
 	const ref = useRef();
 	const { _device, parentAttr } = useSelect(select => {
 		const { getBlockAttributes, getBlockRootClientId } = select(
@@ -53,6 +51,7 @@ export default function(props) {
 		parentAttr[`ratio2${device}`][0] / parentAttr[`ratio2${device}`][1];
 
 	const columns = parentAttr[`columns${device}`];
+	const rows = parentAttr[`rows${device}`];
 
 	const rootId = useSelect(select => {
 		const { getBlockRootClientId } = select("core/block-editor");
@@ -87,10 +86,36 @@ export default function(props) {
 		}
 	}, [ref, gap, ratio, columns, gridColumnEnd, gridRowEnd, device, innerB]);
 
+	useEffect(() => {
+		let gapMargin = getGapMargin();
+		// console.log(gapMargin);
+		if (attributes[`gapMargin${device}`] !== gapMargin) {
+			setAttributes({ [`gapMargin${device}`]: gapMargin });
+		}
+	}, [
+		gap,
+		columns,
+		rows,
+		gridColumnStart,
+		gridColumnEnd,
+		gridRowStart,
+		gridRowEnd
+	]);
+
 	function resetWrap() {
 		wp.data
 			.dispatch("core/block-editor")
 			.updateBlockAttributes(rootId, { size: Math.random() });
+	}
+
+	function getGapMargin() {
+		let mbox = (gap * (columns - 1)) / columns;
+		let mb = gridRowStart + (gridRowEnd - 1) < rows ? gap : 0;
+		let ml = mbox * ((gridColumnStart - 1) / (columns - 1));
+		let mr =
+			mbox *
+			((columns - (gridColumnStart + gridColumnEnd - 1)) / (columns - 1));
+		return `0 ${mr}px ${mb}px ${ml}px`;
 	}
 
 	const setComputedHeight = wrap => {

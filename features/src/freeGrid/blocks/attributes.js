@@ -55,14 +55,6 @@ attributes = addResponsivePropertys(
 	{ name: "breakingPoint", type: "string", default: ["unset", 992, 750] },
 	attributes
 );
-attributes = addResponsivePropertys(
-	{ name: "containerHeight", type: "number", default: 100 },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "area", type: "number", default: 16 },
-	attributes
-);
 
 export default {
 	...attributes,
@@ -77,10 +69,6 @@ export default {
 	clientId: {
 		type: "string",
 		default: ""
-	},
-	borderRadius: {
-		type: "object",
-		default: { value: 0, unit: "%" }
 	},
 	gridHeight: {
 		type: "number",
