@@ -79,17 +79,7 @@ export default function Inspector(props) {
 					}}
 					value={device}
 				></ResponsiveTabs>
-				<div className={style.row}>
-					<RangeControl
-						label={"Corners"}
-						value={attributes[`borderRadius${device}`]}
-						onChange={value =>
-							setAttributes({ [`borderRadius${device}`]: value })
-						}
-						min={0}
-						max={100}
-					></RangeControl>
-				</div>
+
 				<div className={style.row}>
 					<RangeControl
 						label={"gap"}
@@ -102,24 +92,12 @@ export default function Inspector(props) {
 				<div className={style.row}>
 					{attributes[`heightType${device}`] === "ratio" && (
 						<RangeControl
-							label="ratio"
-							value={attributes[`ratio${device}`]}
-							onChange={value => setAttributes({ [`ratio${device}`]: value })}
-							min={1}
-							max={300}
-						/>
-					)}
-				</div>
-
-				<div className={style.row}>
-					{attributes[`heightType${device}`] === "ratio" && (
-						<RangeControl
 							label="ratio zähler"
-							value={attributes[`ratio2${device}`][0]}
+							value={attributes[`ratio${device}`][1]}
 							onChange={value => {
-								let res = [...attributes[`ratio2${device}`]];
-								res[0] = value;
-								setAttributes({ [`ratio2${device}`]: res });
+								let res = [...attributes[`ratio${device}`]];
+								res[1] = value;
+								setAttributes({ [`ratio${device}`]: res });
 							}}
 							min={1}
 							max={1000}
@@ -128,11 +106,11 @@ export default function Inspector(props) {
 					{attributes[`heightType${device}`] === "ratio" && (
 						<RangeControl
 							label="ratio nenner"
-							value={attributes[`ratio2${device}`][1]}
+							value={attributes[`ratio${device}`][0]}
 							onChange={value => {
-								let res = [...attributes[`ratio2${device}`]];
-								res[1] = value;
-								setAttributes({ [`ratio2${device}`]: res });
+								let res = [...attributes[`ratio${device}`]];
+								res[0] = value;
+								setAttributes({ [`ratio${device}`]: res });
 							}}
 							min={1}
 							max={1000}
@@ -140,15 +118,6 @@ export default function Inspector(props) {
 					)}
 				</div>
 
-				<CheckboxControl
-					heading="User"
-					label="no grid"
-					help="works also in ie"
-					checked={attributes.noGrid}
-					onChange={noGrid => {
-						setAttributes({ noGrid });
-					}}
-				></CheckboxControl>
 				<div className={style.row}>
 					<ButtonGroup>
 						<Button

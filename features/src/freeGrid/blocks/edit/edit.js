@@ -1,5 +1,6 @@
 import Inspector from "../inspector/inspector";
 import Placeholder from "./Placeholder";
+import makeId from "../../../shared/makeId";
 
 const { InnerBlocks, BlockControls } = wp.blockEditor;
 const { useState, useEffect, useRef, Fragment } = wp.element;
@@ -14,7 +15,7 @@ export default function(props) {
 	const columns = attributes[`columns${device}`];
 	const rows = attributes[`rows${device}`];
 	const ratio =
-		attributes[`ratio2${device}`][0] / attributes[`ratio2${device}`][1];
+		attributes[`ratio${device}`][0] / attributes[`ratio${device}`][1];
 	const borderRadius = attributes[`borderRadius${device}`];
 	const breakingPoint = attributes[`breakingPoint${device}`];
 	const marginTop = attributes[`marginTop${device}`];
@@ -34,7 +35,7 @@ export default function(props) {
 
 	useEffect(() => {
 		if (attributes.clientId === "") {
-			setAttributes({ clientId });
+			setAttributes({ clientId: makeId() });
 		}
 	}, []);
 
@@ -143,7 +144,6 @@ export default function(props) {
 
 	return (
 		<div className={"grid-Gallerie-editor-wrap"}>
-			<BlockControls></BlockControls>
 			<Inspector {...props}></Inspector>
 
 			<div

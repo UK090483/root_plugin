@@ -48,7 +48,7 @@ export default function(props) {
 
 	const gap = parentAttr[`gap${device}`];
 	const ratio =
-		parentAttr[`ratio2${device}`][0] / parentAttr[`ratio2${device}`][1];
+		parentAttr[`ratio${device}`][0] / parentAttr[`ratio${device}`][1];
 
 	const columns = parentAttr[`columns${device}`];
 	const rows = parentAttr[`rows${device}`];
@@ -88,7 +88,6 @@ export default function(props) {
 
 	useEffect(() => {
 		let gapMargin = getGapMargin();
-		// console.log(gapMargin);
 		if (attributes[`gapMargin${device}`] !== gapMargin) {
 			setAttributes({ [`gapMargin${device}`]: gapMargin });
 		}
@@ -109,12 +108,12 @@ export default function(props) {
 	}
 
 	function getGapMargin() {
-		let mbox = (gap * (columns - 1)) / columns;
+		let mbox = (gap * (columns - 1 || 1)) / columns;
 		let mb = gridRowStart + (gridRowEnd - 1) < rows ? gap : 0;
-		let ml = mbox * ((gridColumnStart - 1) / (columns - 1));
+		let ml = mbox * ((gridColumnStart - 1) / (columns - 1 || 1));
 		let mr =
 			mbox *
-			((columns - (gridColumnStart + gridColumnEnd - 1)) / (columns - 1));
+			((columns - (gridColumnStart + gridColumnEnd - 1)) / (columns - 1 || 1));
 		return `0 ${mr}px ${mb}px ${ml}px`;
 	}
 

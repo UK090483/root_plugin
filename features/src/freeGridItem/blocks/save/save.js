@@ -60,7 +60,7 @@ export default function(props) {
 					padding-top:  ${attributes["ratiomobile"]};
 				}
 			  }
-			  @media only screen and (min-width: ${attributes["breakingPointtablet"]}px) {
+			  @media only screen and (min-width: ${attributes["breakingPointmobile"]}px) {
 				.ku-free-grid-item-${clientId} {
 					grid-area: ${attributes["gridRowStarttablet"]} / ${attributes["gridColumnStarttablet"]} / span ${attributes["gridRowEndtablet"]} / span ${attributes["gridColumnEndtablet"]};
 					-ms-grid-row: ${attributes["gridRowStarttablet"]};
@@ -73,7 +73,7 @@ export default function(props) {
 					padding-top:  ${attributes["ratiotablet"]};
 				}
 			  }
-			  @media only screen and (min-width:${attributes["breakingPointtablet"]}px) {
+			  @media only screen and (min-width: ${attributes["breakingPointtablet"]}px) {
 				.ku-free-grid-item-${clientId} {
 					grid-area: ${attributes["gridRowStartdesktop"]} / ${attributes["gridColumnStartdesktop"]} / span ${attributes["gridRowEnddesktop"]} / span ${attributes["gridColumnEnddesktop"]};
 					-ms-grid-row: ${attributes["gridRowStartdesktop"]};

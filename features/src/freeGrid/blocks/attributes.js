@@ -15,10 +15,7 @@ function addResponsivePropertys(property, attributes) {
 }
 
 let attributes = {};
-attributes = addResponsivePropertys(
-	{ name: "borderRadius", type: "number", default: 0 },
-	attributes
-);
+
 attributes = addResponsivePropertys(
 	{ name: "gap", type: "number", default: 40 },
 	attributes
@@ -40,7 +37,7 @@ attributes = addResponsivePropertys(
 	attributes
 );
 attributes = addResponsivePropertys(
-	{ name: "ratio2", type: "array", default: [289, 426] },
+	{ name: "ratio", type: "array", default: [289, 426] },
 	attributes
 );
 attributes = addResponsivePropertys(
@@ -58,10 +55,6 @@ attributes = addResponsivePropertys(
 
 export default {
 	...attributes,
-	size: {
-		type: "number",
-		default: 5
-	},
 	device: {
 		type: "string",
 		default: "desktop"
@@ -69,13 +62,5 @@ export default {
 	clientId: {
 		type: "string",
 		default: ""
-	},
-	gridHeight: {
-		type: "number",
-		default: 100
-	},
-	noGrid: {
-		type: "bolean",
-		default: false
 	}
 };

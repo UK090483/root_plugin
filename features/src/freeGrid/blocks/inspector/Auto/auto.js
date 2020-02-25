@@ -49,11 +49,9 @@ export default function setAuto(children, device, setAttributes, attributes) {
 			newAttributes
 		);
 	});
-
+	// console.log(pos);
 	setAttributes({
-		[`rows${device}`]: Math.ceil(
-			pos.slice(0, pos.lastIndexOf(1) + 1).length / columns
-		)
+		[`rows${device}`]: Math.ceil(pos.length / columns)
 	});
 
 	return cache;
