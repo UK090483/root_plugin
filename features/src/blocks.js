@@ -31,3 +31,4 @@ import "./freeGrid/freeGrid";
 // import "./freeGridItemnoGrid/freeGridItem";
 // import "./freeGridnoGrid/freeGrid";
 import "./Karussel/karussell -blocks";
+import "./registerBlockStyles/registerBlockStyles";

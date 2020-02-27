@@ -14,15 +14,14 @@ export default function PicMedia(props) {
 	}
 
 	function onSelectImage(media) {
-		console.log(media.sizes);
 		setAttributes({ backgtroundImage: media.sizes });
 	}
 
 	return (
 		<PanelBody title={"Image"} initialOpen={false}>
-			{backgtroundImage && (
+			{backgtroundImage.medium && (
 				<FocalPointPicker
-					url={backgtroundImage}
+					url={backgtroundImage.medium.url}
 					dimensions={{ width: 300, height: 200 }}
 					value={focalPoint}
 					onChange={focalPoint => {

@@ -6,13 +6,19 @@ export default function setAuto(children, device, setAttributes, attributes) {
 
 	let pos = [];
 	let emtyRow = [...new Array(columns - 1).fill(0), ...[2]];
-	let searchAdd = new Array(4).fill(emtyRow).flat();
+	let searchAdd = new Array(16).fill(emtyRow).flat();
 	let cache = { children: [...children], rows: rows };
 	children.forEach(child => {
 		let newAttributes = { ...child.attributes };
 
 		let width = newAttributes[`gridColumnEnd${device}`];
 		let height = newAttributes[`gridRowEnd${device}`];
+
+		if (width > columns) {
+			width = columns;
+			newAttributes[`gridColumnEnd${device}`] = 1;
+			newAttributes[`gridRowEnd${device}`] = 1;
+		}
 
 		let foodprint = getFoodprint(width, height, columns);
 
@@ -27,13 +33,14 @@ export default function setAuto(children, device, setAttributes, attributes) {
 			? Math.floor(search.index / columns) + 1
 			: Math.floor(pos.length / columns) | 1;
 
-		// console.log(pos);
-		// console.log(foodprint);
-		// console.log(foodprintToRegex(foodprint, width));
-		// console.log(search);
+		console.log(pos);
+		console.log(foodprint);
+		console.log(foodprintToRegex(foodprint, width));
+		console.log([...pos, ...searchAdd.slice(pos.length)].join(""));
+		console.log(search);
 
-		// console.log(gcs);
-		// console.log(grs);
+		console.log(gcs);
+		console.log(grs);
 
 		pos = implementArray(search.index, foodprint, pos, columns, emtyRow);
 
@@ -41,10 +48,8 @@ export default function setAuto(children, device, setAttributes, attributes) {
 
 		newAttributes[`gridColumnStart${device}`] = gcs;
 		newAttributes[`gridRowStart${device}`] = grs;
-		// // newAttributes[`gridColumnEnd${device}`] = 1;
-		// // newAttributes[`gridRowEnd${device}`] = 1;
 
-		dispatch("core/editor").updateBlockAttributes(
+		dispatch("core/block-editor").updateBlockAttributes(
 			child.clientId,
 			newAttributes
 		);

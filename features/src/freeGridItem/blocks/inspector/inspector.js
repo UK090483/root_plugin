@@ -1,7 +1,9 @@
 const { InspectorControls } = wp.blockEditor;
-const { TextControl, Button, RangeControl, CheckboxControl } = wp.components;
+const { TextControl, Button, RangeControl, ToggleControl } = wp.components;
+import Link from "./Link/Link";
 import PicMedia from "./PicMedia";
 import AnimationPanel from "./AnimationPanel";
+import Positionator from "./Positionator";
 
 import style from "../helper/style";
 
@@ -54,37 +56,11 @@ export default function Inspector(props) {
 		<InspectorControls>
 			<h1>{device}</h1>
 
+			<Positionator onClick={handleClick}></Positionator>
+
 			<Button onClick={() => makeAuto()}></Button>
 			<div className={style.row}>
-				{/* <TextControl
-					label={"gridColumnStart"}
-					value={attributes[`gridColumnStart${device}`]}
-					onChange={value => {
-						setAttributes({ [`gridColumnStart${device}`]: value });
-					}}
-				></TextControl>
-				<TextControl
-					label={"gridColumnEnd"}
-					value={attributes[`gridColumnEnd${device}`]}
-					onChange={value => {
-						setAttributes({ [`gridColumnEnd${device}`]: value });
-					}}
-				></TextControl>
-				<TextControl
-					label={"gridRowStart"}
-					value={attributes[`gridRowStart${device}`]}
-					onChange={value => {
-						setAttributes({ [`gridRowStart${device}`]: value });
-					}}
-				></TextControl>
-				<TextControl
-					label={"gridRowEnd"}
-					value={attributes[`gridRowEnd${device}`]}
-					onChange={value => {
-						setAttributes({ [`gridRowEnd${device}`]: value });
-					}}
-				></TextControl>  */}
-				<div className={style.row}>
+				{/* <div className={style.row}>
 					<Button isPrimary onClick={() => handleClick("up")}>
 						Up
 					</Button>
@@ -100,7 +76,7 @@ export default function Inspector(props) {
 					<Button isPrimary onClick={() => handleClick("right")}>
 						Right
 					</Button>
-				</div>
+				</div> */}
 				<br></br>
 				<div className={style.row}>
 					<Button isPrimary onClick={() => handleClick("weiter")}>
@@ -120,44 +96,19 @@ export default function Inspector(props) {
 					</Button>
 				</div>
 				<br></br>
-				<CheckboxControl
-					heading="User"
-					label="autoHeight"
-					help="Is the user a author or not?"
-					checked={attributes[`autoHeight${device}`]}
-					onChange={value => {
-						setAttributes({ [`autoHeight${device}`]: value });
-					}}
-				></CheckboxControl>
 
-				<div className={style.row}></div>
-				<RangeControl
-					label="min Height"
-					value={attributes[`minHeight${device}`]}
-					onChange={value => {
-						setAttributes({ [`minHeight${device}`]: value });
-					}}
-					min={0}
-					max={2000}
+				<ToggleControl
+					label="Free Hight"
+					help={"rezize height to Conten"}
+					checked={attributes[`autoHeight${device}`]}
+					onChange={autoheight =>
+						setAttributes({ [`autoHeight${device}`]: autoheight })
+					}
 				/>
-				<TextControl
-					label={"overlay Text"}
-					value={overlayText}
-					onChange={overlayText => {
-						setAttributes({ overlayText });
-					}}
-				></TextControl>
-				<CheckboxControl
-					heading="User"
-					label="overlay"
-					checked={overlay}
-					onChange={overlay => {
-						setAttributes({ overlay });
-					}}
-				></CheckboxControl>
 			</div>
 
 			<PicMedia {...props}></PicMedia>
+			<Link {...props}></Link>
 			<AnimationPanel {...props}></AnimationPanel>
 		</InspectorControls>
 	);

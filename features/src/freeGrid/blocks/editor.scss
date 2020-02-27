@@ -1,0 +1,52 @@
+.ku-base-freeGrid-positionator {
+	height: 100px;
+	width: 50%;
+
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	overflow: hidden;
+	justify-items: center;
+
+	div {
+		background-color: #007cba;
+		width: 100%;
+		height: 30%;
+	}
+	div:hover {
+		background-color: red;
+	}
+	.bigCircle {
+		margin: 0 auto;
+		pointer-events: none;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	.smallCircle {
+		margin: 0 auto;
+		pointer-events: none;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	.up {
+		width: 100%;
+		height: 35%;
+	}
+	.left {
+		width: 50%;
+		align-self: center;
+		height: 25%;
+	}
+	.right {
+		width: 50%;
+		align-self: center;
+		height: 25%;
+	}
+	.down {
+		align-self: flex-end;
+		width: 100%;
+		height: 35%;
+	}
+}

@@ -9,7 +9,6 @@ let items = [].slice.call(
 );
 
 if (items.length > 0) {
-	console.log(items);
 	IntersectionObserverAlternative(items);
 }
 
@@ -44,10 +43,14 @@ function IntersectionObserverAlternative(items) {
 	}
 
 	function checkforItemsInViewPort() {
+		let itemInCounter = 0;
 		cashedItems.forEach(item => {
 			let clientRect = item.listener.getBoundingClientRect();
 			if (clientRect.top < windowBottom && !(clientRect.bottom < 0)) {
-				handleItemIn(item);
+				setTimeout(() => {
+					handleItemIn(item);
+				}, 200 * itemInCounter);
+				itemInCounter++;
 			} else if (clientRect.bottom < 0) {
 				handleItemOutTop(item);
 			} else {
@@ -76,16 +79,16 @@ function IntersectionObserverAlternative(items) {
 	}
 
 	function handleItemIn(item) {
-		item.target.classList.remove("ku-free-grid-animation-active-over");
-		item.target.classList.add("ku-free-grid-animation-active");
+		item.listener.classList.remove("ku-free-grid-animation-active-over");
+		item.listener.classList.add("ku-free-grid-animation-active");
 	}
 	function handleItemOut(item) {
-		item.target.classList.remove("ku-free-grid-animation-active-over");
-		item.target.classList.remove("ku-free-grid-animation-active");
+		item.listener.classList.remove("ku-free-grid-animation-active-over");
+		item.listener.classList.remove("ku-free-grid-animation-active");
 	}
 	function handleItemOutTop(item) {
-		item.target.classList.remove("ku-free-grid-animation-active");
-		item.target.classList.add("ku-free-grid-animation-active-over");
+		item.listener.classList.remove("ku-free-grid-animation-active");
+		item.listener.classList.add("ku-free-grid-animation-active-over");
 	}
 
 	init();

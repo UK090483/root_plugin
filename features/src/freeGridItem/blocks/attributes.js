@@ -102,6 +102,13 @@ export default {
 		type: "string",
 		default: ""
 	},
+	link: {
+		type: "object",
+		default: {
+			postType: "",
+			link: ""
+		}
+	},
 	noGrid: {
 		type: "boolean",
 		default: false
