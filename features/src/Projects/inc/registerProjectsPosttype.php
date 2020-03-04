@@ -53,7 +53,7 @@ function kubase_registerProjectsPostTypes()
             'exclude_from_search' => false,
             'publicly_queryable' => true,
             'capability_type' => 'post',
-            'rest_base' => 'projects',
+            'rest_base' => 'project',
         )
     );
 }

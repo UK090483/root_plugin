@@ -110,7 +110,6 @@ export default function(props) {
 		result.fill(placeholderHeight);
 
 		children.forEach(child => {
-			console.log("resize Row");
 			let itemRows = new Array(child.attributes[`gridRowEnd${device}`]).fill(1);
 
 			let ownHeight =
@@ -121,10 +120,6 @@ export default function(props) {
 			let index = child.attributes[`gridRowStart${device}`] - 1;
 
 			itemRows.forEach((r, i) => {
-				console.log(result[index + i]);
-				console.log(ownHeight);
-				console.log("--------");
-
 				if (
 					result[index + i] < ownHeight ||
 					child.attributes[`autoHeight${device}`]
@@ -133,8 +128,6 @@ export default function(props) {
 				}
 			});
 		});
-
-		console.log(result);
 
 		return result.join("px ") + "px";
 	}
