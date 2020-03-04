@@ -108,21 +108,33 @@ export default function(props) {
 		let result = new Array(rows);
 		let placeholderHeight = ((width - gap * (columns - 1)) / columns) * ratio;
 		result.fill(placeholderHeight);
-		children.forEach(child => {
-			if (!(child.attributes[`gridRowEnd${device}`] > 1)) {
-				let ownHeight =
-					child.attributes[`ownHeight${device}`] /
-					child.attributes[`gridRowEnd${device}`];
 
-				let index = child.attributes[`gridRowStart${device}`] - 1;
+		children.forEach(child => {
+			console.log("resize Row");
+			let itemRows = new Array(child.attributes[`gridRowEnd${device}`]).fill(1);
+
+			let ownHeight =
+				child.attributes[`ownHeight${device}`] /
+					child.attributes[`gridRowEnd${device}`] -
+				(child.attributes[`gridRowEnd${device}`] - 1) * gap;
+
+			let index = child.attributes[`gridRowStart${device}`] - 1;
+
+			itemRows.forEach((r, i) => {
+				console.log(result[index + i]);
+				console.log(ownHeight);
+				console.log("--------");
+
 				if (
-					result[index] < ownHeight ||
+					result[index + i] < ownHeight ||
 					child.attributes[`autoHeight${device}`]
 				) {
-					result[index] = ownHeight;
+					result[index + i] = ownHeight;
 				}
-			}
+			});
 		});
+
+		console.log(result);
 
 		return result.join("px ") + "px";
 	}

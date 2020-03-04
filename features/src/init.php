@@ -29,9 +29,8 @@ if (!defined('ABSPATH')) {
  * @since 1.0.0
  */
 
-require plugin_dir_path(__FILE__) . 'mailchimp/mailchimp.php';
-require plugin_dir_path(__FILE__) . 'events/events.php';
-require plugin_dir_path(__FILE__) . 'icons/icons.php';
+require plugin_dir_path(__FILE__) . 'Projects/projects.php';
+
 
 
 

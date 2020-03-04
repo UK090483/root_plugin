@@ -37,7 +37,7 @@ export default function(props) {
 	}
 
 	const animationClasses = getAnimation();
-	console.log(backgtroundImage);
+
 	const backgtroundImageUrl =
 		Object.keys(backgtroundImage).length > 0
 			? backgtroundImage.large
