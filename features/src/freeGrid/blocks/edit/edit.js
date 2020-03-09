@@ -1,10 +1,13 @@
 import Inspector from "../inspector/inspector";
 import Placeholder from "./Placeholder";
 import makeId from "../../../shared/makeId";
+import move from "../inspector/move/move";
 
 const { InnerBlocks, BlockControls } = wp.blockEditor;
 const { useState, useEffect, useRef, Fragment } = wp.element;
 const { useSelect } = wp.data;
+const { addAction, removeAction } = wp.hooks;
+const { dispatch } = wp.data;
 
 const ALLOWED_BLOCKS = ["kubase/free-grid-item-nogrid"];
 
@@ -16,7 +19,6 @@ export default function(props) {
 	const rows = attributes[`rows${device}`];
 	const ratio =
 		attributes[`ratio${device}`][0] / attributes[`ratio${device}`][1];
-	const borderRadius = attributes[`borderRadius${device}`];
 	const breakingPoint = attributes[`breakingPoint${device}`];
 	const marginTop = attributes[`marginTop${device}`];
 	const marginBottom = attributes[`marginBottom${device}`];
@@ -26,18 +28,52 @@ export default function(props) {
 		containerWidth: null,
 		gridTemplateRows: ""
 	});
-	const children = useSelect(
-		select => {
-			return select("core/block-editor").getBlock(clientId).innerBlocks;
-		},
-		[ratio]
-	);
+	const [activateAble, setActivateAble] = useState(false);
+	const { children, isEditorSidebarOpened } = useSelect(select => {
+		const { getBlock } = select("core/block-editor");
+		const { isEditorSidebarOpened } = select("core/edit-post");
+
+		return {
+			children: getBlock(clientId).innerBlocks,
+			isEditorSidebarOpened: isEditorSidebarOpened()
+		};
+	});
+
+	useEffect(() => {
+		addAction(
+			"move",
+			"ku-base-freeGrid",
+			(direction, ItemID) => {
+				move(direction, ItemID, children, device, columns, rows, clientId);
+			},
+			1
+		);
+		return () => {
+			removeAction("move", "ku-base-freeGrid");
+		};
+	}, [children]);
+	useEffect(() => {
+		addAction(
+			"erase",
+			"ku-base-freeGrid",
+			ItemID => {
+				dispatch("core/block-editor").removeBlock(ItemID, false);
+			},
+			1
+		);
+		return () => {
+			removeAction("move", "ku-base-freeGrid");
+		};
+	}, [children]);
 
 	useEffect(() => {
 		if (attributes.clientId === "") {
 			setAttributes({ clientId: makeId() });
 		}
 	}, []);
+	useEffect(() => {
+		setActivateAble(false);
+	}, [children]);
 
 	useEffect(() => {
 		if (Container.current) {
@@ -47,7 +83,7 @@ export default function(props) {
 				gridTemplateRows: comutedGridTemplateRows(cWidth)
 			});
 		}
-	}, [Container, device, gap, ratio, children, rows]);
+	}, [Container, device, gap, ratio, children, rows, isEditorSidebarOpened]);
 
 	function getPrefItems() {
 		let activeChildren = getChildren();
@@ -77,6 +113,7 @@ export default function(props) {
 				device={device}
 				height={placeholderHeight}
 				children={children}
+				setActivateAble={setActivateAble}
 			></Placeholder>
 		);
 		return [...activeChildren, ...foo];
@@ -84,10 +121,11 @@ export default function(props) {
 
 	function getChildren() {
 		let result = [];
-		children.forEach(child => {
+		children.forEach((child, index) => {
 			if (child.attributes.isActive) {
 				result.push(
 					<div
+						key={child.clientId}
 						style={{
 							minHeight: child.attributes[`ownHeight${device}`],
 							border: "#007cba dotted 1px",
@@ -108,7 +146,6 @@ export default function(props) {
 		let result = new Array(rows);
 		let placeholderHeight = ((width - gap * (columns - 1)) / columns) * ratio;
 		result.fill(placeholderHeight);
-
 		children.forEach(child => {
 			let itemRows = new Array(child.attributes[`gridRowEnd${device}`]).fill(1);
 
@@ -122,13 +159,13 @@ export default function(props) {
 			itemRows.forEach((r, i) => {
 				if (
 					result[index + i] < ownHeight ||
-					child.attributes[`autoHeight${device}`]
+					(child.attributes[`autoHeight${device}`] &&
+						result[index + i] === placeholderHeight)
 				) {
 					result[index + i] = ownHeight;
 				}
 			});
 		});
-
 		return result.join("px ") + "px";
 	}
 
@@ -144,6 +181,18 @@ export default function(props) {
 		  position:relative;
 	  `;
 		s += "}";
+		children.forEach(block => {
+			let attr = block.attributes;
+			s += `#block-${block.clientId} {
+				width:100%;
+				grid-area: 
+				${attr[`gridRowStart${device}`]} / 
+				${attr[`gridColumnStart${device}`]} / 
+				span ${attr[`gridRowEnd${device}`]} /
+				span ${attr[`gridColumnEnd${device}`]};
+			}`;
+		});
+
 		return s;
 	}
 
@@ -172,8 +221,9 @@ export default function(props) {
 						>
 							<InnerBlocks
 								allowedBlocks={ALLOWED_BLOCKS}
-								renderAppender={() => <div className="bla"></div>}
+								templateLock={activateAble ? "" : "all"}
 							/>
+
 							<div
 								ref={PrefContainerRef}
 								className={"grid-Gallerie-editor-pref"}

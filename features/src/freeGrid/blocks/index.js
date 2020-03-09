@@ -11,9 +11,6 @@ registerBlockType("kubase/free-grid", {
 	title: "Free Grid",
 	icon: "images-alt2",
 	category: "kubase-blocks",
-	supports: {
-		align: ["wide", "full", "center"]
-	},
 
 	attributes,
 	edit,

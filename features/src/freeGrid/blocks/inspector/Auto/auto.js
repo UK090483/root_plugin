@@ -8,7 +8,10 @@ export default function setAuto(children, device, setAttributes, attributes) {
 	let emtyRow = [...new Array(columns - 1).fill(0), ...[2]];
 	let searchAdd = new Array(16).fill(emtyRow).flat();
 	let cache = { children: [...children], rows: rows };
-	children.forEach(child => {
+	let childrenCopy = JSON.parse(JSON.stringify(children));
+	let sortedGridElements = sortGridElements(childrenCopy, device);
+
+	sortedGridElements.forEach(child => {
 		let newAttributes = { ...child.attributes };
 
 		let width = newAttributes[`gridColumnEnd${device}`];
@@ -109,4 +112,25 @@ function getFoodprint(width, height, columns) {
 	} else {
 		return widthArray;
 	}
+}
+
+function sortGridElements(gridElements, device) {
+	return gridElements.sort((a, b) => {
+		let indexA =
+			a.attributes[`gridRowStart${device}`] -
+			1 +
+			(a.attributes[`gridColumnStart${device}`] - 1);
+		let indexB =
+			b.attributes[`gridRowStart${device}`] -
+			1 +
+			(b.attributes[`gridColumnStart${device}`] - 1);
+
+		if (indexA < indexB) {
+			return -1;
+		}
+		if (indexA > indexB) {
+			return 1;
+		}
+		return 0;
+	});
 }

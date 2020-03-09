@@ -1,4 +1,5 @@
 import AutoComponent from "./Auto/AutoComponent";
+
 const { InspectorControls } = wp.blockEditor;
 
 const {

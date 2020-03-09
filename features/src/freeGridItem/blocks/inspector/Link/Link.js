@@ -14,7 +14,7 @@ export default function Link({ attributes, setAttributes }) {
 		};
 	});
 
-	console.log(data);
+	// console.log(data);
 
 	function getPostypes() {
 		return data.postTypes.map(posType => ({

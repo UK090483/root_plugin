@@ -12,15 +12,13 @@ export default function Animation(props) {
 		animations.map((animation, index) => (
 			<CheckboxControl
 				label={animation.name}
-				checked={
-					!!(attributes[`animations${device}`].find(a => a === index) + 1)
-				}
+				checked={!!(attributes[`animationsdesktop`].find(a => a === index) + 1)}
 				onChange={animation => {
-					let NewAnimations = [...attributes[`animations${device}`]];
+					let NewAnimations = [...attributes[`animationsdesktop`]];
 					animation
 						? NewAnimations.push(index)
 						: (NewAnimations = NewAnimations.filter(a => a !== index));
-					setAttributes({ [`animations${device}`]: NewAnimations });
+					setAttributes({ [`animationsdesktop`]: NewAnimations });
 				}}
 			></CheckboxControl>
 		));
@@ -30,9 +28,9 @@ export default function Animation(props) {
 			<CheckboxControl
 				heading="Amimation"
 				label="overlay"
-				checked={attributes[`animation${device}`]}
+				checked={attributes[`animationdesktop`]}
 				onChange={animation => {
-					setAttributes({ [`animation${device}`]: animation });
+					setAttributes({ [`animationdesktop`]: animation });
 				}}
 			></CheckboxControl>
 			{getAnimations()}

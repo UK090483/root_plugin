@@ -1,7 +1,16 @@
-const { useState, useEffect, useRef, Fragment } = wp.element;
+const { useState, useEffect, useRef } = wp.element;
 
 export default function(props) {
-	const { columns, rows, clientId, ratio, gap, device, children } = props;
+	const {
+		columns,
+		rows,
+		clientId,
+		ratio,
+		gap,
+		device,
+		children,
+		setActivateAble
+	} = props;
 	const [hoverd, setHoverd] = useState(false);
 	const [height, setHeight] = useState(0);
 	const ref = useRef(null);
@@ -41,9 +50,10 @@ export default function(props) {
 			gridRowEndmobile: 1,
 			isActive: true
 		});
+
 		wp.data
 			.dispatch("core/block-editor")
-			.insertBlock(insert, children.length, clientId, true);
+			.insertBlock(insert, 0, clientId, true);
 	}
 
 	return (
@@ -51,12 +61,14 @@ export default function(props) {
 			ref={ref}
 			onMouseEnter={() => {
 				setHoverd(true);
+				setActivateAble(true);
 			}}
 			onMouseLeave={() => {
 				setHoverd(false);
+				setActivateAble(false);
 			}}
 			style={{
-				minHeight: height,
+				// minHeight: height,
 				pointerEvents: "auto",
 				border: "#80808043 dotted 1px",
 				gridColumnStart: "auto",

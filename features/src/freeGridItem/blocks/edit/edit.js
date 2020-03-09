@@ -9,20 +9,34 @@ let layouts = ["desktop", "tablet", "mobile"];
 export default function(props) {
 	const { attributes, setAttributes, clientId, isSelected } = props;
 	const {
-		device,
-		isActive,
 		backgtroundImage,
 		focalPoint,
 		backgroundSize,
 		overlay,
 		overlayText
 	} = attributes;
+	const { device, parentAttr } = useSelect(select => {
+		const { getBlockAttributes, getBlockRootClientId } = select(
+			"core/block-editor"
+		);
+		let parentAttr = getBlockAttributes(getBlockRootClientId(clientId));
+		const { device } = parentAttr;
+		return { device: device, parentAttr: parentAttr };
+	});
+
 	const gridColumnStart = attributes[`gridColumnStart${device}`];
 	const gridColumnEnd = attributes[`gridColumnEnd${device}`];
 	const gridRowStart = attributes[`gridRowStart${device}`];
 	const gridRowEnd = attributes[`gridRowEnd${device}`];
 	const ownHight = attributes[`ownHeight${device}`];
 	const ownRatio = attributes[`ratio${device}`];
+
+	const gap = parentAttr[`gap${device}`];
+	const ratio =
+		parentAttr[`ratio${device}`][0] / parentAttr[`ratio${device}`][1];
+
+	const columns = parentAttr[`columns${device}`];
+	const rows = parentAttr[`rows${device}`];
 
 	const [hovered, setHovered] = useState(false);
 
@@ -37,42 +51,11 @@ export default function(props) {
 	});
 
 	const ref = useRef();
-	const { _device, parentAttr } = useSelect(select => {
-		const { getBlockAttributes, getBlockRootClientId } = select(
-			"core/block-editor"
-		);
-		let parentAttr = getBlockAttributes(getBlockRootClientId(clientId));
-		const { device } = parentAttr;
-		return { _device: device, parentAttr: parentAttr };
-	});
 
-	const gap = parentAttr[`gap${device}`];
-	const ratio =
-		parentAttr[`ratio${device}`][0] / parentAttr[`ratio${device}`][1];
-
-	const columns = parentAttr[`columns${device}`];
-	const rows = parentAttr[`rows${device}`];
-
-	const rootId = useSelect(select => {
-		const { getBlockRootClientId } = select("core/block-editor");
-		return getBlockRootClientId(clientId);
-	});
 	const hasChildBlocks = useSelect(select => {
 		const { getBlockOrder } = select("core/block-editor");
 		return getBlockOrder(clientId).length > 0;
 	});
-
-	useEffect(() => {
-		if (attributes.device !== _device) {
-			setAttributes({ device: _device });
-		}
-	}, [_device]);
-
-	useEffect(() => {
-		if (attributes.noGrid !== parentAttr.noGrid) {
-			setAttributes({ noGrid: parentAttr.noGrid });
-		}
-	}, [_device]);
 
 	useEffect(() => {
 		if (attributes.clientId === "") {
@@ -101,12 +84,6 @@ export default function(props) {
 		gridRowEnd
 	]);
 
-	function resetWrap() {
-		wp.data
-			.dispatch("core/block-editor")
-			.updateBlockAttributes(rootId, { size: Math.random() });
-	}
-
 	function getGapMargin() {
 		let mbox = (gap * (columns - 1 || 1)) / columns;
 		let mb = gridRowStart + (gridRowEnd - 1) < rows ? gap : 0;
@@ -131,13 +108,11 @@ export default function(props) {
 			let sizes = wrap.getBoundingClientRect();
 			let width = sizes.width;
 			let hightMesured = sizes.height;
-			let gapHeight =
-				(attributes[`gridRowEnd${device}`] - 1) * parentAttr[`gap${device}`];
-			let gapWidth =
-				(attributes[`gridColumnEnd${device}`] - 1) * parentAttr[`gap${device}`];
-			let width1Box = (width - gapWidth) / attributes[`gridColumnEnd${device}`];
+			let gapHeight = (gridRowEnd - 1) * parentAttr[`gap${device}`];
+			let gapWidth = (gridColumnEnd - 1) * parentAttr[`gap${device}`];
+			let width1Box = (width - gapWidth) / gridColumnEnd;
 			let height1Box = width1Box * ratio;
-			let height = height1Box * attributes[`gridRowEnd${device}`] + gapHeight;
+			let height = height1Box * gridRowEnd + gapHeight;
 
 			height = Math.max(height, hightMesured);
 			if (ownHight !== height) {
@@ -146,10 +121,7 @@ export default function(props) {
 				});
 			}
 
-			let r =
-				(ratio / attributes[`gridColumnEnd${device}`]) *
-				attributes[`gridRowEnd${device}`] *
-				100;
+			let r = (ratio / gridColumnEnd) * gridRowEnd * 100;
 
 			let gabSum = gapHeight - gapWidth * (r / 100);
 
@@ -199,13 +171,14 @@ export default function(props) {
 			)}
 			{overlay && <div className={"overlay-box"}>{overlayText}</div>}
 			<Fragment>
-				<Inspector {...props} device={device} resetWrap={resetWrap}></Inspector>
+				<Inspector {...props} device={device} clientId={clientId}></Inspector>
 				<div ref={ref}>
 					<InnerBlocks
+						templateLock={false}
 						renderAppender={
 							!hasChildBlocks && isSelected
 								? () => <InnerBlocks.ButtonBlockAppender />
-								: () => <div style={{ height: 0, width: 0 }}></div>
+								: false
 						}
 					/>
 				</div>
