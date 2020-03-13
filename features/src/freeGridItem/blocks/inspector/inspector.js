@@ -11,10 +11,14 @@ const { doAction } = wp.hooks;
 import style from "../helper/style";
 
 export default function Inspector(props) {
-	const { setAttributes, attributes, device, clientId } = props;
+	const { setAttributes, attributes, device, clientId, parentId } = props;
 
 	function handleClick(dir) {
-		doAction("move", dir, clientId);
+		doAction(`move-${parentId}`, dir, clientId);
+		let data = {
+			type: "move"
+		};
+		doAction(`com-${parentId}`, data);
 	}
 
 	function erase() {
@@ -25,7 +29,7 @@ export default function Inspector(props) {
 		<InspectorControls>
 			<h1>{device}</h1>
 
-			<Positionator onClick={handleClick}></Positionator>
+			<Positionator clientId={clientId} parentId={parentId}></Positionator>
 
 			<Button isSmall isDestructive onClick={() => erase()}>
 				Erase

@@ -3,7 +3,7 @@ const { useEffect, Fragment, useRef, useState } = wp.element;
 let layouts = ["desktop", "tablet", "mobile"];
 export default function(props) {
 	const { attributes } = props;
-	const { clientId } = attributes;
+	const { clientId, childrenAttributes } = attributes;
 
 	function getgridTemplatColumns(_columns) {
 		let ms = new Array(_columns).fill("1fr").join(" ");
@@ -14,6 +14,15 @@ export default function(props) {
 		let mb = attributes[`marginBottom${device}`];
 		let mt = attributes[`marginTop${device}`];
 		return mb || mt ? `margin: ${mt}px 0px ${mb}px 0px ;` : "";
+	}
+
+	function getChildrenStyle(device) {
+		let res = "";
+		childrenAttributes.forEach(child => {
+			res += `.ku-free-grid-item{
+				
+			} `;
+		});
 	}
 
 	function getGridStyle() {

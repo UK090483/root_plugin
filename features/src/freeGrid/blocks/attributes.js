@@ -62,5 +62,9 @@ export default {
 	clientId: {
 		type: "string",
 		default: ""
+	},
+	childrenAttributes: {
+		type: "array",
+		default: []
 	}
 };

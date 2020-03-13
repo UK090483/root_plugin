@@ -35,10 +35,7 @@ attributes = addResponsivePropertys(
 	{ name: "breakingPoint", type: "string", default: ["unset", 992, 750] },
 	attributes
 );
-attributes = addResponsivePropertys(
-	{ name: "minHeight", type: "number", default: 0 },
-	attributes
-);
+
 attributes = addResponsivePropertys(
 	{ name: "ratio", type: "string", default: "calc(100% + 0px)" },
 	attributes
@@ -51,16 +48,17 @@ attributes = addResponsivePropertys(
 	{ name: "ownHeight", type: "number", default: 0 },
 	attributes
 );
-attributes = addResponsivePropertys(
-	{ name: "ownWidth", type: "number", default: 0 },
-	attributes
-);
+
 attributes = addResponsivePropertys(
 	{ name: "animations", type: "array", default: [] },
 	attributes
 );
 attributes = addResponsivePropertys(
 	{ name: "gapMargin", type: "string", default: `` },
+	attributes
+);
+attributes = addResponsivePropertys(
+	{ name: "gridIndex", type: "number", default: 1 },
 	attributes
 );
 
@@ -71,6 +69,10 @@ export default {
 		default: false
 	},
 	clientId: {
+		type: "sting",
+		default: ""
+	},
+	Id: {
 		type: "sting",
 		default: ""
 	},

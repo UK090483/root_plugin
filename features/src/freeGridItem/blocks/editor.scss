@@ -2,3 +2,10 @@
   word-wrap: break-word;
   word-break: break-word;
 }
+
+.hoverbox {
+  opacity: 0;
+  top: 0;
+  right: 0;
+  transition: all 1s;
+}

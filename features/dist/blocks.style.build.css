@@ -289,15 +289,15 @@ a.ku-free-grid-item:hover .ku-free-grid-item-content-overlay {
     .karussell-wrap .karussell-image.active {
       opacity: 1; }
 .is-style-ku-base-header-no-margin {
-  margin-top: 0px;
-  margin-bottom: 0px; }
+  margin-top: 0px !important;
+  margin-bottom: 0px !important; }
 
 .is-style-ku-base-paragraph-no-margin {
-  margin-top: 0px;
-  margin-bottom: 0px; }
+  margin-top: 0px !important;
+  margin-bottom: 0px !important; }
 
 .is-style-ku-base-header-no-margin-top {
-  margin-top: 0px; }
+  margin-top: 0px !important; }
 
 .is-style-ku-base-paragraph-no-margin-top {
-  margin-top: 0px; }
+  margin-top: 0px !important; }

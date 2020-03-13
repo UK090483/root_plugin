@@ -1,15 +1,45 @@
-export default function search(posArray, item, columns, device) {
+export default function search(posArray, items, columns, device) {
 	let searchString = posToString(posArray, columns);
 	let res = [];
-	item.forEach(i => {
-		let footprint = foodprintToRegex(i, device);
+	items.forEach(item => {
+		let footprint = foodprintToRegex(item, device);
 		let changeIndex = searchString.match(footprint).index;
+		let gridIndex =
+			(item.attributes[`gridRowStart${device}`] - 1) * columns +
+			(item.attributes[`gridColumnStart${device}`] - 1);
+
+		let allPossiblePositions = Array.from(
+			searchString.matchAll(footprint),
+			m => m.index
+		);
+		let i = 0;
+		let distence = 1000;
+		let closestIndex = 0;
+		while (i !== allPossiblePositions.length - 1) {
+			let _distence = Math.abs(allPossiblePositions[i] - gridIndex);
+			console.log("i= " + i);
+			console.log("allPossiblePositions[i]= " + allPossiblePositions[i]);
+			console.log("_distance= " + _distence);
+			if (_distence < distence) {
+				distence = _distence;
+				closestIndex = allPossiblePositions[i];
+			} else {
+				break;
+			}
+			i += 1;
+		}
+
+		console.log(gridIndex);
+		console.log(closestIndex);
+		console.log(allPossiblePositions);
+		console.log(searchString);
+		console.log(item.footprint);
 
 		res.push({
-			changeIndex: changeIndex,
-			clientId: i.clientId
+			changeIndex: closestIndex,
+			clientId: item.clientId
 		});
-		searchString = implementChange(i, changeIndex, searchString);
+		searchString = implementChange(item, changeIndex, searchString);
 	});
 
 	return {
@@ -60,13 +90,15 @@ function foodprintToRegex(gridItem, device) {
 				.map((item, index) =>
 					item !== undefined ? (index > width - 2 ? "[^13]" : "[^123]") : "."
 				)
-				.join("")
+				.join(""),
+			"g"
 		);
 	} else {
 		return RegExp(
 			gridItem.footprint
 				.map(item => (item !== undefined ? "[^(1|3)]" : "."))
-				.join("")
+				.join(""),
+			"g"
 		);
 	}
 }

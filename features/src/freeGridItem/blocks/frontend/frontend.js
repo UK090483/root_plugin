@@ -49,7 +49,7 @@ function IntersectionObserverAlternative(items) {
 			if (clientRect.top < windowBottom && !(clientRect.bottom < 0)) {
 				setTimeout(() => {
 					handleItemIn(item);
-				}, 200 * itemInCounter);
+				}, 50 * itemInCounter);
 				itemInCounter++;
 			} else if (clientRect.bottom < 0) {
 				handleItemOutTop(item);

@@ -156,6 +156,14 @@
 .ku-box * {
   word-wrap: break-word;
   word-break: break-word; }
+
+.hoverbox {
+  opacity: 0;
+  top: 0;
+  right: 0;
+  -webkit-transition: all 1s;
+  -o-transition: all 1s;
+  transition: all 1s; }
 .ku-base-freeGrid-positionator {
   height: 100px;
   width: 50%;

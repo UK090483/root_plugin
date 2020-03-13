@@ -1,7 +1,6 @@
 function getPositionArray(Attr, skipElements = []) {
-	const { children, columns, device } = Attr;
-	let res = [];
-
+	const { children, columns, device, rows } = Attr;
+	let res = new Array(columns * rows).fill(undefined);
 	children.forEach((child, i) => {
 		if (!skipElements.includes(i)) {
 			let fp = getFoodprint(child, columns, device, i);
@@ -12,10 +11,9 @@ function getPositionArray(Attr, skipElements = []) {
 			res = implementArray(index, fp, res);
 		}
 	});
-	// console.log(children);
+	// console.log("posarray");
+	//printPos([...res], columns);
 
-	// printPos([...res], columns);
-	// console.log([...res]);
 	return [...res];
 }
 

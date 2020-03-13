@@ -1,4 +1,15 @@
-export default function Positionator({ onClick }) {
+const { doAction } = wp.hooks;
+
+export default function Positionator({ clientId, parentId }) {
+	function onClick(dir) {
+		console.log("move-from-edit-item");
+		doAction(`move-${parentId}`, dir, clientId);
+		// let data = {
+		// 	type: "move"
+		// };
+		// doAction(`com-${parentId}`, data);
+	}
+
 	return (
 		<div className={"ku-base-freeGrid-positionator"}>
 			<svg className={"bigCircle"}>

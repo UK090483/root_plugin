@@ -14,12 +14,14 @@ export default function move(
 ) {
 	let moveItemIndex = children.findIndex(child => id === child.clientId);
 	let moveItem = children[moveItemIndex];
+
 	let gridItems = children.map((child, index) => ({
 		footprint: getFoodprint(child, columns, device, index),
 		attributes: { ...child.attributes },
 		index: index,
 		clientId: child.clientId
 	}));
+
 	let globAttr = {
 		moveItemIndex: moveItemIndex,
 		moveItem: moveItem,
@@ -32,9 +34,10 @@ export default function move(
 	};
 
 	let colitions = getColitions(globAttr);
-	if (colitions.length > 0) {
+	if (colitions) {
 		handleColitions(colitions, globAttr, gridItems);
 	}
+
 	let nextAttributes = getNextAttributes(
 		moveItem.attributes,
 		dir,
@@ -90,14 +93,17 @@ function handleColitions(colitions, globAttr, gridItems) {
 }
 
 function getColitions(globAttr) {
+	console.log("---getClitions-----");
 	const { moveItemIndex, moveItem, children, columns, device, dir } = globAttr;
 	let posArray = getPositionArray(globAttr);
+	console.log(posArray);
 	let testAttributes = getNextAttributes(
-		{ ...moveItem.attributes },
+		JSON.parse(JSON.stringify(moveItem.attributes)),
 		dir,
 		device,
 		columns
 	);
+	console.log("---getClitions-----");
 	let fp = getFoodprint({ attributes: testAttributes }, columns, device, "b");
 	let startIndex =
 		testAttributes[`gridRowStart${device}`] * columns -
@@ -111,7 +117,7 @@ function getColitions(globAttr) {
 			!res.includes(testValue) && res.push(testValue);
 		}
 	});
-	return res;
+	return res.length > 0 ? res : undeinded;
 }
 
 function getNextAttributes(attributes, dir, device, columns) {

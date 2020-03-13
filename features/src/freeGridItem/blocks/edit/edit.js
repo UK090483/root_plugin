@@ -5,6 +5,7 @@ const { InnerBlocks } = wp.blockEditor;
 const { useSelect } = wp.data;
 const { useEffect, Fragment, useRef, useState } = wp.element;
 let layouts = ["desktop", "tablet", "mobile"];
+import Positionator from "../inspector/Positionator";
 
 export default function(props) {
 	const { attributes, setAttributes, clientId, isSelected } = props;
@@ -15,15 +16,24 @@ export default function(props) {
 		overlay,
 		overlayText
 	} = attributes;
-	const { device, parentAttr } = useSelect(select => {
+	const { device, parentAttr, isEditorSidebarOpened } = useSelect(select => {
 		const { getBlockAttributes, getBlockRootClientId } = select(
 			"core/block-editor"
 		);
-		let parentAttr = getBlockAttributes(getBlockRootClientId(clientId));
+		const { isEditorSidebarOpened } = select("core/edit-post");
+		let blockRootClientId = getBlockRootClientId(clientId);
+		let parentAttr = getBlockAttributes(blockRootClientId);
+
 		const { device } = parentAttr;
-		return { device: device, parentAttr: parentAttr };
+		return {
+			device: device,
+			parentAttr: parentAttr,
+			isEditorSidebarOpened: isEditorSidebarOpened()
+		};
 	});
 
+	const parentId = parentAttr.clientId;
+	const gridIndex = attributes[`gridIndex${device}`];
 	const gridColumnStart = attributes[`gridColumnStart${device}`];
 	const gridColumnEnd = attributes[`gridColumnEnd${device}`];
 	const gridRowStart = attributes[`gridRowStart${device}`];
@@ -67,7 +77,17 @@ export default function(props) {
 		if (ref.current) {
 			setComputedHeight(ref.current);
 		}
-	}, [ref, gap, ratio, columns, gridColumnEnd, gridRowEnd, device, innerB]);
+	}, [
+		ref,
+		gap,
+		ratio,
+		columns,
+		gridColumnEnd,
+		gridRowEnd,
+		device,
+		innerB,
+		isEditorSidebarOpened
+	]);
 
 	useEffect(() => {
 		let gapMargin = getGapMargin();
@@ -98,6 +118,10 @@ export default function(props) {
 		if (attributes[`autoHeight${device}`]) {
 			/// FREE HIGHT
 			let sizes = wrap.getBoundingClientRect();
+
+			var styles = window.getComputedStyle(wrap.parentElement.parentElement);
+			var margin =
+				parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
 			let hightMesured = sizes.height;
 			setAttributes({
 				[`ownHeight${device}`]: hightMesured,
@@ -156,22 +180,37 @@ export default function(props) {
 			className={"ku-box"}
 		>
 			{hovered && (
-				<div
-					style={{
-						position: "absolute",
-						right: 0,
-						top: 0,
-						zIndex: 500,
-						backgroundColor: "red"
-					}}
-					className={"hoverbox"}
-				>
-					{"select"}
-				</div>
+				<Fragment>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							borderRadius: "50%",
+							width: 50,
+							height: 50,
+							position: "absolute",
+							right: -15,
+							top: -15,
+							zIndex: 500,
+							backgroundColor: "red",
+							opacity: 1,
+							transition: "all 1s"
+						}}
+						className={"hoverbox"}
+					>
+						{"select"}
+					</div>
+				</Fragment>
 			)}
 			{overlay && <div className={"overlay-box"}>{overlayText}</div>}
 			<Fragment>
-				<Inspector {...props} device={device} clientId={clientId}></Inspector>
+				<Inspector
+					{...props}
+					device={device}
+					clientId={clientId}
+					parentId={parentId}
+				></Inspector>
 				<div ref={ref}>
 					<InnerBlocks
 						templateLock={false}
