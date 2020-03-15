@@ -1,13 +1,14 @@
 const { doAction } = wp.hooks;
 
-export default function Positionator({ clientId, parentId }) {
-	function onClick(dir) {
-		console.log("move-from-edit-item");
-		doAction(`move-${parentId}`, dir, clientId);
-		// let data = {
-		// 	type: "move"
-		// };
-		// doAction(`com-${parentId}`, data);
+export default function Positionator({ id, parentId }) {
+	function onClick(direction) {
+		doAction(`com-${parentId}`, {
+			type: "MOVE",
+			data: {
+				direction: direction,
+				id: id
+			}
+		});
 	}
 
 	return (

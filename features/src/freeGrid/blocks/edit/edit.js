@@ -1,34 +1,47 @@
 import Inspector from "../inspector/inspector";
 import makeId from "../../../shared/makeId";
-import move from "../inspector/move/move";
 import { getPositionArray } from "../inspector/move/helper/positionArray";
 import RowsPreview from "./rowsPreview";
 import EditOverlay from "./EditOverlay";
+import useCom from "./useCom";
+import useAttributes from "./useAttributes";
+const {
+	RangeControl,
+	PanelBody,
+	Button,
+	ButtonGroup,
+	CheckboxControl
+} = wp.components;
 
-const { InnerBlocks } = wp.blockEditor;
+const { InnerBlocks, BlockControls } = wp.blockEditor;
 const { useState, useEffect, useRef, Fragment } = wp.element;
 const { useSelect } = wp.data;
-const { addAction, removeAction } = wp.hooks;
-const { dispatch } = wp.data;
 const ALLOWED_BLOCKS = ["kubase/free-grid-item-nogrid"];
 
 export default function(props) {
 	const { setAttributes, attributes, clientId } = props;
 	const { device, childrenAttributes } = attributes;
-	const gap = attributes[`gap${device}`];
-	const columns = attributes[`columns${device}`];
-	const rows = attributes[`rows${device}`];
-	const ratio =
-		attributes[`ratio${device}`][0] / attributes[`ratio${device}`][1];
-	const breakingPoint = attributes[`breakingPoint${device}`];
-	const marginTop = attributes[`marginTop${device}`];
-	const marginBottom = attributes[`marginBottom${device}`];
+	const {
+		gap,
+		columns,
+		rows,
+		ratio,
+		breakingPoint,
+		marginTop,
+		marginBottom
+	} = useAttributes(attributes, device);
+
 	const Container = useRef();
+	const InnerBlocksref = useRef();
+
 	const [state, setState] = useState({
 		containerWidth: null,
 		gridTemplateRows: ""
 	});
+
 	const [activateAble, setActivateAble] = useState(false);
+	const [childrenHeights, setchildrenHeights] = useState({});
+
 	const { children } = useSelect(select => {
 		const { getBlock } = select("core/block-editor");
 		return {
@@ -36,48 +49,21 @@ export default function(props) {
 		};
 	});
 
-	const positionArray = getPositionArray({
-		columns: columns,
-		children: children,
-		device: device,
-		rows: rows
-	});
+	const positionArray = getPositionArray(attributes);
 
-	useEffect(() => {
-		addAction(
-			`move-${attributes.clientId}`,
-			`ku-base-freeGrid`,
-			(direction, ItemID) => {
-				move(direction, ItemID, children, device, columns, rows, clientId);
-			},
-			1
-		);
-		return () => {
-			removeAction(`move-${attributes.clientId}`, "ku-base-freeGrid");
-			removeAction(`com-${attributes.clientId}`, "ku-base-freeGrid");
-		};
-	}, [children]);
-
-	useEffect(() => {
-		setActivateAble(false);
-		addAction(
-			"erase",
-			"ku-base-freeGrid",
-			ItemID => {
-				dispatch("core/block-editor").removeBlock(ItemID, false);
-			},
-			1
-		);
-		return () => {
-			removeAction("move", "ku-base-freeGrid");
-		};
-	}, [children]);
+	useCom(props, [children]);
 
 	useEffect(() => {
 		if (attributes.clientId === "") {
 			setAttributes({ clientId: makeId() });
 		}
 	}, []);
+
+	useEffect(() => {
+		if (activateAble) {
+			setActivateAble(false);
+		}
+	}, [children]);
 
 	useEffect(() => {
 		if (Container.current) {
@@ -87,7 +73,22 @@ export default function(props) {
 				gridTemplateRows: comutedGridTemplateRows(cWidth)
 			});
 		}
-	}, [Container, device, gap, ratio, children, rows]);
+	}, [Container, device, gap, ratio, children, childrenHeights, columns]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			let res = {};
+			children.forEach(child => {
+				let item = Container.current.querySelector(
+					`.ku-freegrid-item-wrap-${child.attributes.id}`
+				);
+				//
+				res[child.attributes.id] = item.getBoundingClientRect().height;
+			});
+
+			setchildrenHeights(res);
+		});
+	}, [InnerBlocksref, children, columns]);
 
 	function comutedGridTemplateRows(width) {
 		let result = new Array(rows);
@@ -99,7 +100,6 @@ export default function(props) {
 		positionArray.forEach((element, index) => {
 			let _row = Math.floor(index / columns);
 			let child = children[element];
-
 			if (index % columns !== columns - 1) {
 				setValues();
 			} else {
@@ -122,16 +122,42 @@ export default function(props) {
 				if (element !== undefined) {
 					hasItems = true;
 					let ownHeight =
-						(child.attributes[`ownHeight${device}`] -
-							(child.attributes[`gridRowEnd${device}`] - 1) * gap) /
-						child.attributes[`gridRowEnd${device}`];
+						(childrenHeights[child.attributes.id] -
+							(childrenAttributes[element][`gridRowEnd${device}`] - 1) * gap) /
+						childrenAttributes[element][`gridRowEnd${device}`];
 
-					ownHeight > rowheight && (rowheight = ownHeight);
+					if (child.innerBlocks.length === 0) {
+						rowheight =
+							rowheight < placeholderHeight ? placeholderHeight : rowheight;
+					}
+					if (ownHeight > rowheight) {
+						rowheight = ownHeight;
+					}
+
+					if (child.attributes[`autoHeight${device}`]) {
+						rowheight < ownHeight && (rowheigt = ownHeight);
+					}
+
+					// rowheight = ownHeight > rowheight ? ownHeight : placeholderHeight;
 				}
 			}
 		});
-
+		console.log(placeholderHeight);
+		console.log(result);
 		return result.join("px ") + "px";
+	}
+
+	function getRatio(device, child) {
+		let _gridRowEnd = child[`gridRowEnd${device}`];
+		let _gridColumnEnd = child[`gridColumnEnd${device}`];
+		const ratio =
+			attributes[`ratio${device}`][0] / attributes[`ratio${device}`][1];
+		let gapHeight = (_gridRowEnd - 1) * gap;
+		let gapWidth = (_gridColumnEnd - 1) * gap;
+		let r = (ratio / _gridColumnEnd) * _gridRowEnd * 100;
+		let gabSum = gapHeight - gapWidth * (r / 100);
+
+		return `padding-top: calc(${r}% + ${gabSum}px );`;
 	}
 
 	function getStyles() {
@@ -154,21 +180,38 @@ export default function(props) {
 				${attr[`gridColumnStart${device}`]} / 
 				span ${attr[`gridRowEnd${device}`]} /
 				span ${attr[`gridColumnEnd${device}`]};
-			}`;
+			}
+				.ku-freegrid-item-wrap-${children[index].attributes.id}::before{
+					content: "";
+					width: 1px;
+					margin-left: -1px;
+					float: left;
+					height: 0;
+					 ${getRatio(device, attr)}
+				} 
+				.ku-freegrid-item-wrap-${children[index].attributes.id}::after{
+					content: "";
+			display: table;
+			clear: both;
+				} 
+			`;
 		});
-
 		return s;
 	}
 
 	return (
 		<div className={"grid-Gallerie-editor-wrap"}>
 			<Inspector {...props}></Inspector>
+			<BlockControls>
+				<Button>b</Button>
+			</BlockControls>
 			<div
 				ref={Container}
 				style={{
 					maxWidth: breakingPoint,
 					width: "100%",
-					margin: " 0 auto"
+					margin: " 0 auto",
+					position: "relative"
 				}}
 			>
 				{state.containerWidth && (
@@ -183,6 +226,7 @@ export default function(props) {
 
 						<style>{getStyles()}</style>
 						<div
+							ref={InnerBlocksref}
 							className={`grid-Gallerie-e-wrap-${clientId} `}
 							style={{
 								position: "relative",
@@ -194,15 +238,14 @@ export default function(props) {
 								allowedBlocks={ALLOWED_BLOCKS}
 								templateLock={activateAble ? "" : "all"}
 							/>
-
-							<EditOverlay
-								{...props}
-								positionArray={positionArray}
-								state={state}
-								children={children}
-								setActivateAble={setActivateAble}
-							></EditOverlay>
 						</div>
+						<EditOverlay
+							{...props}
+							positionArray={positionArray}
+							state={state}
+							children={children}
+							setActivateAble={setActivateAble}
+						></EditOverlay>
 					</Fragment>
 				)}
 			</div>

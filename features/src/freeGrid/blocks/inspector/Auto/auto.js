@@ -1,129 +1,47 @@
-const { dispatch } = wp.data;
+import search from "../move/helper/search";
+import { getPositionArray } from "../move/helper/positionArray";
 
-export default function setAuto(children, device, setAttributes, attributes) {
-	let columns = attributes[`columns${device}`];
-	let rows = attributes[`rows${device}`];
+export default function setAuto(attributes, setAttributes) {
+	const { childrenAttributes, device } = attributes;
 
-	let pos = [];
-	let emtyRow = [...new Array(columns - 1).fill(0), ...[2]];
-	let searchAdd = new Array(16).fill(emtyRow).flat();
-	let cache = { children: [...children], rows: rows };
-	let childrenCopy = JSON.parse(JSON.stringify(children));
-	let sortedGridElements = sortGridElements(childrenCopy, device);
+	const columns = attributes[`columns${device}`];
 
-	sortedGridElements.forEach(child => {
-		let newAttributes = { ...child.attributes };
+	let items = childrenAttributes.map((a, i) => i);
+	let positionSortedItems = positionSortItems(
+		items,
+		childrenAttributes,
+		device
+	);
 
-		let width = newAttributes[`gridColumnEnd${device}`];
-		let height = newAttributes[`gridRowEnd${device}`];
+	let posArray = getPositionArray(attributes, items);
+	let searchResult = search(attributes, posArray, positionSortedItems, false);
+	const nextChildrenAttributes = JSON.parse(JSON.stringify(childrenAttributes));
 
-		if (width > columns) {
-			width = columns;
-			newAttributes[`gridColumnEnd${device}`] = 1;
-			newAttributes[`gridRowEnd${device}`] = 1;
-		}
-
-		let foodprint = getFoodprint(width, height, columns);
-
-		let search = [...pos, ...searchAdd.slice(pos.length)]
-			.join("")
-			.match(foodprintToRegex(foodprint, width));
-
-		let gcs = search
-			? (search.index % columns) + 1
-			: (pos.length % columns) + 1;
-		let grs = search
-			? Math.floor(search.index / columns) + 1
-			: Math.floor(pos.length / columns) | 1;
-
-		console.log(pos);
-		console.log(foodprint);
-		console.log(foodprintToRegex(foodprint, width));
-		console.log([...pos, ...searchAdd.slice(pos.length)].join(""));
-		console.log(search);
-
-		console.log(gcs);
-		console.log(grs);
-
-		pos = implementArray(search.index, foodprint, pos, columns, emtyRow);
-
-		// console.log("----------------------------------------------");
-
-		newAttributes[`gridColumnStart${device}`] = gcs;
-		newAttributes[`gridRowStart${device}`] = grs;
-
-		dispatch("core/block-editor").updateBlockAttributes(
-			child.clientId,
-			newAttributes
+	searchResult.colitions.forEach(item => {
+		let nextAttributes = changeIndexToAttributes(
+			item.changeIndex,
+			columns,
+			device
 		);
-	});
-	// console.log(pos);
-	setAttributes({
-		[`rows${device}`]: Math.ceil(pos.length / columns)
+		nextChildrenAttributes[item.index] = {
+			...nextChildrenAttributes[item.index],
+			...nextAttributes
+		};
 	});
 
-	return cache;
+	setAttributes({ childrenAttributes: nextChildrenAttributes });
 }
 
-function implementArray(index, implementArray, targetArray, columns, emtyRow) {
-	let res = [...targetArray];
-	implementArray.forEach((item, i) => {
-		if ((index + i) % columns === columns - 1) {
-			res[index + i] = item === 1 ? 3 : 2;
-		} else {
-			res[index + i] = item === 1 ? 1 : res[index + i] || 0;
-		}
-	});
-	if (res.length % columns !== 0) {
-		return [...res, ...emtyRow.slice(res.length % columns)];
-	} else {
-		return res;
-	}
-}
-
-function foodprintToRegex(foodprint, width) {
-	if (width > 1) {
-		return RegExp(
-			foodprint
-				.slice(0, foodprint.lastIndexOf(1) + 1)
-				.map((item, index) =>
-					item === 1 ? (index > width - 2 ? "[^13]" : "[^123]") : "."
-				)
-				.join("")
-		);
-	} else {
-		return RegExp(
-			foodprint
-				.slice(0, foodprint.lastIndexOf(1) + 1)
-				.map(item => (item === 1 ? "[^(1|3)]" : "."))
-				.join("")
-		);
-	}
-}
-function getFoodprint(width, height, columns) {
-	let widthArray = new Array(width).fill(1);
-
-	if (height > 1) {
-		let res = new Array(height)
-			.fill([...widthArray, ...new Array(columns - widthArray.length).fill(0)])
-			.flat();
-
-		return res;
-	} else {
-		return widthArray;
-	}
-}
-
-function sortGridElements(gridElements, device) {
-	return gridElements.sort((a, b) => {
+function positionSortItems(items, childrenAttributes, device) {
+	return [...items].sort((a, b) => {
 		let indexA =
-			a.attributes[`gridRowStart${device}`] -
+			childrenAttributes[a][`gridRowStart${device}`] -
 			1 +
-			(a.attributes[`gridColumnStart${device}`] - 1);
+			(childrenAttributes[a][`gridColumnStart${device}`] - 1);
 		let indexB =
-			b.attributes[`gridRowStart${device}`] -
+			childrenAttributes[b][`gridRowStart${device}`] -
 			1 +
-			(b.attributes[`gridColumnStart${device}`] - 1);
+			(childrenAttributes[b][`gridColumnStart${device}`] - 1);
 
 		if (indexA < indexB) {
 			return -1;
@@ -133,4 +51,10 @@ function sortGridElements(gridElements, device) {
 		}
 		return 0;
 	});
+}
+function changeIndexToAttributes(changeIndex, columns, device) {
+	return {
+		[`gridColumnStart${device}`]: (changeIndex % columns) + 1,
+		[`gridRowStart${device}`]: Math.ceil((changeIndex + 1) / columns)
+	};
 }

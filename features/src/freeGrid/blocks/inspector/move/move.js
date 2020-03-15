@@ -3,125 +3,126 @@ import { getPositionArray } from "./helper/positionArray";
 import search from "./helper/search";
 import getFoodprint from "./helper/footprint";
 
-export default function move(
-	dir,
-	id,
-	children,
-	device,
-	columns,
-	rows,
-	clientId
-) {
-	let moveItemIndex = children.findIndex(child => id === child.clientId);
-	let moveItem = children[moveItemIndex];
+export default function move(data, attributes, setAttributes) {
+	const { childrenAttributes, device } = attributes;
+	const { direction, id } = data;
+	const columns = attributes[`columns${device}`];
+	const rows = attributes[`rows${device}`];
+	const nextChildrenAttributes = JSON.parse(JSON.stringify(childrenAttributes));
 
-	let gridItems = children.map((child, index) => ({
-		footprint: getFoodprint(child, columns, device, index),
-		attributes: { ...child.attributes },
-		index: index,
-		clientId: child.clientId
-	}));
+	let moveItemIndex = childrenAttributes.findIndex(c => c.id === id);
+	let nextAttributes = {};
+	nextChildrenAttributes[moveItemIndex] = getNextAttributes(
+		childrenAttributes[moveItemIndex],
+		direction,
+		device,
+		columns
+	);
 
-	let globAttr = {
-		moveItemIndex: moveItemIndex,
-		moveItem: moveItem,
-		children: gridItems,
-		columns: columns,
-		rows: rows,
-		device: device,
-		dir: dir,
-		clientId: clientId
-	};
+	let colitions = getColitions(attributes, direction, moveItemIndex);
 
-	let colitions = getColitions(globAttr);
 	if (colitions) {
-		handleColitions(colitions, globAttr, gridItems);
+		let searchResult = handleColitions(
+			attributes,
+			colitions,
+			direction,
+			moveItemIndex
+		);
+
+		searchResult.colitions.forEach(item => {
+			let nextAttributes = changeIndexToAttributes(
+				item.changeIndex,
+				columns,
+				device
+			);
+			nextChildrenAttributes[item.index] = {
+				...nextChildrenAttributes[item.index],
+				...nextAttributes
+			};
+		});
 	}
 
-	let nextAttributes = getNextAttributes(
-		moveItem.attributes,
-		dir,
-		device,
-		columns
-	);
-	dispatch("core/block-editor").updateBlockAttributes(id, nextAttributes);
+	let RowsNeeded = checkIfRowsNeedChange(nextChildrenAttributes, rows, device);
+
+	if (RowsNeeded) {
+		setAttributes({
+			childrenAttributes: nextChildrenAttributes,
+			[`rows${device}`]: RowsNeeded
+		});
+	} else {
+		setAttributes({ childrenAttributes: nextChildrenAttributes });
+	}
 }
 
-function handleColitions(colitions, globAttr, gridItems) {
-	const {
-		children,
-		moveItemIndex,
-		dir,
-		device,
-		columns,
-		rows,
-		clientId
-	} = globAttr;
-	const NextChildren = JSON.parse(JSON.stringify(children));
-	NextChildren[moveItemIndex].attributes = getNextAttributes(
-		NextChildren[moveItemIndex].attributes,
-		dir,
+function handleColitions(attributes, colitions, direction, moveItemIndex) {
+	const { childrenAttributes } = attributes;
+	const { device } = attributes;
+	const columns = attributes[`columns${device}`];
+
+	const NextChildren = JSON.parse(JSON.stringify(childrenAttributes));
+	NextChildren[moveItemIndex] = getNextAttributes(
+		NextChildren[moveItemIndex],
+		direction,
 		device,
 		columns
 	);
+
 	let posArrayWitoutColitionElements = getPositionArray(
-		{ ...globAttr, ...{ children: NextChildren } },
+		{ ...attributes, ...{ childrenAttributes: NextChildren } },
 		colitions
 	);
 
 	let searchResult = search(
+		attributes,
 		posArrayWitoutColitionElements,
-		colitions.map((i, index) => {
-			return gridItems[i];
-		}),
-		columns,
-		device
+		colitions
 	);
 
-	searchResult.colitions.forEach(item => {
-		dispatch("core/block-editor").updateBlockAttributes(
-			item.clientId,
-			changeIndexToAttributes(item.changeIndex, columns, device)
-		);
-	});
+	return searchResult;
 
-	if (searchResult.nededRows > rows) {
-		dispatch("core/block-editor").updateBlockAttributes(clientId, {
-			[`rows${device}`]: searchResult.nededRows
-		});
-	}
+	// if (searchResult.nededRows > rows) {
+	// 	dispatch("core/block-editor").updateBlockAttributes(clientId, {
+	// 		[`rows${device}`]: searchResult.nededRows
+	// 	});
+	// }
 }
 
-function getColitions(globAttr) {
-	console.log("---getClitions-----");
-	const { moveItemIndex, moveItem, children, columns, device, dir } = globAttr;
-	let posArray = getPositionArray(globAttr);
-	console.log(posArray);
+function getColitions(attributes, direction, moveItemIndex) {
+	// console.log("---getClitions-----");
+	const { device } = attributes;
+	const columns = attributes[`columns${device}`];
+	let posArray = getPositionArray(attributes);
+
+	let moveItem = attributes.childrenAttributes[moveItemIndex];
+
 	let testAttributes = getNextAttributes(
-		JSON.parse(JSON.stringify(moveItem.attributes)),
-		dir,
+		JSON.parse(JSON.stringify(moveItem)),
+		direction,
 		device,
 		columns
 	);
-	console.log("---getClitions-----");
-	let fp = getFoodprint({ attributes: testAttributes }, columns, device, "b");
+
+	let fp = getFoodprint(testAttributes, columns, device, "b");
+
 	let startIndex =
 		testAttributes[`gridRowStart${device}`] * columns -
 		columns +
 		(testAttributes[`gridColumnStart${device}`] - 1);
 	let res = [];
-
 	fp.forEach((item, index) => {
 		let testValue = posArray[index + startIndex];
 		if (typeof testValue === "number" && testValue !== moveItemIndex && item) {
 			!res.includes(testValue) && res.push(testValue);
 		}
 	});
-	return res.length > 0 ? res : undeinded;
+
+	// console.log("---getClitions-----");
+	return res.length > 0 ? res : undefined;
 }
 
 function getNextAttributes(attributes, dir, device, columns) {
 	let nextAttributes = { ...attributes };
+
 	if (dir === "up") {
 		let newValue = nextAttributes[`gridRowStart${device}`] - 1;
 		newValue < 1 && (newValue = 1);
@@ -179,4 +180,17 @@ function changeIndexToAttributes(changeIndex, columns, device) {
 		[`gridColumnStart${device}`]: (changeIndex % columns) + 1,
 		[`gridRowStart${device}`]: Math.ceil((changeIndex + 1) / columns)
 	};
+}
+
+function checkIfRowsNeedChange(nextChildrenAttributes, rows, device) {
+	let neededRows =
+		nextChildrenAttributes.reduce((reduceValue, child) => {
+			let height =
+				child[`gridRowStart${device}`] + child[`gridRowEnd${device}`];
+
+			return height > reduceValue ? height : reduceValue;
+		}, 0) - 1;
+	console.log(neededRows);
+	console.log(rows);
+	return neededRows > rows ? neededRows : undefined;
 }

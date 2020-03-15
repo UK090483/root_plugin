@@ -1,45 +1,58 @@
-export default function search(posArray, items, columns, device) {
+import getFoodprint from "./footprint";
+
+export default function search(attributes, posArray, items, nearest = true) {
+	const { childrenAttributes, device } = attributes;
+
+	const columns = attributes[`columns${device}`];
+
 	let searchString = posToString(posArray, columns);
+
 	let res = [];
 	items.forEach(item => {
-		let footprint = foodprintToRegex(item, device);
-		let changeIndex = searchString.match(footprint).index;
+		let footprint = getFoodprint(childrenAttributes[item], columns, device, 1);
+
+		let searchRegex = getRegex(childrenAttributes[item], columns, device);
 		let gridIndex =
-			(item.attributes[`gridRowStart${device}`] - 1) * columns +
-			(item.attributes[`gridColumnStart${device}`] - 1);
+			(childrenAttributes[item][`gridRowStart${device}`] - 1) * columns +
+			(childrenAttributes[item][`gridColumnStart${device}`] - 1);
 
 		let allPossiblePositions = Array.from(
-			searchString.matchAll(footprint),
+			searchString.matchAll(searchRegex),
 			m => m.index
 		);
-		let i = 0;
-		let distence = 1000;
-		let closestIndex = 0;
-		while (i !== allPossiblePositions.length - 1) {
-			let _distence = Math.abs(allPossiblePositions[i] - gridIndex);
-			console.log("i= " + i);
-			console.log("allPossiblePositions[i]= " + allPossiblePositions[i]);
-			console.log("_distance= " + _distence);
-			if (_distence < distence) {
-				distence = _distence;
-				closestIndex = allPossiblePositions[i];
-			} else {
-				break;
+
+		let closestIndex = allPossiblePositions[0];
+
+		if (nearest) {
+			let i = 0;
+			let distence = 1000;
+
+			while (i !== allPossiblePositions.length - 1) {
+				let _distence = Math.abs(allPossiblePositions[i] - gridIndex);
+				// console.log("i= " + i);
+				// console.log("allPossiblePositions[i]= " + allPossiblePositions[i]);
+				// console.log("_distance= " + _distence);
+				if (_distence < distence) {
+					distence = _distence;
+					closestIndex = allPossiblePositions[i];
+				} else {
+					break;
+				}
+				i += 1;
 			}
-			i += 1;
 		}
 
-		console.log(gridIndex);
-		console.log(closestIndex);
-		console.log(allPossiblePositions);
-		console.log(searchString);
-		console.log(item.footprint);
+		// console.log("gridIndex " + gridIndex);
+		// console.log(closestIndex);
+		// console.log(allPossiblePositions);
+		// console.log(searchString);
+		// console.log(footprint);
 
 		res.push({
 			changeIndex: closestIndex,
-			clientId: item.clientId
+			index: item
 		});
-		searchString = implementChange(item, changeIndex, searchString);
+		searchString = implementChange(footprint, closestIndex, searchString);
 	});
 
 	return {
@@ -71,9 +84,9 @@ function posToString(pos, columns) {
 	);
 }
 
-function implementChange(gridItem, changeIndex, searchString) {
+function implementChange(footprint, changeIndex, searchString) {
 	let searchArray = searchString.split("");
-	gridItem.footprint.forEach((item, index) => {
+	footprint.forEach((item, index) => {
 		if (item !== undefined) {
 			searchArray[index + changeIndex] =
 				parseInt(searchArray[index + changeIndex]) + 1;
@@ -83,7 +96,7 @@ function implementChange(gridItem, changeIndex, searchString) {
 }
 
 function foodprintToRegex(gridItem, device) {
-	let width = gridItem.attributes[`gridColumnEnd${device}`];
+	let width = gridItem[`gridColumnEnd${device}`];
 	if (width > 1) {
 		return RegExp(
 			gridItem.footprint
@@ -98,6 +111,25 @@ function foodprintToRegex(gridItem, device) {
 			gridItem.footprint
 				.map(item => (item !== undefined ? "[^(1|3)]" : "."))
 				.join(""),
+			"g"
+		);
+	}
+}
+function getRegex(item, columns, device) {
+	let fp = getFoodprint(item, columns, device, "2");
+	let width = item[`gridColumnEnd${device}`];
+	if (width > 1) {
+		return RegExp(
+			fp
+				.map((item, index) =>
+					item !== undefined ? (index > width - 2 ? "[^13]" : "[^123]") : "."
+				)
+				.join(""),
+			"g"
+		);
+	} else {
+		return RegExp(
+			fp.map(item => (item !== undefined ? "[^(1|3)]" : ".")).join(""),
 			"g"
 		);
 	}

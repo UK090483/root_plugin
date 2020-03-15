@@ -12,7 +12,8 @@ export default function(props) {
 		focalPoint,
 		overlayText,
 		overlay,
-		link
+		link,
+		id
 	} = attributes;
 
 	function getFocalPoint() {
@@ -49,7 +50,7 @@ export default function(props) {
 		return (
 			<Fragment>
 				<div
-					className={`ku-free-grid-item-background ku-free-grid-item-background-${clientId} ${animationClasses.target}`}
+					className={`ku-free-grid-item-background ku-free-grid-item-background-${id} ${animationClasses.target}`}
 				>
 					{overlayText && (
 						<div className={`ku-free-grid-item-content-overlay`}>
@@ -60,7 +61,7 @@ export default function(props) {
 					)}
 				</div>
 				<div
-					className={`ku-free-grid-item-content ku-free-grid-item-content-${clientId} ${animationClasses.target}`}
+					className={`ku-free-grid-item-content ku-free-grid-item-content-${id} ${animationClasses.target}`}
 				>
 					<InnerBlocks.Content />
 				</div>
@@ -68,72 +69,24 @@ export default function(props) {
 		);
 	}
 
-	function getRatioPadding(device) {
-		let ratio = attributes[`ratio${device}`];
-		return attributes[`autoheight${device}`]
-			? "padding-top: 0px ;"
-			: `padding-top: ${ratio};`;
-	}
-
 	function getStyle() {
 		let e = `
-		.ku-free-grid-item-background-${clientId} {
+		.ku-free-grid-item-background-${id} {
 			background-image: url(${backgtroundImageUrl});
 			background-position: ${_focalPoint};
 			background-size: ${backgroundSize};
 		}
-		@media only screen and (max-width: ${attributes["breakingPointmobile"]}px) {
-				.ku-free-grid-item-${clientId} {
-					grid-area: ${attributes["gridRowStartmobile"]} / ${
-			attributes["gridColumnStartmobile"]
-		} / span ${attributes["gridRowEndmobile"]} / span ${
-			attributes["gridColumnEndmobile"]
-		};
-					-ms-grid-row: ${attributes["gridRowStartmobile"]};
-					-ms-grid-column:${attributes["gridColumnStartmobile"]};
-					-ms-grid-row-span: ${attributes["gridRowEndmobile"]};
-					-ms-grid-column-span: ${attributes["gridColumnEndmobile"]};	
-					margin: ${attributes["gapMarginmobile"]};			
-				}
-				.ku-free-grid-item-${clientId}::before{
-					 ${getRatioPadding("mobile")}
-				}
-			  }
-			  @media only screen and (min-width: ${attributes["breakingPointmobile"]}px) {
-				.ku-free-grid-item-${clientId} {
-					grid-area: ${attributes["gridRowStarttablet"]} / ${
-			attributes["gridColumnStarttablet"]
-		} / span ${attributes["gridRowEndtablet"]} / span ${
-			attributes["gridColumnEndtablet"]
-		};
-					-ms-grid-row: ${attributes["gridRowStarttablet"]};
-					-ms-grid-column:${attributes["gridColumnStarttablet"]};
-					-ms-grid-row-span: ${attributes["gridRowEndtablet"]};
-					-ms-grid-column-span: ${attributes["gridColumnEndtablet"]};	
-					margin: ${attributes["gapMargintablet"]};				
-				}
-				.ku-free-grid-item-${clientId}::before{
-					${getRatioPadding("tablet")}
-				}
-			  }
-			  @media only screen and (min-width: ${attributes["breakingPointtablet"]}px) {
-				.ku-free-grid-item-${clientId} {
-					grid-area: ${attributes["gridRowStartdesktop"]} / ${
-			attributes["gridColumnStartdesktop"]
-		} / span ${attributes["gridRowEnddesktop"]} / span ${
-			attributes["gridColumnEnddesktop"]
-		};
-					-ms-grid-row: ${attributes["gridRowStartdesktop"]};
-					-ms-grid-column:${attributes["gridColumnStartdesktop"]};
-					-ms-grid-row-span: ${attributes["gridRowEnddesktop"]};
-					-ms-grid-column-span: ${attributes["gridColumnEnddesktop"]};	
-					margin: ${attributes["gapMargindesktop"]};						
-				}
-				.ku-free-grid-item-${clientId}::before{
-					${getRatioPadding("desktop")}
-				}
-			  }
 	`;
+
+		// 	justincase = `@media only screen and (max-width: ${attributes["breakingPointmobile"]}px) {
+
+		// }
+		// @media only screen and (min-width: ${attributes["breakingPointmobile"]}px) {
+
+		// }
+		// @media only screen and (min-width: ${attributes["breakingPointtablet"]}px) {
+
+		// }`;
 
 		return e;
 	}
@@ -142,7 +95,7 @@ export default function(props) {
 			<style>{getStyle()}</style>
 			{!link.link && (
 				<div
-					className={`ku-free-grid-item ku-free-grid-item-${clientId}  ${animationClasses.listener}`}
+					className={`ku-free-grid-item ku-free-grid-item-${id}  ${animationClasses.listener}`}
 				>
 					{getInnerItem()}
 				</div>
@@ -150,7 +103,7 @@ export default function(props) {
 			{link.link && (
 				<a
 					href={link.link}
-					className={`ku-free-grid-item ku-free-grid-item-${clientId}  ${animationClasses.listener}`}
+					className={`ku-free-grid-item ku-free-grid-item-${id}  ${animationClasses.listener}`}
 				>
 					{getInnerItem()}
 				</a>

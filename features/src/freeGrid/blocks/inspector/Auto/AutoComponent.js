@@ -17,7 +17,8 @@ export default function AutoComponent({
 	const [state, setState] = useState(null);
 
 	function manageAuto() {
-		setState(setAuto(children, device, setAttributes, attributes));
+		// setState(setAuto(children, device, setAttributes, attributes));
+		setAuto(attributes, setAttributes);
 	}
 
 	function manageBack() {

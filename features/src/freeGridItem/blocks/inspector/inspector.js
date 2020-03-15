@@ -12,24 +12,32 @@ import style from "../helper/style";
 
 export default function Inspector(props) {
 	const { setAttributes, attributes, device, clientId, parentId } = props;
+	const { id } = attributes;
 
-	function handleClick(dir) {
-		doAction(`move-${parentId}`, dir, clientId);
-		let data = {
-			type: "move"
-		};
-		doAction(`com-${parentId}`, data);
+	function handleClick(direction) {
+		doAction(`com-${parentId}`, {
+			type: "MOVE",
+			data: {
+				direction: direction,
+				id: id
+			}
+		});
 	}
-
 	function erase() {
-		doAction("erase", clientId);
+		doAction(`com-${parentId}`, {
+			type: "ERASE",
+			data: {
+				id: id,
+				clientId: clientId
+			}
+		});
 	}
 
 	return (
 		<InspectorControls>
 			<h1>{device}</h1>
 
-			<Positionator clientId={clientId} parentId={parentId}></Positionator>
+			<Positionator id={id} parentId={parentId}></Positionator>
 
 			<Button isSmall isDestructive onClick={() => erase()}>
 				Erase

@@ -1,6 +1,6 @@
 export default function getFoodprint(child, columns, device, index) {
-	let width = child.attributes[`gridColumnEnd${device}`];
-	let height = child.attributes[`gridRowEnd${device}`];
+	let width = child[`gridColumnEnd${device}`];
+	let height = child[`gridRowEnd${device}`];
 	let widthArray = new Array(width).fill(index);
 	if (height > 1) {
 		let res = new Array(height)

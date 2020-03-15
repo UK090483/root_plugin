@@ -1,19 +1,20 @@
-function getPositionArray(Attr, skipElements = []) {
-	const { children, columns, device, rows } = Attr;
+function getPositionArray(attributes, skipElements = []) {
+	const { childrenAttributes, device } = attributes;
+	const columns = attributes[`columns${device}`];
+	const rows = attributes[`rows${device}`];
 	let res = new Array(columns * rows).fill(undefined);
-	children.forEach((child, i) => {
+	childrenAttributes.forEach((child, i) => {
 		if (!skipElements.includes(i)) {
 			let fp = getFoodprint(child, columns, device, i);
 			let index =
-				child.attributes[`gridRowStart${device}`] * columns -
+				child[`gridRowStart${device}`] * columns -
 				columns +
-				(child.attributes[`gridColumnStart${device}`] - 1);
+				(child[`gridColumnStart${device}`] - 1);
 			res = implementArray(index, fp, res);
 		}
 	});
 	// console.log("posarray");
-	//printPos([...res], columns);
-
+	// printPos([...res], columns);
 	return [...res];
 }
 
@@ -26,8 +27,8 @@ function implementArray(index, implementArray, targetArray) {
 }
 
 function getFoodprint(child, columns, device, index) {
-	let width = child.attributes[`gridColumnEnd${device}`];
-	let height = child.attributes[`gridRowEnd${device}`];
+	let width = child[`gridColumnEnd${device}`];
+	let height = child[`gridRowEnd${device}`];
 	let widthArray = new Array(width).fill(index);
 	if (height > 1) {
 		let res = new Array(height)

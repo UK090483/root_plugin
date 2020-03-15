@@ -27,12 +27,13 @@ registerBlockType("kubase/free-grid-item", {
 	// 	return {
 	// 		style: {
 	// 			// border: attributes.isActive ? "red dotted 1px" : "grey dotted 1px",
-	// 			width: "100%",
-	// 			maxWith: "100%",
-	// 			gridColumnStart: attributes[`gridColumnStart${device}`],
-	// 			gridColumnEnd: "span " + attributes[`gridColumnEnd${device}`],
-	// 			gridRowStart: attributes[`gridRowStart${device}`],
-	// 			gridRowEnd: "span " + attributes[`gridRowEnd${device}`]
+	// 			// width: "100%",
+	// 			// maxWith: "100%",
+	// 			// gridColumnStart: attributes[`gridColumnStart${device}`],
+	// 			// gridColumnEnd: "span " + attributes[`gridColumnEnd${device}`],
+	// 			// gridRowStart: attributes[`gridRowStart${device}`],
+	// 			// gridRowEnd: "span " + attributes[`gridRowEnd${device}`]
+	// 			height: "100%"
 	// 		}
 	// 	};
 	// },

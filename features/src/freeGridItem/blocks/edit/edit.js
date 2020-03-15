@@ -1,11 +1,12 @@
 import Inspector from "../inspector/inspector";
 import makeId from "../../../shared/makeId";
+import style from "../../../freeGrid/blocks/helper/style";
 const { InspectorControls } = wp.blockEditor;
 const { InnerBlocks } = wp.blockEditor;
 const { useSelect } = wp.data;
 const { useEffect, Fragment, useRef, useState } = wp.element;
+const { doAction } = wp.hooks;
 let layouts = ["desktop", "tablet", "mobile"];
-import Positionator from "../inspector/Positionator";
 
 export default function(props) {
 	const { attributes, setAttributes, clientId, isSelected } = props;
@@ -14,9 +15,15 @@ export default function(props) {
 		focalPoint,
 		backgroundSize,
 		overlay,
-		overlayText
+		overlayText,
+		id
 	} = attributes;
-	const { device, parentAttr, isEditorSidebarOpened } = useSelect(select => {
+	const {
+		device,
+		parentAttr,
+		parentClientId,
+		isEditorSidebarOpened
+	} = useSelect(select => {
 		const { getBlockAttributes, getBlockRootClientId } = select(
 			"core/block-editor"
 		);
@@ -26,20 +33,21 @@ export default function(props) {
 
 		const { device } = parentAttr;
 		return {
+			parentClientId: blockRootClientId,
 			device: device,
 			parentAttr: parentAttr,
 			isEditorSidebarOpened: isEditorSidebarOpened()
 		};
 	});
 
-	const parentId = parentAttr.clientId;
-	const gridIndex = attributes[`gridIndex${device}`];
-	const gridColumnStart = attributes[`gridColumnStart${device}`];
-	const gridColumnEnd = attributes[`gridColumnEnd${device}`];
-	const gridRowStart = attributes[`gridRowStart${device}`];
-	const gridRowEnd = attributes[`gridRowEnd${device}`];
-	const ownHight = attributes[`ownHeight${device}`];
+	const myAttributes = parentAttr.childrenAttributes.find(c => c.id === id);
+	const gridColumnStart = myAttributes[`gridColumnStart${device}`];
+	const gridColumnEnd = myAttributes[`gridColumnEnd${device}`];
+	const gridRowStart = myAttributes[`gridRowStart${device}`];
+	const gridRowEnd = myAttributes[`gridRowEnd${device}`];
+	// const ownHeight = attributes[`ownHeight${device}`];
 	const ownRatio = attributes[`ratio${device}`];
+	const [ownHeight, setOwnHeight] = useState(0);
 
 	const gap = parentAttr[`gap${device}`];
 	const ratio =
@@ -73,48 +81,23 @@ export default function(props) {
 		}
 	}, []);
 
-	useEffect(() => {
-		if (ref.current) {
-			setComputedHeight(ref.current);
-		}
-	}, [
-		ref,
-		gap,
-		ratio,
-		columns,
-		gridColumnEnd,
-		gridRowEnd,
-		device,
-		innerB,
-		isEditorSidebarOpened
-	]);
-
-	useEffect(() => {
-		let gapMargin = getGapMargin();
-		if (attributes[`gapMargin${device}`] !== gapMargin) {
-			setAttributes({ [`gapMargin${device}`]: gapMargin });
-		}
-	}, [
-		gap,
-		columns,
-		rows,
-		gridColumnStart,
-		gridColumnEnd,
-		gridRowStart,
-		gridRowEnd
-	]);
-
-	function getGapMargin() {
-		let mbox = (gap * (columns - 1 || 1)) / columns;
-		let mb = gridRowStart + (gridRowEnd - 1) < rows ? gap : 0;
-		let ml = mbox * ((gridColumnStart - 1) / (columns - 1 || 1));
-		let mr =
-			mbox *
-			((columns - (gridColumnStart + gridColumnEnd - 1)) / (columns - 1 || 1));
-		return `0 ${mr}px ${mb}px ${ml}px`;
-	}
+	// useEffect(() => {
+	// 	if (ref.current) {
+	// 		let oH = setComputedHeight(ref.current);
+	// 	}
+	// }, [
+	// 	ref,
+	// 	gap,
+	// 	ratio,
+	// 	columns,
+	// 	device,
+	// 	innerB,
+	// 	isEditorSidebarOpened,
+	// 	parentAttr.childrenAttributes
+	// ]);
 
 	const setComputedHeight = wrap => {
+		let res = 0;
 		if (attributes[`autoHeight${device}`]) {
 			/// FREE HIGHT
 			let sizes = wrap.getBoundingClientRect();
@@ -122,12 +105,8 @@ export default function(props) {
 			var styles = window.getComputedStyle(wrap.parentElement.parentElement);
 			var margin =
 				parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
-			let hightMesured = sizes.height;
-			setAttributes({
-				[`ownHeight${device}`]: hightMesured,
-				[`minHeight${device}`]: 0,
-				[`ratio${device}`]: "0%"
-			});
+			res = sizes.height;
+			// setOwnHeight(hightMesured);
 		} else {
 			let sizes = wrap.getBoundingClientRect();
 			let width = sizes.width;
@@ -138,90 +117,83 @@ export default function(props) {
 			let height1Box = width1Box * ratio;
 			let height = height1Box * gridRowEnd + gapHeight;
 
-			height = Math.max(height, hightMesured);
-			if (ownHight !== height) {
-				setAttributes({
-					[`ownHeight${device}`]: height
-				});
-			}
-
-			let r = (ratio / gridColumnEnd) * gridRowEnd * 100;
-
-			let gabSum = gapHeight - gapWidth * (r / 100);
-
-			let ratioString = `calc(${r}% + ${gabSum}px )`;
-
-			if (ownRatio !== ratioString) {
-				setAttributes({ [`ratio${device}`]: ratioString });
-			}
+			res = Math.max(height, hightMesured);
+		}
+		if (res !== ownHeight) {
+			setOwnHeight(res);
+			// setAttributes({
+			// 	[`ownHeight${device}`]: res
+			// });
 		}
 	};
 
 	return (
-		<div
-			onMouseEnter={() => {
-				setHovered(true);
-			}}
-			onMouseLeave={() => {
-				setHovered(false);
-			}}
-			style={{
-				zIndex: isSelected ? 100 : 0,
-				minHeight: ownHight,
-				margin: "-28px -15px -28px -15px",
-				backgroundSize: backgroundSize,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: getFocalPoint(),
-				backgroundImage:
-					Object.keys(backgtroundImage).length !== 0 &&
-					`url(${backgtroundImage.full.url})`,
-				position: "relative"
-			}}
-			className={"ku-box"}
-		>
-			{hovered && (
+		<Fragment>
+			<div
+				onMouseEnter={() => {
+					setHovered(true);
+				}}
+				onMouseLeave={() => {
+					setHovered(false);
+				}}
+				style={{
+					zIndex: isSelected ? 100 : 0,
+					// minHeight: ownHeight,
+					margin: "-28px -15px -28px -15px",
+					backgroundSize: backgroundSize,
+					backgroundRepeat: "no-repeat",
+					backgroundPosition: getFocalPoint(),
+					backgroundImage:
+						Object.keys(backgtroundImage).length !== 0 &&
+						`url(${backgtroundImage.full.url})`,
+					position: "relative"
+				}}
+				className={`ku-freegrid-item-wrap-${id}`}
+			>
+				{hovered && (
+					<Fragment>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								borderRadius: "50%",
+								width: 50,
+								height: 50,
+								position: "absolute",
+								right: -15,
+								top: -15,
+								zIndex: 500,
+								backgroundColor: "red",
+								opacity: 1,
+								transition: "all 1s"
+							}}
+							className={"hoverbox"}
+						>
+							{"select"}
+						</div>
+					</Fragment>
+				)}
+				{overlay && <div className={"overlay-box"}>{overlayText}</div>}
 				<Fragment>
-					<div
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							borderRadius: "50%",
-							width: 50,
-							height: 50,
-							position: "absolute",
-							right: -15,
-							top: -15,
-							zIndex: 500,
-							backgroundColor: "red",
-							opacity: 1,
-							transition: "all 1s"
-						}}
-						className={"hoverbox"}
-					>
-						{"select"}
+					<Inspector
+						{...props}
+						device={device}
+						clientId={clientId}
+						parentId={parentClientId}
+					></Inspector>
+					<div ref={ref}>
+						<InnerBlocks
+							templateLock={false}
+							renderAppender={
+								!hasChildBlocks && isSelected
+									? () => <InnerBlocks.ButtonBlockAppender />
+									: false
+							}
+						/>
 					</div>
 				</Fragment>
-			)}
-			{overlay && <div className={"overlay-box"}>{overlayText}</div>}
-			<Fragment>
-				<Inspector
-					{...props}
-					device={device}
-					clientId={clientId}
-					parentId={parentId}
-				></Inspector>
-				<div ref={ref}>
-					<InnerBlocks
-						templateLock={false}
-						renderAppender={
-							!hasChildBlocks && isSelected
-								? () => <InnerBlocks.ButtonBlockAppender />
-								: false
-						}
-					/>
-				</div>
-			</Fragment>
-		</div>
+			</div>
+		</Fragment>
 	);
 }

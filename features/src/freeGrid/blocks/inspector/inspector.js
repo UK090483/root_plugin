@@ -17,38 +17,30 @@ const devices = ["desktop", "tablet", "mobile"];
 
 export default function Inspector(props) {
 	const { attributes, setAttributes, clientId } = props;
-	const { device } = attributes;
+	const { device, childrenAttributes } = attributes;
 
 	const children = useSelect(select => {
 		return select("core/block-editor").getBlock(clientId).innerBlocks;
 	});
 
 	function copyAttributes(from) {
-		setAttributes({
-			[`borderRadius${device}`]: attributes[`borderRadius${from}`],
+		let nextChildrenAttributes = JSON.parse(JSON.stringify(childrenAttributes));
+		nextChildrenAttributes.forEach(child => {
+			child[`gridColumnStart${device}`] = child[`gridColumnStart${from}`];
+			child[`gridColumnEnd${device}`] = child[`gridColumnEnd${from}`];
+			child[`gridRowStart${device}`] = child[`gridRowStart${from}`];
+			child[`gridRowEnd${device}`] = child[`gridRowEnd${from}`];
+		});
+		let nextAttributes = {
 			[`gap${device}`]: attributes[`gap${from}`],
 			[`ratio${device}`]: attributes[`ratio${from}`],
 			[`columns${device}`]: attributes[`columns${from}`],
-			[`rows${device}`]: attributes[`rows${from}`]
-		});
-
-		copyChildrenAttributes(from);
-	}
-	function copyChildrenAttributes(from) {
-		children.forEach(child => {
-			let newAttributes = { ...child.attributes };
-			newAttributes[`gridColumnStart${device}`] =
-				child.attributes[`gridColumnStart${from}`];
-			newAttributes[`gridColumnEnd${device}`] =
-				child.attributes[`gridColumnEnd${from}`];
-			newAttributes[`gridRowStart${device}`] =
-				child.attributes[`gridRowStart${from}`];
-			newAttributes[`gridRowEnd${device}`] =
-				child.attributes[`gridRowEnd${from}`];
-			wp.data
-				.dispatch("core/editor")
-				.updateBlockAttributes(child.clientId, newAttributes);
-		});
+			[`rows${device}`]: attributes[`rows${from}`],
+			[`marginTop${device}`]: attributes[`marginTop${from}`],
+			[`marginBottom${device}`]: attributes[`marginBottom${from}`],
+			childrenAttributes: nextChildrenAttributes
+		};
+		setAttributes(nextAttributes);
 	}
 
 	function getCopyFromButtons() {

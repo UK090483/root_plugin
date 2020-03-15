@@ -12,12 +12,16 @@ export default function(props) {
 		setAttributes,
 		attributes
 	} = props;
+
 	const [hoverd, setHoverd] = useState(false);
 
 	function insertBlock() {
-		let Id = makeId();
+		let id = makeId();
 		let insert = wp.blocks.createBlock("kubase/free-grid-item", {
-			Id: Id,
+			id: id
+		});
+		let nextChildrenAtributes = {
+			id: id,
 			gridColumnStartdesktop: column,
 			gridColumnStarttablet: column,
 			gridColumnStartmobile: column,
@@ -30,22 +34,9 @@ export default function(props) {
 			gridRowEnddesktop: 1,
 			gridRowEndtablet: 1,
 			gridRowEndmobile: 1,
-			isActive: true
-		});
-		let nextChildrenAtributes = {
-			Id: Id,
-			gridColumnStartdesktop: column,
-			gridColumnStarttablet: column,
-			gridColumnStartmobile: column,
-			gridColumnEnddesktop: 1,
-			gridColumnEndtablet: 1,
-			gridColumnEndmobile: 1,
-			gridRowStartdesktop: row,
-			gridRowStarttablet: row,
-			gridRowStartmobile: row,
-			gridRowEnddesktop: 1,
-			gridRowEndtablet: 1,
-			gridRowEndmobile: 1
+			ownHeightdesktop: 0,
+			ownHeightmobile: 0,
+			ownHeighttablet: 0
 		};
 		setAttributes({
 			childrenAttributes: [
@@ -62,11 +53,11 @@ export default function(props) {
 		<div
 			onMouseEnter={() => {
 				setHoverd(true);
-				setActivateAble(true);
+				// setActivateAble(true);
 			}}
 			onMouseLeave={() => {
 				setHoverd(false);
-				setActivateAble(false);
+				// setActivateAble(false);
 			}}
 			style={{
 				// minHeight: height,
@@ -79,7 +70,11 @@ export default function(props) {
 			}}
 		>
 			{hoverd && (
-				<h5 onClick={() => insertBlock()} style={{ margin: 0 }}>
+				<h5
+					onMouseDown={() => setActivateAble(true)}
+					onMouseUp={() => insertBlock()}
+					style={{ margin: 0 }}
+				>
 					activate
 				</h5>
 			)}
