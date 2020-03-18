@@ -1,63 +1,84 @@
 const { InspectorControls } = wp.blockEditor;
-const { TextControl, Button, RangeControl, ToggleControl } = wp.components;
+const { Button, ToggleControl } = wp.components;
+const { useState } = wp.element;
 
-import Link from "./Link/Link";
-import PicMedia from "./PicMedia";
-import AnimationPanel from "./AnimationPanel";
-import Positionator from "./Positionator";
+import Link from './Link/Link';
+import PicMedia from './PicMedia';
+import AnimationPanel from './AnimationPanel';
+import Positionator from './Positionator';
 
 const { doAction } = wp.hooks;
 
-import style from "../helper/style";
+import style from '../helper/style';
 
-export default function Inspector(props) {
-	const { setAttributes, attributes, device, clientId, parentId } = props;
+export default function Inspector( props ) {
+	const {
+
+		attributes,
+		device,
+		clientId,
+		parentId,
+		ownAttributes,
+	} = props;
 	const { id } = attributes;
 
-	function handleClick(direction) {
-		doAction(`com-${parentId}`, {
-			type: "MOVE",
+	const [ , setstate ] = useState( 0 );
+
+	function handleClick( direction ) {
+		doAction( `com-${ parentId }`, {
+			type: 'MOVE',
 			data: {
 				direction: direction,
-				id: id
-			}
-		});
+				id: id,
+			},
+		} );
 	}
 	function erase() {
-		doAction(`com-${parentId}`, {
-			type: "ERASE",
+		doAction( `com-${ parentId }`, {
+			type: 'ERASE',
 			data: {
 				id: id,
-				clientId: clientId
-			}
-		});
+				clientId: clientId,
+			},
+		} );
+	}
+	function setAutoheight( autoHeight ) {
+		setstate( Math.random() );
+		doAction( `com-${ parentId }`, {
+			type: 'AUTOHEIGHT',
+			data: {
+				id: id,
+				clientId: clientId,
+				autoHeight: autoHeight,
+			},
+		} );
 	}
 
 	return (
 		<InspectorControls>
-			<h1>{device}</h1>
+			<h1>{ device }</h1>
 
-			<Positionator id={id} parentId={parentId}></Positionator>
+			<Positionator id={ id } parentId={ parentId }></Positionator>
 
-			<Button isSmall isDestructive onClick={() => erase()}>
+			<Button isSmall isDestructive onClick={ () => erase() }>
 				Erase
 			</Button>
-			<div className={style.row}>
+			<div className={ style.row }>
 				<br></br>
-				<div className={style.row}>
-					<Button isPrimary onClick={() => handleClick("weiter")}>
+				<div className={ style.row }>
+					<Button isPrimary onClick={ () => handleClick( 'weiter' ) }>
 						weiter
 					</Button>
-					<Button isPrimary onClick={() => handleClick("schmaler")}>
+					<Button isPrimary onClick={ () => handleClick( 'schmaler' ) }>
 						schmaler
 					</Button>
 				</div>
 				<br></br>
-				<div className={style.row}>
-					<Button isPrimary onClick={() => handleClick("höher")}>
+				<div className={ style.row }>
+					<Button isPrimary onClick={ () => handleClick( 'höher' ) }>
 						höher
 					</Button>
-					<Button isPrimary onClick={() => handleClick("niedriger")}>
+					<Button isPrimary onClick={ () => handleClick( 'niedriger' ) }>
 						niedriger
 					</Button>
 				</div>
@@ -65,17 +86,17 @@ export default function Inspector(props) {
 
 				<ToggleControl
 					label="Free Hight"
-					help={"rezize height to Conten"}
-					checked={attributes[`autoHeight${device}`]}
-					onChange={autoheight =>
-						setAttributes({ [`autoHeight${device}`]: autoheight })
-					}
+					help={ 'rezize height to Conten' }
+					checked={ ownAttributes[ `autoHeight${ device }` ] }
+					onChange={ autoheight => {
+						setAutoheight( autoheight );
+					} }
 				/>
 			</div>
 
-			<PicMedia {...props}></PicMedia>
-			<Link {...props}></Link>
-			<AnimationPanel {...props}></AnimationPanel>
+			<PicMedia { ...props }></PicMedia>
+			<Link { ...props }></Link>
+			<AnimationPanel { ...props }></AnimationPanel>
 		</InspectorControls>
 	);
 }

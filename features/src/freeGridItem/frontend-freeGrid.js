@@ -1,1 +1,1 @@
-import "./blocks/frontend/frontend";
+import './blocks/frontend/frontend';

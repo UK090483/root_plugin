@@ -1,8 +1,8 @@
 const { Dashicon, TabPanel, Button, Dropdown } = wp.components;
-
+const { addAction, removeAction, doAction } = wp.hooks;
 const { useState, useEffect, useRef } = wp.element;
 
-export default function ResponsiveTabs({ onSelect, value }) {
+export default function ResponsiveTabs({ setAttributes, value, clientId }) {
 	function getStyle(name) {
 		return {
 			width: 40,
@@ -12,6 +12,17 @@ export default function ResponsiveTabs({ onSelect, value }) {
 			padding: 5,
 			backgroundColor: value === name ? "#006fa777" : "transparent"
 		};
+	}
+
+	function onSelect(device) {
+		// setAttributes({ device });
+		doAction(`com-ku-base-freeGrid`, {
+			type: "DEVICE",
+			data: {
+				clientId: clientId,
+				device: device
+			}
+		});
 	}
 
 	return (

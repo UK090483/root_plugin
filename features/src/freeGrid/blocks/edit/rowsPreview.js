@@ -1,42 +1,43 @@
-export default function RowsPreview({
+export default function RowsPreview( {
 	rows,
 	columns,
 	gap,
 	breakingPoint,
-	state
-}) {
+	state,
+} ) {
 	function getPreviewRows() {
-		let PrevRows = new Array(rows).fill(1);
-		return PrevRows.map((item, index) => {
+		const PrevRows = new Array( rows ).fill( 1 );
+		return PrevRows.map( ( item, index ) => {
 			return (
 				<div
-					style={{
-						backgroundColor: "#ff000010",
+					key={ index }
+					style={ {
+						backgroundColor: '#007cba10',
 						gridColumnStart: 1,
 						gridRowStart: index + 1,
-						gridColumnEnd: `span ${columns}`
-					}}
+						gridColumnEnd: `span ${ columns }`,
+					} }
 				></div>
 			);
-		});
+		} );
 	}
 	return (
 		<div
-			className={"grid-Gallerie-editor-pref"}
-			style={{
-				pointerEvents: "none",
-				position: "absolute",
+			className={ 'grid-Gallerie-editor-pref' }
+			style={ {
+				pointerEvents: 'none',
+				position: 'absolute',
 				top: 0,
-				display: "grid",
-				gridTemplateColumns: `repeat( ${columns} , 1fr)`,
+				display: 'grid',
+				gridTemplateColumns: `repeat( ${ columns } , 1fr)`,
 				gridTemplateRows: state.gridTemplateRows,
-				gridGap: gap + "px",
-				width: "calc(100% + 20px)",
+				gridGap: gap + 'px',
+				width: 'calc(100% + 20px)',
 				left: 0,
-				maxWidth: breakingPoint
-			}}
+				maxWidth: breakingPoint,
+			} }
 		>
-			{getPreviewRows()}
+			{ getPreviewRows() }
 		</div>
 	);
 }

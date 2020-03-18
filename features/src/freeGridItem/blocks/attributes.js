@@ -1,16 +1,16 @@
-function addResponsivePropertys(property, attributes) {
-	let layouts = ["desktop", "tablet", "mobile"];
-	let result = { ...attributes };
+function addResponsivePropertys( property, attributes ) {
+	const layouts = [ 'desktop', 'tablet', 'mobile' ];
+	const result = { ...attributes };
 
-	layouts.forEach((layout, index) => {
-		result[property.name + layout] = {
+	layouts.forEach( ( layout, index ) => {
+		result[ property.name + layout ] = {
 			type: property.type,
 			default:
-				typeof property.default === "object" && property.type !== "array"
-					? property.default[index]
-					: property.default
+				typeof property.default === 'object' && property.type !== 'array' ?
+					property.default[ index ] :
+					property.default,
 		};
-	});
+	} );
 	return result;
 }
 
@@ -32,21 +32,21 @@ let attributes = {};
 // 	attributes
 // );
 attributes = addResponsivePropertys(
-	{ name: "breakingPoint", type: "string", default: ["unset", 992, 750] },
+	{ name: 'breakingPoint', type: 'string', default: [ 'unset', 992, 750 ] },
 	attributes
 );
 
-attributes = addResponsivePropertys(
-	{ name: "autoHeight", type: "boolean", default: false },
-	attributes
-);
-attributes = addResponsivePropertys(
-	{ name: "ownHeight", type: "number", default: 0 },
-	attributes
-);
+// attributes = addResponsivePropertys(
+// 	{ name: "autoHeight", type: "boolean", default: false },
+// 	attributes
+// );
+// attributes = addResponsivePropertys(
+// 	{ name: "ownHeight", type: "number", default: 0 },
+// 	attributes
+// );
 
 attributes = addResponsivePropertys(
-	{ name: "animations", type: "array", default: [] },
+	{ name: 'animations', type: 'array', default: [] },
 	attributes
 );
 // attributes = addResponsivePropertys(
@@ -58,42 +58,39 @@ export default {
 	...attributes,
 
 	id: {
-		type: "sting",
-		default: ""
+		type: 'sting',
+		default: '',
 	},
 	device: {
-		type: "string",
-		default: "desktop"
+		type: 'string',
+		default: 'desktop',
 	},
 	backgtroundImage: {
-		type: "object",
-		default: {}
+		type: 'object',
+		default: {},
 	},
 	focalPoint: {
-		type: "object",
-		default: { x: 0.5, y: 0.5 }
+		type: 'object',
+		default: { x: 0.5, y: 0.5 },
 	},
 	backgroundSize: {
-		type: "string",
-		default: "cover"
+		type: 'string',
+		default: 'cover',
 	},
-	ownHeight: {
-		type: "number",
-		default: 0
-	},
+
 	overlay: {
-		type: "boolean",
-		default: false
+		type: 'boolean',
+		default: false,
 	},
 	overlayText: {
-		type: "string",
-		default: ""
+		type: 'string',
+		default: '',
 	},
 	link: {
-		type: "object",
+		type: 'object',
 		default: {
-			postType: "",
-			link: ""
-		}
-	}
+			postType: '',
+			link: '',
+		},
+	},
 };

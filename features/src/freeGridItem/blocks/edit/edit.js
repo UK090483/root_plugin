@@ -1,198 +1,143 @@
-import Inspector from "../inspector/inspector";
-import makeId from "../../../shared/makeId";
-import style from "../../../freeGrid/blocks/helper/style";
-const { InspectorControls } = wp.blockEditor;
-const { InnerBlocks } = wp.blockEditor;
-const { useSelect } = wp.data;
-const { useEffect, Fragment, useRef, useState } = wp.element;
-const { doAction } = wp.hooks;
-let layouts = ["desktop", "tablet", "mobile"];
+import Inspector from '../inspector/inspector';
+import makeId from '../../../shared/makeId';
+import MoveOverlay from './moveOverlay';
 
-export default function(props) {
+const { InnerBlocks, BlockControls } = wp.blockEditor;
+const { useSelect } = wp.data;
+const { useEffect, Fragment, useState } = wp.element;
+const { Toolbar } = wp.components;
+
+export default function( props ) {
 	const { attributes, setAttributes, clientId, isSelected } = props;
 	const {
 		backgtroundImage,
 		focalPoint,
 		backgroundSize,
-		overlay,
-		overlayText,
-		id
+		id,
 	} = attributes;
-	const {
-		device,
-		parentAttr,
-		parentClientId,
-		isEditorSidebarOpened
-	} = useSelect(select => {
-		const { getBlockAttributes, getBlockRootClientId } = select(
-			"core/block-editor"
-		);
-		const { isEditorSidebarOpened } = select("core/edit-post");
-		let blockRootClientId = getBlockRootClientId(clientId);
-		let parentAttr = getBlockAttributes(blockRootClientId);
+	const { device, parentClientId, ownAttributes } = useSelect(
+		select => {
+			const { getBlockAttributes, getBlockRootClientId } = select(
+				'core/block-editor'
+			);
 
-		const { device } = parentAttr;
-		return {
-			parentClientId: blockRootClientId,
-			device: device,
-			parentAttr: parentAttr,
-			isEditorSidebarOpened: isEditorSidebarOpened()
-		};
-	});
+			const { isEditorSidebarOpened } = select( 'core/edit-post' );
+			const blockRootClientId = getBlockRootClientId( clientId );
+			const _parentAttr = getBlockAttributes( blockRootClientId );
+			const _ownAttributes = _parentAttr.childrenAttributes.find(
+				c => c.id === attributes.id
+			);
 
-	const myAttributes = parentAttr.childrenAttributes.find(c => c.id === id);
-	const gridColumnStart = myAttributes[`gridColumnStart${device}`];
-	const gridColumnEnd = myAttributes[`gridColumnEnd${device}`];
-	const gridRowStart = myAttributes[`gridRowStart${device}`];
-	const gridRowEnd = myAttributes[`gridRowEnd${device}`];
-	// const ownHeight = attributes[`ownHeight${device}`];
-	const ownRatio = attributes[`ratio${device}`];
-	const [ownHeight, setOwnHeight] = useState(0);
+			return {
+				parentClientId: blockRootClientId,
+				device: _parentAttr.device,
+				parentAttr: _parentAttr,
+				isEditorSidebarOpened: isEditorSidebarOpened(),
+				ownAttributes: _ownAttributes,
+			};
+		}
+	);
 
-	const gap = parentAttr[`gap${device}`];
-	const ratio =
-		parentAttr[`ratio${device}`][0] / parentAttr[`ratio${device}`][1];
+	const [ hovered, setHovered ] = useState( false );
 
-	const columns = parentAttr[`columns${device}`];
-	const rows = parentAttr[`rows${device}`];
-
-	const [hovered, setHovered] = useState(false);
+	const [ overlay, setOverlay ] = useState( null );
 
 	function getFocalPoint() {
-		let x = focalPoint.x * 100;
-		let y = focalPoint.y * 100;
-		return `${x}% ${y}%`;
+		const x = focalPoint.x * 100;
+		const y = focalPoint.y * 100;
+		return `${ x }% ${ y }%`;
 	}
 
-	const innerB = useSelect(select => {
-		return select("core/block-editor").getBlock(clientId).innerBlocks;
-	});
+	const hasChildBlocks = useSelect( select => {
+		const { getBlockOrder } = select( 'core/block-editor' );
+		return getBlockOrder( clientId ).length > 0;
+	} );
 
-	const ref = useRef();
-
-	const hasChildBlocks = useSelect(select => {
-		const { getBlockOrder } = select("core/block-editor");
-		return getBlockOrder(clientId).length > 0;
-	});
-
-	useEffect(() => {
-		if (attributes.clientId === "") {
-			setAttributes({ clientId: makeId() });
+	useEffect( () => {
+		if ( attributes.clientId === '' ) {
+			setAttributes( { clientId: makeId() } );
 		}
-	}, []);
+	}, [] );
 
-	// useEffect(() => {
-	// 	if (ref.current) {
-	// 		let oH = setComputedHeight(ref.current);
-	// 	}
-	// }, [
-	// 	ref,
-	// 	gap,
-	// 	ratio,
-	// 	columns,
-	// 	device,
-	// 	innerB,
-	// 	isEditorSidebarOpened,
-	// 	parentAttr.childrenAttributes
-	// ]);
-
-	const setComputedHeight = wrap => {
-		let res = 0;
-		if (attributes[`autoHeight${device}`]) {
-			/// FREE HIGHT
-			let sizes = wrap.getBoundingClientRect();
-
-			var styles = window.getComputedStyle(wrap.parentElement.parentElement);
-			var margin =
-				parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
-			res = sizes.height;
-			// setOwnHeight(hightMesured);
+	function handleOverlay( overlayName ) {
+		if ( overlayName === overlay ) {
+			setOverlay( null )
+			;
 		} else {
-			let sizes = wrap.getBoundingClientRect();
-			let width = sizes.width;
-			let hightMesured = sizes.height;
-			let gapHeight = (gridRowEnd - 1) * parentAttr[`gap${device}`];
-			let gapWidth = (gridColumnEnd - 1) * parentAttr[`gap${device}`];
-			let width1Box = (width - gapWidth) / gridColumnEnd;
-			let height1Box = width1Box * ratio;
-			let height = height1Box * gridRowEnd + gapHeight;
-
-			res = Math.max(height, hightMesured);
+			setOverlay( 'move' )
+			;
 		}
-		if (res !== ownHeight) {
-			setOwnHeight(res);
-			// setAttributes({
-			// 	[`ownHeight${device}`]: res
-			// });
-		}
-	};
+	}
 
 	return (
 		<Fragment>
+			<BlockControls> <Toolbar controls={ [ { icon: 'move', onClick: ()=>handleOverlay( 'move' ) } ] }></Toolbar> </BlockControls>
+
 			<div
-				onMouseEnter={() => {
-					setHovered(true);
-				}}
-				onMouseLeave={() => {
-					setHovered(false);
-				}}
-				style={{
+				onMouseEnter={ () => {
+					setHovered( true );
+				} }
+				onMouseLeave={ () => {
+					setHovered( false );
+				} }
+				style={ {
 					zIndex: isSelected ? 100 : 0,
-					// minHeight: ownHeight,
-					margin: "-28px -15px -28px -15px",
+					margin: '-28px -15px -28px -15px',
 					backgroundSize: backgroundSize,
-					backgroundRepeat: "no-repeat",
+					backgroundRepeat: 'no-repeat',
 					backgroundPosition: getFocalPoint(),
 					backgroundImage:
-						Object.keys(backgtroundImage).length !== 0 &&
-						`url(${backgtroundImage.full.url})`,
-					position: "relative"
-				}}
-				className={`ku-freegrid-item-wrap-${id}`}
+						Object.keys( backgtroundImage ).length !== 0 &&
+						`url(${ backgtroundImage.full.url })`,
+					position: 'relative',
+				} }
+				className={ `ku-freegrid-item ku-freegrid-item-wrap-${ id }` }
 			>
-				{hovered && (
+				{ hovered && (
 					<Fragment>
 						<div
-							style={{
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								borderRadius: "50%",
+							style={ {
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								borderRadius: '50%',
 								width: 50,
 								height: 50,
-								position: "absolute",
+								position: 'absolute',
 								right: -15,
 								top: -15,
 								zIndex: 500,
-								backgroundColor: "red",
+								backgroundColor: 'red',
 								opacity: 1,
-								transition: "all 1s"
-							}}
-							className={"hoverbox"}
+								transition: 'all 1s',
+							} }
+							className={ 'hoverbox' }
 						>
-							{"select"}
+							{ 'select' }
 						</div>
+
 					</Fragment>
-				)}
-				{overlay && <div className={"overlay-box"}>{overlayText}</div>}
+				) }
+				{ overlay === 'move' && <MoveOverlay parentId={ parentClientId } id={ id }></MoveOverlay> }
 				<Fragment>
 					<Inspector
-						{...props}
-						device={device}
-						clientId={clientId}
-						parentId={parentClientId}
+						{ ...props }
+						device={ device }
+						clientId={ clientId }
+						parentId={ parentClientId }
+						ownAttributes={ ownAttributes }
 					></Inspector>
-					<div ref={ref}>
-						<InnerBlocks
-							templateLock={false}
-							renderAppender={
-								!hasChildBlocks && isSelected
-									? () => <InnerBlocks.ButtonBlockAppender />
-									: false
-							}
-						/>
-					</div>
+
+					<InnerBlocks
+						templateLock={ false }
+						renderAppender={
+							! hasChildBlocks && isSelected && ! overlay ?
+								() => <InnerBlocks.ButtonBlockAppender /> :
+								false
+						}
+					/>
 				</Fragment>
+
 			</div>
 		</Fragment>
 	);

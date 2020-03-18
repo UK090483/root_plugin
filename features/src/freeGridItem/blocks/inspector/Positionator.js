@@ -1,55 +1,57 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 const { doAction } = wp.hooks;
 
-export default function Positionator({ id, parentId }) {
-	function onClick(direction) {
-		doAction(`com-${parentId}`, {
-			type: "MOVE",
+export default function Positionator( { id, parentId } ) {
+	function onClick( direction ) {
+		doAction( `com-${ parentId }`, {
+			type: 'MOVE',
 			data: {
 				direction: direction,
-				id: id
-			}
-		});
+				id: id,
+			},
+		} );
 	}
 
 	return (
-		<div className={"ku-base-freeGrid-positionator"}>
-			<svg className={"bigCircle"}>
+		<div className={ 'ku-base-freeGrid-positionator' }>
+			<svg className={ 'bigCircle' }>
 				<circle
 					cx="50%"
 					cy="50%"
 					r="55%"
 					stroke="white"
-					stroke-width="30%"
+					strokeWidth="30%"
 					fill="transparent"
 				/>
 			</svg>
-			<svg className={"smallCircle"}>
+			<svg className={ 'smallCircle' }>
 				<circle cx="50%" cy="50%" r="20%" fill="white" />
 			</svg>
 
 			<div
-				onClick={() => {
-					onClick("up");
-				}}
-				className={"up"}
+				onClick={ () => {
+					onClick( 'up' );
+				} }
+				className={ 'up' }
 			></div>
 			<div
-				onClick={() => {
-					onClick("left");
-				}}
-				className={"left"}
+				onClick={ () => {
+					onClick( 'left' );
+				} }
+				className={ 'left' }
 			></div>
 			<div
-				onClick={() => {
-					onClick("right");
-				}}
-				className={"right"}
+				onClick={ () => {
+					onClick( 'right' );
+				} }
+				className={ 'right' }
 			></div>
 			<div
-				onClick={() => {
-					onClick("down");
-				}}
-				className={"down"}
+				onClick={ () => {
+					onClick( 'down' );
+				} }
+				className={ 'down' }
 			></div>
 		</div>
 	);

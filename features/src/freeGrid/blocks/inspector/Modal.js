@@ -1,54 +1,54 @@
-import SelectPages from "./selectPages";
-const { Button, Modal, TextControl, SelectControl } = wp.components;
+import SelectPages from './selectPages';
+const { Button, Modal, TextControl } = wp.components;
 
-export default function KUmodal({
+export default function KUmodal( {
 	setAttributes,
 	selectedItem,
 	isOpen,
 	setOpen,
 	images,
-	tools
-}) {
-	const item = images.find(element => element.id === selectedItem);
+	tools,
+} ) {
+	const item = images.find( element => element.id === selectedItem );
 
-	function setAlt(text) {
-		let i = [...images];
-		i.find(element => element.id === selectedItem).alt = text;
-		setAttributes({
-			images: i
-		});
+	function setAlt( text ) {
+		const i = [ ...images ];
+		i.find( element => element.id === selectedItem ).alt = text;
+		setAttributes( {
+			images: i,
+		} );
 	}
 
 	return (
 		<div>
-			{isOpen && (
+			{ isOpen && (
 				<Modal
 					title="Image Settings"
-					onRequestClose={() => {
-						setOpen(false);
-					}}
+					onRequestClose={ () => {
+						setOpen( false );
+					} }
 				>
-					<SelectPages tools={tools}></SelectPages>
+					<SelectPages tools={ tools }></SelectPages>
 
 					<TextControl
 						label="Label"
-						value={item.alt}
-						onChange={e => setAlt(e)}
+						value={ item.alt }
+						onChange={ e => setAlt( e ) }
 					></TextControl>
 
-					<div className={"gallerie-modal-button-wrap"}>
+					<div className={ 'gallerie-modal-button-wrap' }>
 						<Button
 							isLarge
 							isPrimary
-							onClick={() => {
-								setOpen(false);
-							}}
+							onClick={ () => {
+								setOpen( false );
+							} }
 						>
 							Done
 						</Button>
 					</div>
 				</Modal>
-			)}
+			) }
 		</div>
 	);
 }

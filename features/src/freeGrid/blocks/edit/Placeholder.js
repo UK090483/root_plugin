@@ -1,26 +1,25 @@
-import makeId from "../../../shared/makeId";
+import makeId from '../../../shared/makeId';
 
 const { useState } = wp.element;
 
-export default function(props) {
+export default function( props ) {
 	const {
 		column,
 		row,
 		clientId,
 		setActivateAble,
-		gridrowIndex,
 		setAttributes,
-		attributes
+		attributes,
 	} = props;
 
-	const [hoverd, setHoverd] = useState(false);
+	const [ hoverd, setHoverd ] = useState( false );
 
 	function insertBlock() {
-		let id = makeId();
-		let insert = wp.blocks.createBlock("kubase/free-grid-item", {
-			id: id
-		});
-		let nextChildrenAtributes = {
+		const id = makeId();
+		const insert = wp.blocks.createBlock( 'kubase/free-grid-item', {
+			id: id,
+		} );
+		const nextChildrenAtributes = {
 			id: id,
 			gridColumnStartdesktop: column,
 			gridColumnStarttablet: column,
@@ -36,48 +35,49 @@ export default function(props) {
 			gridRowEndmobile: 1,
 			ownHeightdesktop: 0,
 			ownHeightmobile: 0,
-			ownHeighttablet: 0
+			ownHeighttablet: 0,
 		};
-		setAttributes({
+		setAttributes( {
 			childrenAttributes: [
 				nextChildrenAtributes,
-				...attributes.childrenAttributes
-			]
-		});
+				...attributes.childrenAttributes,
+			],
+		} );
 		wp.data
-			.dispatch("core/block-editor")
-			.insertBlock(insert, 0, clientId, true);
+			.dispatch( 'core/block-editor' )
+			.insertBlock( insert, 0, clientId, true );
 	}
 
 	return (
 		<div
-			onMouseEnter={() => {
-				setHoverd(true);
+			onMouseEnter={ () => {
+				setHoverd( true );
 				// setActivateAble(true);
-			}}
-			onMouseLeave={() => {
-				setHoverd(false);
+			} }
+			onMouseLeave={ () => {
+				setHoverd( false );
 				// setActivateAble(false);
-			}}
-			style={{
+			} }
+			style={ {
 				// minHeight: height,
-				pointerEvents: "auto",
-				border: "#80808043 dotted 1px",
+				pointerEvents: 'auto',
+				border: '#80808043 dotted 1px',
 				gridColumnStart: column,
-				gridColumnEnd: "span 1",
+				gridColumnEnd: 'span 1',
 				gridRowStart: row,
-				gridRowEnd: "span 1"
-			}}
+				gridRowEnd: 'span 1',
+			} }
 		>
-			{hoverd && (
+			{ hoverd && (
+				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 				<h5
-					onMouseDown={() => setActivateAble(true)}
-					onMouseUp={() => insertBlock()}
-					style={{ margin: 0 }}
+					onMouseDown={ () => setActivateAble( true ) }
+					onMouseUp={ () => insertBlock() }
+					style={ { margin: 0 } }
 				>
 					activate
 				</h5>
-			)}
+			) }
 		</div>
 	);
 }

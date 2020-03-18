@@ -190,7 +190,6 @@ function checkIfRowsNeedChange(nextChildrenAttributes, rows, device) {
 
 			return height > reduceValue ? height : reduceValue;
 		}, 0) - 1;
-	console.log(neededRows);
-	console.log(rows);
-	return neededRows > rows ? neededRows : undefined;
+
+	return neededRows !== rows ? neededRows : undefined;
 }

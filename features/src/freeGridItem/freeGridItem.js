@@ -1,1 +1,1 @@
-import "./blocks/index";
+import './blocks/index';

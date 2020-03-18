@@ -1,64 +1,46 @@
-import ButtonGroup from "../../../shared/ButtonGroup";
+import ButtonGroup from '../../../shared/ButtonGroup';
 const { PanelBody, Button, FocalPointPicker } = wp.components;
 const { MediaUpload } = wp.blockEditor;
-const { __ } = wp.i18n;
 
-export default function PicMedia(props) {
-	const { setAttributes, attributes, device, resetWrap } = props;
+export default function PicMedia( props ) {
+	const { setAttributes, attributes } = props;
 	const { backgtroundImage, focalPoint, backgroundSize } = attributes;
 
-	function onSelectVideo(media) {
-		setAttributes({
-			videoUrl: media.url
-		});
-	}
-
-	function onSelectImage(media) {
-		setAttributes({ backgtroundImage: media.sizes });
+	function onSelectImage( media ) {
+		setAttributes( { backgtroundImage: media.sizes } );
 	}
 
 	return (
-		<PanelBody title={"Image"} initialOpen={false}>
-			{backgtroundImage.medium && (
+		<PanelBody title={ 'Image' } initialOpen={ false }>
+			{ backgtroundImage.medium && (
 				<FocalPointPicker
-					url={backgtroundImage.medium.url}
-					dimensions={{ width: 300, height: 200 }}
-					value={focalPoint}
-					onChange={focalPoint => {
-						setAttributes({ focalPoint });
-					}}
+					url={ backgtroundImage.medium.url }
+					dimensions={ { width: 300, height: 200 } }
+					value={ focalPoint }
+					onChange={ _focalPoint => {
+						setAttributes( { _focalPoint } );
+					} }
 				/>
-			)}
+			) }
 			<MediaUpload
-				title={__("Select Image")}
-				onSelect={onSelectImage}
-				allowedTypes={["image"]}
-				render={({ open }) => (
-					<Button isDefault onClick={open}>
+				title={ 'Select Image' }
+				onSelect={ onSelectImage }
+				allowedTypes={ [ 'image' ] }
+				render={ ( { open } ) => (
+					<Button isDefault onClick={ open }>
 						select Image
 					</Button>
-				)}
+				) }
 			/>
 
 			<ButtonGroup
-				items={[
-					{ value: "cover", label: "Cover" },
-					{ value: "contain", label: "Contain" }
-				]}
-				activeItem={backgroundSize}
-				onChange={backgroundSize => setAttributes({ backgroundSize })}
+				items={ [
+					{ value: 'cover', label: 'Cover' },
+					{ value: 'contain', label: 'Contain' },
+				] }
+				activeItem={ backgroundSize }
+				onChange={ _backgroundSize => setAttributes( { _backgroundSize } ) }
 			></ButtonGroup>
-			{/* <MediaUpload
-				title={__("Select Video")}
-				onSelect={onSelectVideo}
-				allowedTypes={["video"]}
-				// value={videoId}
-				render={({ open }) => (
-					<Button isDefault onClick={open}>
-						{!imageId ? __("Select Video") : __("Replace Video")}
-					</Button>
-				)}
-			/> */}
 		</PanelBody>
 	);
 }

@@ -68,9 +68,8 @@ export default function Inspector(props) {
 				<br></br>
 
 				<ResponsiveTabs
-					onSelect={device => {
-						setAttributes({ device });
-					}}
+					setAttributes={setAttributes}
+					clientId={clientId}
 					value={device}
 				></ResponsiveTabs>
 
